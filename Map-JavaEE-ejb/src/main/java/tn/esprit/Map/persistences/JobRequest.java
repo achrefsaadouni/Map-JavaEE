@@ -15,7 +15,7 @@ public class JobRequest implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date date;
 	private String speciality;
-	@OneToOne(mappedBy = "jobRequest")
+	@OneToOne
 	private Candidate candidate;
 
 	public int getId() {

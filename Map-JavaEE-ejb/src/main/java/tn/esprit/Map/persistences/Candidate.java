@@ -7,7 +7,11 @@ import javax.persistence.*;
 @Entity
 @DiscriminatorValue(value = "candidate")
 public class Candidate extends Person implements Serializable {
-	@OneToOne
+	
+	@OneToOne(mappedBy="candidate")
+	private TechnicalTest TechnicalTest;
+	
+	@OneToOne(mappedBy="candidate")
 	private JobRequest jobRequest;
 
 	public JobRequest getJobRequest() {
@@ -18,4 +22,12 @@ public class Candidate extends Person implements Serializable {
 		this.jobRequest = jobRequest;
 	}
 
+	public TechnicalTest getTechnicalTest() {
+		return TechnicalTest;
+	}
+
+	public void setTechnicalTest(TechnicalTest technicalTest) {
+		TechnicalTest = technicalTest;
+	}
+	
 }
