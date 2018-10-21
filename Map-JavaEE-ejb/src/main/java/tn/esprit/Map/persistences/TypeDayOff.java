@@ -1,4 +1,4 @@
-package tn.map.entities;
+package tn.esprit.Map.persistences;
 
 public enum TypeDayOff {
 vacancy,maternity,illness,other

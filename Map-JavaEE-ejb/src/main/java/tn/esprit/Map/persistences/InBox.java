@@ -1,4 +1,4 @@
-package tn.map.entities;
+package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 
