@@ -2,29 +2,47 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import tn.esprit.testClassResource.entitiy.Resource;
 
 @Entity
 public class DayOff implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
+	
+	
 	@Temporal(TemporalType.DATE)
 	private Date startDate;
+	
+	
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
+	
+	
 	private String reason;
+	
+	
 	@Enumerated(EnumType.STRING)
 	private TypeDayOff typeDayOff;
+	
+	
 	@Enumerated(EnumType.STRING)
 	private StateType stateType;
+	
+	@ManyToMany(mappedBy="dayOffs")
+	private List<Resource> Resources;
+	
 
 	public int getId() {
 		return id;
@@ -74,4 +92,12 @@ public class DayOff implements Serializable {
 		this.stateType = stateType;
 	}
 
+	
+	public List<Resource> getResources() {
+		return Resources;
+	}
+	public void setResources(List<Resource> resources) {
+		Resources = resources;
+	}
+	
 }

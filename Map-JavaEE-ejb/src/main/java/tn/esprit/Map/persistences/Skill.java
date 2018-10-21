@@ -1,48 +1,74 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.*;
 
+import tn.esprit.testClassResource.entitiy.Resource;
+
 @Entity
 public class Skill implements Serializable {
+	
+	
 	@Id
-	@GeneratedValue
-	private int id;
-	private String nameSkill;
-	private String descriptionSkill;
-	private float rateSkill;
-
-	public int getId() {
-		return id;
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int IdSkill;
+	
+	private String NameSkill;
+	
+	private String DescriptionSkill;
+	
+	private float RateSkill;
+	
+	@ManyToMany(mappedBy="skills")
+	private List<Resource> Resources;
+	
+	
+	
+	public int getIdSkill() {
+		return IdSkill;
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setIdSkill(int idSkill) {
+		IdSkill = idSkill;
 	}
-
+	
+	
+	
+	
 	public String getNameSkill() {
-		return nameSkill;
+		return NameSkill;
 	}
-
 	public void setNameSkill(String nameSkill) {
-		this.nameSkill = nameSkill;
+		NameSkill = nameSkill;
 	}
-
+	
+	
+	
+	
 	public String getDescriptionSkill() {
-		return descriptionSkill;
+		return DescriptionSkill;
 	}
-
 	public void setDescriptionSkill(String descriptionSkill) {
-		this.descriptionSkill = descriptionSkill;
+		DescriptionSkill = descriptionSkill;
 	}
-
+	
+	
+	
+	
 	public float getRateSkill() {
-		return rateSkill;
+		return RateSkill;
 	}
-
 	public void setRateSkill(float rateSkill) {
-		this.rateSkill = rateSkill;
+		RateSkill = rateSkill;
 	}
-
+	
+	
+	public List<Resource> getResources() {
+		return Resources;
+	}
+	public void setResources(List<Resource> resources) {
+		Resources = resources;
+	}
+	
 }
