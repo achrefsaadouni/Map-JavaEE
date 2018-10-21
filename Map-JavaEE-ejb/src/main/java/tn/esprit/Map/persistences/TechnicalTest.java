@@ -30,6 +30,7 @@ public class TechnicalTest implements Serializable {
 	
 	private File TestFile ;
 	
+	private File TestResponseFile ;
 	
 	private String Employment_Letter;
 	
@@ -68,13 +69,13 @@ public class TechnicalTest implements Serializable {
 		TestFile = testFile;
 	}
 
-	//public File getTestResponseFile() {
-	//	return TestResponseFile;
-	//}
+	public File getTestResponseFile() {
+		return TestResponseFile;
+	}
 
-	//public void setTestResponseFile(File testResponseFile) {
-		//TestResponseFile = testResponseFile;
-//	}
+	public void setTestResponseFile(File testResponseFile) {
+		TestResponseFile = testResponseFile;
+	}
 
 	public String getEmployment_Letter() {
 		return Employment_Letter;
