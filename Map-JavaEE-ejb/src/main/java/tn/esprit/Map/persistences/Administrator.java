@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Administrator extends Person implements Serializable {
 	@OneToMany(mappedBy = "administrator")
 	private List<Request> requests;
-	private int x;
+	
 	public List<Request> getRequests() {
 		return requests;
 	}
