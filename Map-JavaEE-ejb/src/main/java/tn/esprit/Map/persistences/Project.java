@@ -32,7 +32,7 @@ public class Project implements Serializable {
 	private Client client;
 	@OneToMany(mappedBy = "project")
 	private List<Resource> resources;
-	@OneToMany(mappedBy = "projet",fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "projet")
 	private List<Mandate> listeMondats;
 
 	public int getId() {
