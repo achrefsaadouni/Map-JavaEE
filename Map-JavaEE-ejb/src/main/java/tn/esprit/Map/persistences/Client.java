@@ -15,7 +15,7 @@ public class Client extends Person implements Serializable {
 	private String nameSociety;
 	private String logo;
 	private String address;
-	@OneToMany(mappedBy = "client")
+	@OneToMany(mappedBy = "client" , cascade = CascadeType.PERSIST )
 	private List<Project> projects;
 	@OneToMany(mappedBy = "client")
 	private List<Request> requests;
