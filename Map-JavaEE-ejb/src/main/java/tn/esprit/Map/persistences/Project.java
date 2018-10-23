@@ -27,7 +27,7 @@ public class Project implements Serializable {
 	private Client client;
 	@OneToMany(mappedBy = "project")
 	private List<Resource> resources;
-	@OneToMany(mappedBy = "projet")
+	@OneToMany(mappedBy = "projet",fetch=FetchType.EAGER)
 	private List<Mandate> listeMondats;
 
 	public int getId() {
