@@ -1,4 +1,4 @@
-package tn.esprit.Map.utils;
+package tn.esprit.utlities;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
