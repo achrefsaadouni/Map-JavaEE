@@ -24,6 +24,15 @@ public class Mandate implements Serializable {
 	private Resource ressource;
 	private float montant;
 	private Resource gps;
+	
+	public Resource getGps() {
+		return gps;
+	}
+
+	public void setGps(Resource gps) {
+		this.gps = gps;
+	}
+
 	public float getMontant() {
 		return montant;
 	}
@@ -77,15 +86,16 @@ public class Mandate implements Serializable {
 	}
 
 	@Override
+	public String toString() {
+		return "Mandate [id=" + id + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", projet=" + projet
+				+ ", ressource=" + ressource + ", montant=" + montant + ", gps=" + gps + "]";
+	}
+
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dateDebut == null) ? 0 : dateDebut.hashCode());
-		result = prime * result + ((dateFin == null) ? 0 : dateFin.hashCode());
 		result = prime * result + id;
-		result = prime * result + Float.floatToIntBits(montant);
-		result = prime * result + ((projet == null) ? 0 : projet.hashCode());
-		result = prime * result + ((ressource == null) ? 0 : ressource.hashCode());
 		return result;
 	}
 
@@ -98,37 +108,11 @@ public class Mandate implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Mandate other = (Mandate) obj;
-		if (dateDebut == null) {
-			if (other.dateDebut != null)
-				return false;
-		} else if (!dateDebut.equals(other.dateDebut))
-			return false;
-		if (dateFin == null) {
-			if (other.dateFin != null)
-				return false;
-		} else if (!dateFin.equals(other.dateFin))
-			return false;
 		if (id != other.id)
-			return false;
-		if (Float.floatToIntBits(montant) != Float.floatToIntBits(other.montant))
-			return false;
-		if (projet == null) {
-			if (other.projet != null)
-				return false;
-		} else if (!projet.equals(other.projet))
-			return false;
-		if (ressource == null) {
-			if (other.ressource != null)
-				return false;
-		} else if (!ressource.equals(other.ressource))
 			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Mandate [id=" + id + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", projet=" + projet
-				+ ", ressource=" + ressource + ", montant=" + montant + "]";
-	}
+
 
 }
