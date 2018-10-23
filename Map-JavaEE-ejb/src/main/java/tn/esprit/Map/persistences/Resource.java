@@ -27,6 +27,7 @@ public class Resource extends Person implements Serializable {
 	@ManyToMany(mappedBy = "resources")
 	private List<OrganizationalChart> organizationalCharts;
 
+	private List<Mandate> listeMondats;
 	public String getSeniority() {
 		return seniority;
 	}
