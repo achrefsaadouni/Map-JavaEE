@@ -1,5 +1,6 @@
 package tn.esprit.ressources;
 
+import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -8,12 +9,13 @@ import javax.ws.rs.core.Response;
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 
 @Path("mandate")
+@ManagedBean
 public class MandateResource {
 	@EJB
 	MandateServiceLocal mandateService;
 
 	@GET
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMandate(@QueryParam(value = "ressourceId") String ressourceId,
 			@QueryParam(value = "projetId") String projetId, @QueryParam(value = "dateFin") String dateDebut,
 			@QueryParam(value = "dateFin") String dateFin) {
