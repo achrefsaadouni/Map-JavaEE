@@ -28,8 +28,14 @@ public class JobRequestWebService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String AddReq()
 	{
-		JobRequestService.AddJobRequest(jb);
+		try {
+			JobRequestService.AddJobRequest(jb);
+			return "succ add";
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 		return "succ";
+		
 	}
 
 }
