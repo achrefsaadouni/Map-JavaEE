@@ -15,11 +15,13 @@ import tn.esprit.Map.persistences.JobRequest;
 
 @Stateless
 public class JobRequestService implements JobRequestLocal{
-
+	
+	@PersistenceContext(unitName = "MAP")
+	private EntityManager em;
 	@Override
-	public String AddJobRequest(JobRequest jobRequest) {
-		// TODO Auto-generated method stub
-		return null;
+	public void AddJobRequest(JobRequest jobRequest) {
+	em.persist(jobRequest);
+		
 	}
 
 	@Override
