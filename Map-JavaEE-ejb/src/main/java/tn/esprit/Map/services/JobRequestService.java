@@ -19,8 +19,7 @@ public class JobRequestService implements JobRequestRemote {
 	
 	@PersistenceContext(unitName = "Map-JavaEE-ejb")
 	private EntityManager em;
-	String st ;
-	int a ;
+	
 
 	@Produces(MediaType.TEXT_PLAIN)
 	@GET
