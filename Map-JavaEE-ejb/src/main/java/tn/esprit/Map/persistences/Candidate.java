@@ -9,10 +9,13 @@ import javax.persistence.*;
 public class Candidate extends Person implements Serializable {
 	
 	@OneToOne(mappedBy="candidate")
-	private TechnicalTest TechnicalTest;
+	private Test Test;
 	
 	@OneToOne(mappedBy="candidate")
 	private JobRequest jobRequest;
+	@OneToOne(mappedBy="Candidate")
+	private CandidateFolder CandidateFolder;
+	
 
 	public JobRequest getJobRequest() {
 		return jobRequest;
@@ -22,12 +25,12 @@ public class Candidate extends Person implements Serializable {
 		this.jobRequest = jobRequest;
 	}
 
-	public TechnicalTest getTechnicalTest() {
-		return TechnicalTest;
+	public Test getTechnicalTest() {
+		return Test;
 	}
 
-	public void setTechnicalTest(TechnicalTest technicalTest) {
-		TechnicalTest = technicalTest;
+	public void setTechnicalTest(Test technicalTest) {
+		Test = technicalTest;
 	}
 	
 }

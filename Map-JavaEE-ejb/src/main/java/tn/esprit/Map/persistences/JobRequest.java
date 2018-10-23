@@ -13,7 +13,9 @@ public class JobRequest implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StateType stateType;
 	@Temporal(TemporalType.DATE)
-	private Date date;
+	private Date Rdvdate;
+	@Temporal(TemporalType.DATE)
+	private Date Sentdate;
 	private String speciality;
 	@OneToOne
 	private Candidate candidate;
@@ -35,11 +37,11 @@ public class JobRequest implements Serializable {
 	}
 
 	public Date getDate() {
-		return date;
+		return Rdvdate;
 	}
 
 	public void setDate(Date date) {
-		this.date = date;
+		this.Rdvdate = date;
 	}
 
 	public String getSpeciality() {
@@ -57,5 +59,22 @@ public class JobRequest implements Serializable {
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
 	}
+
+	public Date getRdvdate() {
+		return Rdvdate;
+	}
+
+	public void setRdvdate(Date rdvdate) {
+		Rdvdate = rdvdate;
+	}
+
+	public Date getSentdate() {
+		return Sentdate;
+	}
+
+	public void setSentdate(Date sentdate) {
+		Sentdate = sentdate;
+	}
+	
 
 }

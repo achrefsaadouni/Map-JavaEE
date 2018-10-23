@@ -17,12 +17,13 @@ import javax.persistence.TemporalType;
 
 @Entity
 
-public class TechnicalTest implements Serializable {
+public class Test implements Serializable {
 	@Id
 	
 	@GeneratedValue
 	private int id ; 
-	
+	@Enumerated(EnumType.STRING)
+	private TestType TestType;
 	@Enumerated(EnumType.STRING)
 	private TestResult result;
 	@Temporal(TemporalType.DATE)
