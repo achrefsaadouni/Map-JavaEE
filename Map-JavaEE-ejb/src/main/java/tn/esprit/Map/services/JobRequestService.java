@@ -34,4 +34,10 @@ public class JobRequestService implements JobRequestLocal{
 		return null;
 	}
 
+	@Override
+	public String ViewAllRequested() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
