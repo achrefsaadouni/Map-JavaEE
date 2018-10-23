@@ -27,9 +27,9 @@ public class Project implements Serializable {
 	private Client client;
 	@OneToMany(mappedBy = "project")
 	private List<Resource> resources;
-	
+	@OneToMany(mappedBy = "projet")
 	private List<Mandate> listeMondats;
-	
+
 	public int getId() {
 		return id;
 	}
@@ -92,6 +92,14 @@ public class Project implements Serializable {
 
 	public void setPicture(String picture) {
 		this.picture = picture;
+	}
+
+	public List<Mandate> getListeMondats() {
+		return listeMondats;
+	}
+
+	public void setListeMondats(List<Mandate> listeMondats) {
+		this.listeMondats = listeMondats;
 	}
 
 	public ProjectType getProjectType() {

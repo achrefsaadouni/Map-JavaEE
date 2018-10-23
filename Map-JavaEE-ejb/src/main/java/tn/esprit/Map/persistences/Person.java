@@ -10,7 +10,7 @@ import javax.persistence.*;
 @DiscriminatorColumn(name = "role")
 public class Person implements Serializable {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private String firstName;
 	private String lastName;

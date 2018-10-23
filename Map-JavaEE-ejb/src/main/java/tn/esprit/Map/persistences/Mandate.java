@@ -1,12 +1,14 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
 
 @Entity
 public class Mandate implements Serializable {
@@ -15,14 +17,16 @@ public class Mandate implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private Date dateDebut;
-	private Date dateFin;
+	@EmbeddedId
+	private MandateId mandateId;
+	@ManyToOne
+	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Project projet;
+	@ManyToOne
+	@JoinColumn(name = "ressourceId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Resource ressource;
 	private float montant;
+	@OneToOne
 	private Resource gps;
 	
 	public Resource getGps() {
@@ -41,29 +45,6 @@ public class Mandate implements Serializable {
 		this.montant = montant;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Date getDateDebut() {
-		return dateDebut;
-	}
-
-	public void setDateDebut(Date dateDebut) {
-		this.dateDebut = dateDebut;
-	}
-
-	public Date getDateFin() {
-		return dateFin;
-	}
-
-	public void setDateFin(Date dateFin) {
-		this.dateFin = dateFin;
-	}
 
 	public Project getProjet() {
 		return projet;
@@ -85,33 +66,8 @@ public class Mandate implements Serializable {
 		return serialVersionUID;
 	}
 
-	@Override
-	public String toString() {
-		return "Mandate [id=" + id + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", projet=" + projet
-				+ ", ressource=" + ressource + ", montant=" + montant + ", gps=" + gps + "]";
-	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
-	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Mandate other = (Mandate) obj;
-		if (id != other.id)
-			return false;
-		return true;
-	}
 
 
 
