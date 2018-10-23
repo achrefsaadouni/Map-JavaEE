@@ -21,7 +21,7 @@ public class JobRequestService implements JobRequestRemote {
 	private EntityManager em;
 	
 
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_XML)
 	@GET
 	@Override
 	public String sendJobRequest() {
