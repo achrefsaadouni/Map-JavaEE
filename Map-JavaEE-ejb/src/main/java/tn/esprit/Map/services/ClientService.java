@@ -1,19 +1,16 @@
 package tn.esprit.Map.services;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+
 
 import tn.esprit.Map.interfaces.ClientRemote;
 import tn.esprit.Map.persistences.*;
 
 @Stateless
 public class ClientService implements ClientRemote{
-	@PersistenceContext(unitName = "Map-JavaEE-ejb")
+	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
 //	
 ////	@POST
