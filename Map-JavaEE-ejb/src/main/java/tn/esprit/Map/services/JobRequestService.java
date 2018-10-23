@@ -13,17 +13,10 @@ import javax.ws.rs.core.MediaType;
 import tn.esprit.Map.interfaces.JobRequestRemote;
 import tn.esprit.Map.persistences.JobRequest;
 
-@Path("/jobrequest")
 @Stateless
 public class JobRequestService implements JobRequestRemote {
 	
-	@PersistenceContext(unitName = "Map-JavaEE-ejb")
-	private EntityManager em;
-	
 
-	@Produces(MediaType.TEXT_PLAIN)
-	@GET
-	@Override
 	public String sendJobRequest() {
 		
 		return "done";
