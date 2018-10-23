@@ -28,7 +28,7 @@ public class Project implements Serializable {
 	@OneToMany(mappedBy = "project")
 	private List<Resource> resources;
 	
-	private Mandate mandate;
+	private List<Mandate> listeMondats;
 	
 	public int getId() {
 		return id;
