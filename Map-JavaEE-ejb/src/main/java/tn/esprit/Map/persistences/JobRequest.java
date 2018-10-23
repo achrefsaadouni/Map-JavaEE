@@ -1,10 +1,13 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
+
 import java.util.Date;
 
 import javax.persistence.*;
-
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement
 @Entity
 public class JobRequest implements Serializable {
 	@Id
@@ -19,7 +22,7 @@ public class JobRequest implements Serializable {
 	private String speciality;
 	@OneToOne
 	private Candidate candidate;
-
+	@XmlElement(name="id")
 	public int getId() {
 		return id;
 	}
@@ -27,7 +30,7 @@ public class JobRequest implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	@XmlElement(name="stateType")
 	public StateType getStateType() {
 		return stateType;
 	}
@@ -35,23 +38,16 @@ public class JobRequest implements Serializable {
 	public void setStateType(StateType stateType) {
 		this.stateType = stateType;
 	}
-
-	public Date getDate() {
-		return Rdvdate;
-	}
-
-	public void setDate(Date date) {
-		this.Rdvdate = date;
-	}
-
+	
+	@XmlElement(name="speciality")
 	public String getSpeciality() {
 		return speciality;
 	}
-
+	
 	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
 	}
-
+	@XmlElement(name="candidate")
 	public Candidate getCandidate() {
 		return candidate;
 	}
@@ -59,7 +55,7 @@ public class JobRequest implements Serializable {
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
 	}
-
+	@XmlElement(name="Rdvdate")
 	public Date getRdvdate() {
 		return Rdvdate;
 	}
@@ -67,7 +63,7 @@ public class JobRequest implements Serializable {
 	public void setRdvdate(Date rdvdate) {
 		Rdvdate = rdvdate;
 	}
-
+	@XmlElement(name="Sentdate")
 	public Date getSentdate() {
 		return Sentdate;
 	}

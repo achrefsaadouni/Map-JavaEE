@@ -10,24 +10,36 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import tn.esprit.Map.interfaces.JobRequestRemote;
+import tn.esprit.Map.interfaces.JobRequestLocal;
 import tn.esprit.Map.persistences.JobRequest;
 
-@Path("/jobrequest")
 @Stateless
-public class JobRequestService implements JobRequestRemote {
+public class JobRequestService implements JobRequestLocal{
 	
-	@PersistenceContext(unitName = "Map-JavaEE-ejb")
+	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
-	
-
-	@Produces(MediaType.TEXT_PLAIN)
-	@GET
 	@Override
-	public String sendJobRequest() {
+	public void AddJobRequest(JobRequest jobRequest) {
+	em.persist(jobRequest);
 		
-		return "done";
 	}
-	
+
+	@Override
+	public String UpdateJobRequest(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String DeleteJobRequest(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String ViewAllRequested() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

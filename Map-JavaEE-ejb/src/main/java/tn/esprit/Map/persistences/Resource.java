@@ -26,8 +26,17 @@ public class Resource extends Person implements Serializable {
 	private List<Skill> skills;
 	@ManyToMany(mappedBy = "resources")
 	private List<OrganizationalChart> organizationalCharts;
+	@OneToMany(mappedBy = "ressource")
+	private List<Mandate> listeMondats;
 
-	private Mandate mandate;
+	public List<Mandate> getListeMondats() {
+		return listeMondats;
+	}
+
+	public void setListeMondats(List<Mandate> listeMondats) {
+		this.listeMondats = listeMondats;
+	}
+
 	public String getSeniority() {
 		return seniority;
 	}
