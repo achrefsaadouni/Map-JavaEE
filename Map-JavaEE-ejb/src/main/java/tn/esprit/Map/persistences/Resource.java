@@ -26,7 +26,7 @@ public class Resource extends Person implements Serializable {
 	private List<Skill> skills;
 	@ManyToMany(mappedBy = "resources")
 	private List<OrganizationalChart> organizationalCharts;
-	@OneToMany(mappedBy = "ressource")
+	@OneToMany(mappedBy = "ressource",fetch=FetchType.EAGER)
 	private List<Mandate> listeMondats;
 
 	public List<Mandate> getListeMondats() {
