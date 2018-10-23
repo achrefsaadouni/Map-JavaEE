@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
@@ -45,27 +46,45 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Mandate> getByResource(int resourceId) {
-		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId", Mandate.class);
+		query.setParameter("rId", resourceId);
 		List<Mandate> results = query.getResultList();
 		return results;
 	}
 
 	@Override
 	public List<Mandate> getByProject(int projectId) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.projetId = :pId", Mandate.class);
+		query.setParameter("pId", projectId);
+		List<Mandate> results = query.getResultList();
+		return results;
 	}
 
 	@Override
 	public List<Mandate> getByStartDate(Date startDate) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.dateDebut = :startDate",
+				Mandate.class);
+		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
+		List<Mandate> results = query.getResultList();
+		return results;
 	}
 
 	@Override
 	public List<Mandate> getByEndDate(Date endDate) {
-		// TODO Auto-generated method stub
-		return null;
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.dateFin = :endDate", Mandate.class);
+		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
+		List<Mandate> results = query.getResultList();
+		return results;
+	}
+
+	@Override
+	public List<Mandate> getByPeriod(Date startDate, Date endDate) {
+		TypedQuery<Mandate> query = em
+				.createQuery("SELECT m FROM Mandate m where m.dateFin BETWEEN :endDate AND :startDate", Mandate.class);
+		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
+		List<Mandate> results = query.getResultList();
+		return results;
 	}
 
 	@Override

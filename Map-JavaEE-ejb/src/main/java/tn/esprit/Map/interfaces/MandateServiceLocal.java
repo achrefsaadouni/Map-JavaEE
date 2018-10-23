@@ -20,6 +20,7 @@ public interface MandateServiceLocal {
 	public List<Mandate> getByProject(int projectId);
 	public List<Mandate> getByStartDate(Date startDate);
 	public List<Mandate> getByEndDate(Date endDate);
+	public List<Mandate> getByPeriod(Date startDate,Date endDate);
 	public boolean archive();
 	public float calculateCost(Mandate mandate);
 	public void AlertEndMandate(Mandate mandate);
