@@ -23,7 +23,7 @@ public class RequestService implements RequestServiceRemote{
 	public int addRequest(Request request) {
 		em.persist(request);
 		return request.getId();
-	}
+	}   
 
 	@Override
 	public void calcul() {
