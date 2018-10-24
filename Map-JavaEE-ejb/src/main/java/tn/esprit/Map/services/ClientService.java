@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //package tn.esprit.Map.services;
 //
 //import java.util.ArrayList;
@@ -26,6 +27,22 @@
 ////		return client.getId();
 ////	}
 //	
+=======
+package tn.esprit.Map.services;
+
+
+import javax.ejb.Stateless;
+import javax.persistence.*;
+
+
+import tn.esprit.Map.interfaces.ClientRemote;
+import tn.esprit.Map.persistences.*;
+
+@Stateless
+public class ClientService implements ClientRemote{
+	@PersistenceContext(unitName = "MAP")
+	private EntityManager em;
+>>>>>>> 4e349fa845099c47a25aac04ea98c011d86e37ce
 //	
 //	@Override
 //	public String getAllClients(int id) {
