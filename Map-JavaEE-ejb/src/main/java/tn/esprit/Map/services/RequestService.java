@@ -25,4 +25,10 @@ public class RequestService implements RequestServiceRemote{
 		return request.getId();
 	}
 
+	@Override
+	public void calcul() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
