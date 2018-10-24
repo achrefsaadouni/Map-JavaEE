@@ -42,6 +42,16 @@ public class Resource extends Person implements Serializable {
 	
 	@ManyToMany(mappedBy = "resources")
 	private List<OrganizationalChart> organizationalCharts;
+	@OneToMany(mappedBy = "ressource")
+	private List<Mandate> listeMondats;
+
+	public List<Mandate> getListeMondats() {
+		return listeMondats;
+	}
+
+	public void setListeMondats(List<Mandate> listeMondats) {
+		this.listeMondats = listeMondats;
+	}
 
 	
 	

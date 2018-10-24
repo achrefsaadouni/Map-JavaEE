@@ -27,7 +27,9 @@ public class Request implements Serializable {
 	private Administrator administrator;
 	@ManyToOne
 	private Client client;
+	
 
+	
 	public int getId() {
 		return id;
 	}
