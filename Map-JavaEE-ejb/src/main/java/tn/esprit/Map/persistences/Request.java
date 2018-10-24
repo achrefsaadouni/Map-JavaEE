@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 public class Request implements Serializable {
 	@Id
-	@GeneratedValue
+	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	private int id;
 	private String requestedProfil;
 	private String experienceYear;
@@ -18,7 +18,7 @@ public class Request implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date depositDate;
 	@Temporal(TemporalType.TIME)
-	private Date depositTime;
+	private Date depositTime;     
 	@Temporal(TemporalType.DATE)
 	private Date startDateMondate;
 	@Temporal(TemporalType.DATE)
@@ -125,5 +125,11 @@ public class Request implements Serializable {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+
+	public Request() {
+		super();
+	}
+	
+	
 
 }
