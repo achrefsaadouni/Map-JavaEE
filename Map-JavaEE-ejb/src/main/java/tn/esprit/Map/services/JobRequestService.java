@@ -1,8 +1,11 @@
 package tn.esprit.Map.services;
 
+import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -37,9 +40,11 @@ public class JobRequestService implements JobRequestLocal{
 	}
 
 	@Override
-	public String ViewAllRequested() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<JobRequest> ViewAllRequested() {
+		TypedQuery<JobRequest> query = em.createQuery("SELECT j FROM JobRequest j", JobRequest.class);
+		List<JobRequest> results = query.getResultList();
+		return results;
 	}
+
 
 }
