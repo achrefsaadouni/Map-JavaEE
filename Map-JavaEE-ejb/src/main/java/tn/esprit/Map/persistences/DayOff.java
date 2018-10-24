@@ -13,7 +13,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import tn.esprit.testClassResource.entitiy.Resource;
 
 @Entity
 public class DayOff implements Serializable {

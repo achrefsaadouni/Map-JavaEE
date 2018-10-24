@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import tn.esprit.testClassResource.entitiy.Resource;
 
 @Entity
 public class Skill implements Serializable {
