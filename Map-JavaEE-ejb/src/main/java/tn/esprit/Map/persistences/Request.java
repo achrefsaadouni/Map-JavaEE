@@ -18,7 +18,7 @@ public class Request implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date depositDate;
 	@Temporal(TemporalType.TIME)
-	private Date depositTime;    
+	private Date depositTime;     
 	@Temporal(TemporalType.DATE)
 	private Date startDateMondate;
 	@Temporal(TemporalType.DATE)

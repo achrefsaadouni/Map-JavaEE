@@ -21,7 +21,7 @@ public class RequestService implements RequestServiceRemote{
 
 	@Override
 	public int addRequest(Request request) {
-		em.persist(request);
+		em.persist(request); 
 		return request.getId();
 	}    
 
