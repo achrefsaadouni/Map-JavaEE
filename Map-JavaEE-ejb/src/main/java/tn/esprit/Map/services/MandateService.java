@@ -105,4 +105,15 @@ public class MandateService implements MandateServiceLocal {
 
 	}
 
+	@Override
+	public boolean addMandate(int ressourceId,int projetId,Date dateDebut,Date dateFin) {
+		
+		return false;
+	}
+
+	@Override
+	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId) {
+		return false;
+	}
+
 }
