@@ -1,12 +1,7 @@
 package tn.esprit.webservices;
-
-import tn.esprit.Map.services.*;
-
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -20,11 +15,14 @@ import tn.esprit.Map.persistences.JobRequest;
 public class JobRequestWebService {
 	@EJB
 	JobRequestLocal JobRequestService;
+	JobRequest jobRequest = new JobRequest();
 	
+//ObjectMapper mapper = new ObjectMapper();
+
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response ViewRequestdJobs()
-	{
+	public Response ViewRequestdJobs() {
 		if (JobRequestService.ViewAllRequested() == null)
 			return Response.status(Response.Status.NOT_FOUND).build();
 
@@ -33,8 +31,9 @@ public class JobRequestWebService {
 
 		else
 			return Response.ok(JobRequestService.ViewAllRequested(), MediaType.APPLICATION_JSON).build();
-		
+
 	}
+
 
 
 }
