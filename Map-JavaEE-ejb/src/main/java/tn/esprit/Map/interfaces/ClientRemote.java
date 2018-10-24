@@ -8,7 +8,7 @@ import tn.esprit.Map.persistences.Client;
 
 @Remote
 public interface ClientRemote {
-	//public int addClient(Client client);
-	//public List<Client> getAllClients(int id);
-	public String getAllClients(int id);
+//	public int addClient(Client client);
+//	public List<Client> getAllClients(int id);
+//	public String getAllClients(int id);
 }

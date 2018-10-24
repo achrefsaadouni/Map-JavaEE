@@ -10,12 +10,15 @@ import tn.esprit.Map.services.ProjectService;
 @Path("/projects")
 public class ProjectWebService {
 	ProjectService projectService = new ProjectService();
-	@GET
-	@Produces("application/json")
-	public String getProjectById(int projectId)
-	{
-		projectId = 1 ;
-		return projectService.getProjectById(projectId);
-	}
 
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String test() {
+		return projectService.test();
+	}
 }
+// public String getProjectById(int projectId)
+// {
+// projectId = 1 ;
+// return projectService.getProjectById(projectId);
+// }
