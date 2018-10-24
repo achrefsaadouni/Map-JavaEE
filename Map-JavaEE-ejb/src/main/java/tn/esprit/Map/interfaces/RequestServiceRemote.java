@@ -10,4 +10,4 @@ public interface RequestServiceRemote {
 	public int addRequest(Request request);
 	public void calcul();   
 
-}
+} 
