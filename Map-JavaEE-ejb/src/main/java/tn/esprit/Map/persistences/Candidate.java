@@ -10,7 +10,8 @@ public class Candidate extends Person implements Serializable {
 	
 	@OneToOne(mappedBy="candidate")
 	private Test Test;
-	
+	@Enumerated(EnumType.STRING)
+	private CandidateState candidateState ;
 	@OneToOne(mappedBy="candidate")
 	private JobRequest jobRequest;
 	@OneToOne(mappedBy="Candidate")
