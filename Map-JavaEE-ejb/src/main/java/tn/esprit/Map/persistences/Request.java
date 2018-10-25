@@ -13,7 +13,7 @@ public class Request implements Serializable {
 	private String requestedProfil;
 	private String experienceYear;
 	private String educationScolarity;
-	private Project project;
+	private String project;
 	private String manager;
 	@Temporal(TemporalType.DATE)
 	private Date depositDate;
@@ -26,6 +26,7 @@ public class Request implements Serializable {
 	@ManyToOne
 	private Administrator administrator;
 	@ManyToOne
+	@JoinColumn(insertable = false, updatable = false)
 	private Client client;
 	
 
@@ -62,11 +63,11 @@ public class Request implements Serializable {
 		this.educationScolarity = educationScolarity;
 	}
 
-	public Project getProject() {
+	public String getProject() {
 		return project;
 	}
 
-	public void setProject(Project project) {
+	public void setProject(String project) {
 		this.project = project;
 	}
 

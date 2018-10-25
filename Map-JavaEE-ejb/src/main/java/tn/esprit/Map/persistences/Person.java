@@ -18,10 +18,9 @@ public class Person implements Serializable {
 	private String lastName;
 	private String login;
 	private String password;
-	@OneToMany(mappedBy = "person")
-	private List<InBox> inBoxs;
-	@OneToMany(mappedBy = "person")
-	private List<Message> messages;
+	@OneToOne
+	private InBox inBox;
+
 
 	public int getId() {
 		return id;
@@ -63,20 +62,12 @@ public class Person implements Serializable {
 		this.password = password;
 	}
 
-	public List<InBox> getInBoxs() {
-		return inBoxs;
+	public InBox getInBox() {
+		return inBox;
+	}
+	public void setInBoxs(InBox inBox) {
+		this.inBox = inBox;
 	}
 
-	public void setInBoxs(List<InBox> inBoxs) {
-		this.inBoxs = inBoxs;
-	}
-
-	public List<Message> getMessages() {
-		return messages;
-	}
-
-	public void setMessages(List<Message> messages) {
-		this.messages = messages;
-	}
 
 }
