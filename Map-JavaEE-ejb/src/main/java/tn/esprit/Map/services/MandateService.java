@@ -106,14 +106,17 @@ public class MandateService implements MandateServiceLocal {
 
 	}
 
+	
+
 	@Override
-	public boolean addMandate(Request request) {
+	public boolean addMandate(int ressourceId,int projetId,Date dateDebut,Date dateFin) {
 		
 		return false;
 	}
 
 	@Override
-	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId) {
+	public boolean addMandate(Request request) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 

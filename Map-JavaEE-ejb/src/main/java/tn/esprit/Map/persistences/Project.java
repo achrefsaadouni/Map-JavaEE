@@ -9,36 +9,54 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+@JsonRootName("project")
 @Entity
-//@XmlRootElement(name="project")
 public class Project implements Serializable {
 	@Id
 	@GeneratedValue
+	@JsonProperty("idProject")
 	private int id;
+	@JsonProperty("NameProject")
 	private String projectName;
 	@Temporal(TemporalType.DATE)
+	@JsonProperty("StartDate")
 	private Date startDate;
 	@Temporal(TemporalType.DATE)
+	@JsonProperty("EndDate")
 	private Date endDate;
+	@JsonProperty("Address")
 	private String address;
+	@JsonProperty("TotalNbResource")
 	private int totalNumberResource;
+	@JsonProperty("LevioNbResource")
 	private int levioNumberResource;
+	@JsonProperty("Picture")
 	private String picture;
 	@Enumerated(EnumType.STRING)
+	@JsonProperty("ProjectType")
 	private ProjectType projectType;
 	@ManyToOne
+	@JsonProperty("OrganizationalChart")
 	private OrganizationalChart organizationalChart;
-	@ManyToOne
+	@ManyToOne	
+	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
+	@JsonProperty("Client")
 	private Client client;
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
+	@JsonProperty("Resources")
 	private List<Resource> resources;
-	@OneToMany(mappedBy = "projet")
+	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
+	@JsonProperty("ListeMondats")
 	private List<Mandate> listeMondats;
 
 	public int getId() {
 		return id;
 	}
-	//@XmlAttribute(name="id",required=true)
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -46,7 +64,7 @@ public class Project implements Serializable {
 	public String getProjectName() {
 		return projectName;
 	}
-	//@XmlElement(name="projectName")
+
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
@@ -54,7 +72,7 @@ public class Project implements Serializable {
 	public Date getStartDate() {
 		return startDate;
 	}
-	//@XmlElement(name="startDate")
+
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
@@ -62,7 +80,7 @@ public class Project implements Serializable {
 	public Date getEndDate() {
 		return endDate;
 	}
-	//@XmlElement(name="endDate")
+
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
@@ -70,7 +88,7 @@ public class Project implements Serializable {
 	public String getAddress() {
 		return address;
 	}
-	//@XmlElement(name="address")
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -78,7 +96,7 @@ public class Project implements Serializable {
 	public int getTotalNumberResource() {
 		return totalNumberResource;
 	}
-	//@XmlElement(name="totalNumberResource")
+
 	public void setTotalNumberResource(int totalNumberResource) {
 		this.totalNumberResource = totalNumberResource;
 	}
@@ -86,7 +104,7 @@ public class Project implements Serializable {
 	public int getLevioNumberResource() {
 		return levioNumberResource;
 	}
-	//@XmlElement(name="levioNumberResource")
+
 	public void setLevioNumberResource(int levioNumberResource) {
 		this.levioNumberResource = levioNumberResource;
 	}
@@ -94,7 +112,7 @@ public class Project implements Serializable {
 	public String getPicture() {
 		return picture;
 	}
-	//@XmlElement(name="picture")
+
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
@@ -110,7 +128,7 @@ public class Project implements Serializable {
 	public ProjectType getProjectType() {
 		return projectType;
 	}
-	//@XmlElement(name="projectType")
+
 	public void setProjectType(ProjectType projectType) {
 		this.projectType = projectType;
 	}

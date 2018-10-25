@@ -29,6 +29,7 @@ public class Resource extends Person implements Serializable {
 	private String jobType;
 	
 	@ManyToOne
+	//@JoinColumn(name = "project_id", referencedColumnName = "id",insertable = false, updatable = false)
 	private Project project;
 	
 	
