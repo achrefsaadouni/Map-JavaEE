@@ -6,12 +6,13 @@ import java.util.List;
 import javax.ejb.Local;
 
 import tn.esprit.Map.persistences.Mandate;
+import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
 
 @Local
 public interface MandateServiceLocal {
-	
+	public boolean addMandate(Request request);
 	public Resource SearchResourceBySkill(Skill skill);
 	public boolean isAvailable(int resourceId);
 	public void notify(String receiver);
@@ -24,4 +25,5 @@ public interface MandateServiceLocal {
 	public boolean archive();
 	public float calculateCost(Mandate mandate);
 	public void AlertEndMandate(Mandate mandate);
+	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId);
 }

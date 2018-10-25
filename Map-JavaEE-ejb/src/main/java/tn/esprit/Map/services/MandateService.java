@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 import tn.esprit.Map.persistences.Mandate;
+import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
 
@@ -103,6 +104,19 @@ public class MandateService implements MandateServiceLocal {
 	public void AlertEndMandate(Mandate mandate) {
 		// TODO Auto-generated method stub
 
+	}
+
+	
+
+	@Override
+	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId) {
+		return false;
+	}
+
+	@Override
+	public boolean addMandate(Request request) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
