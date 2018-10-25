@@ -61,7 +61,7 @@ public class ClientService implements ClientRemote {
 		Client client = em.find(Client.class,clientId);
 		if(client.getId()!=-1){
 			em.remove(client);
-			return "delete success";
+			return "deleted";
 		}
 		return "error";
 	}
