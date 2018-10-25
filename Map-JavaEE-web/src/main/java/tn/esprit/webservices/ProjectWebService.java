@@ -20,7 +20,6 @@ import tn.esprit.Map.persistences.ProjectType;
 public class ProjectWebService {
 	@EJB
 	ProjectRemote projectRemote;
-	SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy");
 	Project project = new Project();
 
 	@GET
