@@ -16,7 +16,8 @@ public class Message implements Serializable {
 	private Date dateMessage;
 	private TypeMessage typeMessage;
 	@ManyToOne
-	private Person person;
+	private InBox inBox;
+	
 
 	public int getId() {
 		return id;
@@ -58,12 +59,14 @@ public class Message implements Serializable {
 		this.typeMessage = typeMessage;
 	}
 
-	public Person getPerson() {
-		return person;
+	public InBox getInBox() {
+		return inBox;
 	}
 
-	public void setPerson(Person person) {
-		this.person = person;
+	public void setInBox(InBox inBox) {
+		this.inBox = inBox;
 	}
+
+
 
 }

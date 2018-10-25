@@ -2,31 +2,40 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.jms.JMSSessionMode;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+@JsonRootName("client")
 @Entity
 @DiscriminatorValue(value = "client")
-@XmlRootElement(name="client")
 public class Client extends Person implements Serializable {
 	@Enumerated(EnumType.STRING)
+	@JsonProperty("clientType")
 	private ClientType clientType;
 	@Enumerated(EnumType.STRING)
+	@JsonProperty("clientCategory")
 	private ClientCategory clientCategory;
+	@JsonProperty("nameSociety")
 	private String nameSociety;
+	@JsonProperty("logo")
 	private String logo;
+	@JsonProperty("address")
 	private String address;
-	@OneToMany(mappedBy = "client" , cascade = CascadeType.PERSIST )
+	@OneToMany(mappedBy = "client")
+	@JsonProperty("projects")
 	private List<Project> projects;
+	@JsonProperty("requests")
 	@OneToMany(mappedBy = "client")
 	private List<Request> requests;
 
 	public ClientType getClientType() {
 		return clientType;
 	}
-	@XmlElement(name="clientType")
 	public void setClientType(ClientType clientType) {
 		this.clientType = clientType;
 	}
@@ -34,7 +43,6 @@ public class Client extends Person implements Serializable {
 	public ClientCategory getClientCategory() {
 		return clientCategory;
 	}
-	@XmlElement(name="clientCategory")
 	public void setClientCategory(ClientCategory clientCategory) {
 		this.clientCategory = clientCategory;
 	}
@@ -42,7 +50,7 @@ public class Client extends Person implements Serializable {
 	public String getNameSociety() {
 		return nameSociety;
 	}
-	@XmlElement(name="nameSociety")
+
 	public void setNameSociety(String nameSociety) {
 		this.nameSociety = nameSociety;
 	}
@@ -50,7 +58,7 @@ public class Client extends Person implements Serializable {
 	public String getLogo() {
 		return logo;
 	}
-	@XmlElement(name="logo")
+
 	public void setLogo(String logo) {
 		this.logo = logo;
 	}
@@ -58,7 +66,7 @@ public class Client extends Person implements Serializable {
 	public String getAddress() {
 		return address;
 	}
-	@XmlElement(name="address")
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
