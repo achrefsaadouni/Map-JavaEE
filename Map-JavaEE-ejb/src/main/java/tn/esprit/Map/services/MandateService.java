@@ -3,6 +3,7 @@ package tn.esprit.Map.services;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,13 +15,14 @@ import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
-import tn.esprit.Map.utilities.Mail;
 
 @Stateless
 public class MandateService implements MandateServiceLocal {
 	@PersistenceContext(unitName = "MAP")
 	EntityManager em;
-
+	@EJB
+	Mail mail;
+	
 	@Override
 	public Resource SearchResourceBySkill(Skill skill) {
 		
@@ -36,7 +38,7 @@ public class MandateService implements MandateServiceLocal {
 	@Override
 	public void notify(String receiver ,String topic, String textMessage) {
 		
-		Mail mail = new Mail();
+		
 		mail.send(receiver, topic, textMessage);
 
 	}

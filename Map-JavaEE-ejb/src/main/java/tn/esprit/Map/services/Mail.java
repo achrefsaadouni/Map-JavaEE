@@ -1,7 +1,6 @@
-package tn.esprit.Map.utilities;
+package tn.esprit.Map.services;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
@@ -12,10 +11,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+
 @Stateless
 public class Mail {
  
-    @Resource(name = "java:jboss/mail/Default")
+	@Resource(mappedName="java:jboss/mail/RedHat")
     private Session session;
  
     public void send(String addresses, String topic, String textMessage) {
@@ -30,7 +30,7 @@ public class Mail {
             Transport.send(message);
  
         } catch (MessagingException e) {
-            Logger.getLogger(Mail.class.getName()).log(Level.WARNING, "Cannot send mail", e);
+            System.out.println(e);
         }
     }
 }

@@ -19,7 +19,6 @@ import javax.persistence.TemporalType;
 
 public class Test implements Serializable {
 	@Id
-	
 	@GeneratedValue
 	private int id ; 
 	@Enumerated(EnumType.STRING)
