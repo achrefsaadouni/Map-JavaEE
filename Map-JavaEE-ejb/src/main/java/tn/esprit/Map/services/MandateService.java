@@ -31,7 +31,7 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public boolean isAvailable(int resourceId) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
@@ -95,14 +95,19 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public boolean archive() {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	@Override
-	public float calculateCost(Mandate mandate) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double calculateCost(int ressourceId,int projetId,Date startDate,Date endDate) {
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate", Mandate.class);
+		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("rid", ressourceId);
+		query.setParameter("pId", projetId);
+		Mandate mandate = query.getSingleResult();
+		return mandate.getRessource().getSalary()*mandate.getRessource().getTaux();
 	}
 
 	@Override

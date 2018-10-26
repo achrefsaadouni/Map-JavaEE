@@ -28,6 +28,25 @@ public class Resource extends Person implements Serializable {
 	
 	private String jobType;
 	
+	private  double taux;
+	
+	
+	public Resource() {
+		super();
+		this.taux = 1.8;
+	}
+
+
+	public  double getTaux() {
+		return taux;
+	}
+
+
+	public void setTaux(double taux) {
+		this.taux = taux;
+	}
+
+
 	@ManyToOne
 	//@JoinColumn(name = "project_id", referencedColumnName = "id",insertable = false, updatable = false)
 	private Project project;

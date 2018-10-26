@@ -23,7 +23,7 @@ public interface MandateServiceLocal {
 	public List<Mandate> getByEndDate(Date endDate);
 	public List<Mandate> getByPeriod(Date startDate,Date endDate);
 	public boolean archive();
-	public float calculateCost(Mandate mandate);
+	public double calculateCost(int ressourceId,int projetId,Date dateDebut,Date dateFin);
 	public void AlertEndMandate(Mandate mandate);
 	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId);
 }
