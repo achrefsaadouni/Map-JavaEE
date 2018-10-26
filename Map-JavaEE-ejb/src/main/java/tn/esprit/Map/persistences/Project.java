@@ -39,6 +39,8 @@ public class Project implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("ProjectType")
 	private ProjectType projectType;
+	@JsonProperty("archived")
+	private boolean archived;
 	@ManyToOne
 	@JsonProperty("OrganizationalChart")
 	private OrganizationalChart organizationalChart;

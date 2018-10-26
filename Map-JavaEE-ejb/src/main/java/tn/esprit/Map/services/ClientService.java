@@ -25,7 +25,8 @@ public class ClientService implements ClientRemote {
 
 	@Override
 	public List<Client> getAllClients() {
-		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c", Client.class);
+		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c where c.archived= :archvied", Client.class);
+		query.setParameter("archvied",false);
 		List<Client> results = query.getResultList();
 		for (Client c : results) {
 			c.setProjects(null);
@@ -66,6 +67,18 @@ public class ClientService implements ClientRemote {
 	@Override
 	public String deleteClient(int clientId) {
 		Client client = em.find(Client.class,clientId);
+		Query queryGetProjects = em.createQuery("select p from Project p where p.client = :client");
+		Query queryUpdateProject = em.createQuery("update Project p set client= :client where p.id= :projectId");
+		queryGetProjects.setParameter("client",client);
+		List<Project> projectsClient =queryGetProjects.getResultList();
+		for(Project project : projectsClient)
+		{
+			//project.setClient(null); --> didn't work
+			//cause of insertable = false, updatable = false
+			queryUpdateProject.setParameter("client", null);
+			queryUpdateProject.setParameter("projectId", project.getId());
+			queryUpdateProject.executeUpdate();		
+		}
 		if(client.getId()!=-1){
 			em.remove(client);
 			return "deleted";
@@ -77,6 +90,13 @@ public class ClientService implements ClientRemote {
 	public void testSendMail(String to, String from, String subject, String bodyText) {
 		mailAPI.sendEmail(to, from, subject, bodyText);
 		
+	}
+
+	@Override
+	public String archiveClient(int clientId) {
+		Client client = em.find(Client.class,clientId);
+		client.setArchived(true);
+		return "archived";
 	}
 
 }

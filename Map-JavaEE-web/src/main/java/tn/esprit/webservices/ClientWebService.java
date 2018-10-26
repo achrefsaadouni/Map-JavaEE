@@ -56,10 +56,11 @@ public class ClientWebService {
 	public String deleteProject(@PathParam("idClient") String idClient){
 		return clientRemote.deleteClient(Integer.parseInt(idClient));
 	}
-	//work but must consume JSON
 	@POST
 	@Produces(MediaType.TEXT_PLAIN)
-	public void testSendMail(@QueryParam("to")String to, @QueryParam("from")String from, @QueryParam("subject")String subject, @QueryParam("bodyText")String bodyText) {
-		clientRemote.testSendMail(to, from, subject, bodyText);
-}
+	@Path("{idClient}")
+	public String archiveClient(@PathParam("idClient") String idClient )
+	{
+		return clientRemote.archiveClient(Integer.parseInt(idClient));
 	}
+}
