@@ -95,8 +95,8 @@ public class ClientService implements ClientRemote {
 	@Override
 	public String archiveClient(int clientId) {
 		Client client = em.find(Client.class,clientId);
-		client.setArchived(true);
-		return "archived";
+		client.setArchived(1);
+		return "archived done";
 	}
 
 }
