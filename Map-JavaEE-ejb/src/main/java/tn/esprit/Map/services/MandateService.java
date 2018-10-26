@@ -14,6 +14,7 @@ import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
+import tn.esprit.Map.utilities.Mail;
 
 @Stateless
 public class MandateService implements MandateServiceLocal {
@@ -22,7 +23,7 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public Resource SearchResourceBySkill(Skill skill) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -33,8 +34,10 @@ public class MandateService implements MandateServiceLocal {
 	}
 
 	@Override
-	public void notify(String receiver) {
-		// TODO Auto-generated method stub
+	public void notify(String receiver ,String topic, String textMessage) {
+		
+		Mail mail = new Mail();
+		mail.send(receiver, topic, textMessage);
 
 	}
 

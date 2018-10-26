@@ -30,7 +30,7 @@ public class MandateResource {
 				return Response.ok(mandateService.getAll(), MediaType.APPLICATION_JSON).build();
 
 		} else if ((ressourceId != null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
-			
+
 			if (mandateService.getByResource(Integer.parseInt(ressourceId)) == null)
 				return Response.status(Response.Status.NOT_FOUND).build();
 
@@ -38,12 +38,22 @@ public class MandateResource {
 				return Response.status(Response.Status.NO_CONTENT).entity("Pas de contenu").build();
 
 			else {
-				return Response.ok(mandateService.getByResource(Integer.parseInt(ressourceId)), MediaType.APPLICATION_JSON)
+				return Response
+						.ok(mandateService.getByResource(Integer.parseInt(ressourceId)), MediaType.APPLICATION_JSON)
 						.header("Access-Control-Allow-Origin", "*").build();
 			}
 
-		
 		} else
 			return Response.status(Response.Status.BAD_REQUEST).entity("Requete eronnée").build();
 	}
+
+	@GET
+	@Path("/notif")
+	public void notif(@QueryParam(value = "receiver") String receiver, @QueryParam(value = "subject") String subject,
+			@QueryParam(value = "body") String body) {
+		
+		mandateService.notify(receiver, subject, body);
+
+	}
+
 }

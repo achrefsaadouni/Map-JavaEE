@@ -15,7 +15,7 @@ public interface MandateServiceLocal {
 	public boolean addMandate(Request request);
 	public Resource SearchResourceBySkill(Skill skill);
 	public boolean isAvailable(int resourceId);
-	public void notify(String receiver);
+	public void notify(String receiver ,String topic, String textMessage);
 	public List<Mandate> getAll();
 	public List<Mandate> getByResource(int resourceId);
 	public List<Mandate> getByProject(int projectId);
