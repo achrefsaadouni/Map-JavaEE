@@ -13,7 +13,7 @@ public class Request implements Serializable {
 	private String requestedProfil;
 	private String experienceYear;
 	private String educationScolarity;
-	private String project;
+	private Project project;
 	private String manager;
 	@Temporal(TemporalType.DATE)
 	private Date depositDate;
@@ -63,11 +63,12 @@ public class Request implements Serializable {
 		this.educationScolarity = educationScolarity;
 	}
 
-	public String getProject() {
+
+	public Project getProject() {
 		return project;
 	}
 
-	public void setProject(String project) {
+	public void setProject(Project project) {
 		this.project = project;
 	}
 

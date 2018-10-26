@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 import tn.esprit.Map.persistences.Mandate;
+import tn.esprit.Map.persistences.MandateId;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
@@ -113,22 +114,34 @@ public class MandateService implements MandateServiceLocal {
 	@Override
 	public void AlertEndMandate(Mandate mandate) {
 		// TODO Auto-generated method stub
-
 	}
 
 	
 
 
 	@Override
-	public boolean addMandate(Request request) {
-		// TODO Auto-generated method stub
-		return false;
+	public void addMandate(int requestId,int resourceId) {
+		Request request = em.find(Request.class, requestId);
+		Mandate mandate = new Mandate();
+		MandateId mandateId = new MandateId();
+		mandateId.setDateDebut(request.getStartDateMondate());
+		mandateId.setDateFin(request.getEndDateMondate());
+		mandateId.setProjetId(request.getProject().getId());
+		mandateId.setRessourceId(resourceId);
+		mandate.setMandateId(mandateId);
+		em.persist(mandate);
 	}
 
 	@Override
-	public boolean addGps(int ressourceId, int projetId, Date dateDebut, Date dateFin, int gpsId) {
-		// TODO Auto-generated method stub
-		return false;
+	public void addGps(int ressourceId, int projetId, Date dateDebut, Date dateFin, int gpsId) {
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate", Mandate.class);
+		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("rid", ressourceId);
+		query.setParameter("pId", projetId);
+		Mandate mandate = query.getSingleResult();
+		Resource resource = em.find(Resource.class, gpsId);
+		mandate.setGps(resource);
 	}
 
 }

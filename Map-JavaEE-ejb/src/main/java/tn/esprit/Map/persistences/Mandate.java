@@ -28,6 +28,15 @@ public class Mandate implements Serializable {
 	@OneToOne
 	private Resource gps;
 	
+	
+	public MandateId getMandateId() {
+		return mandateId;
+	}
+
+	public void setMandateId(MandateId mandateId) {
+		this.mandateId = mandateId;
+	}
+
 	public Resource getGps() {
 		return gps;
 	}
