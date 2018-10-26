@@ -18,7 +18,7 @@ public class Person implements Serializable {
 	private String login;
 	private String password;
 	private String email;
-	private boolean archived;
+	private int archived;
 	@OneToOne
 	private InBox inBox;
 
@@ -74,10 +74,10 @@ public class Person implements Serializable {
 	public void setInBox(InBox inBox) {
 		this.inBox = inBox;
 	}
-	public boolean isArchived() {
+	public int isArchived() {
 		return archived;
 	}
-	public void setArchived(boolean archived) {
+	public void setArchived(int archived) {
 		this.archived = archived;
 	}
 
