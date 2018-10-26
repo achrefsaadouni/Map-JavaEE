@@ -39,7 +39,7 @@ public class ClientService implements ClientRemote {
 		c.setPassword(randomPassword.generateRandomPassword());
 		em.persist(c);
 		c.setLogin(c.getFirstName()+" "+c.getLastName());
-		mailAPI.sendEmail(c.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login :"+c.getLogin()+" Password :"+c.getPassword());
+		mailAPI.sendEmail(c.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login : "+c.getLogin()+" Password : "+c.getPassword());
 		return c.getId();
 	}
 
