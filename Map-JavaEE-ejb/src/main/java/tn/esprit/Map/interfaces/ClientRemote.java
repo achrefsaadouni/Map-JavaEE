@@ -13,4 +13,5 @@ public interface ClientRemote {
 	public int addClient(Client c);
 	public String updateClientByAdmin(Client client);
 	public String deleteClient(int clientId);
+	public  void testSendMail(String to,String from,String subject,String bodyText);
 }

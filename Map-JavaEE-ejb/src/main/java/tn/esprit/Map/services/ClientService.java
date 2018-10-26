@@ -12,11 +12,16 @@ import javax.persistence.TypedQuery;
 import tn.esprit.Map.interfaces.ClientRemote;
 import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.Project;
+import tn.esprit.Map.utilities.Mail_API;
+import tn.esprit.Map.utilities.RandomPassword;
+
 
 @Stateless
 public class ClientService implements ClientRemote {
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
+	private Mail_API mailAPI = new Mail_API();
+	private RandomPassword randomPassword = new RandomPassword();
 
 	@Override
 	public List<Client> getAllClients() {
@@ -31,7 +36,10 @@ public class ClientService implements ClientRemote {
 
 	@Override
 	public int addClient(Client c) {
+		c.setPassword(randomPassword.generateRandomPassword());
 		em.persist(c);
+		c.setLogin(c.getFirstName()+" "+c.getLastName());
+		mailAPI.sendEmail(c.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login :"+c.getLogin()+" Password :"+c.getPassword());
 		return c.getId();
 	}
 
@@ -46,7 +54,6 @@ public class ClientService implements ClientRemote {
 		query.setParameter("nameSociety", client.getNameSociety());
 		query.setParameter("logo", client.getLogo());
 		query.setParameter("clientCategory", client.getClientCategory());
-		
 		query.setParameter("clientId", client.getId());
 		int modified = query.executeUpdate();
 		if (modified == 1) {
@@ -64,6 +71,12 @@ public class ClientService implements ClientRemote {
 			return "deleted";
 		}
 		return "error";
+	}
+
+	@Override
+	public void testSendMail(String to, String from, String subject, String bodyText) {
+		mailAPI.sendEmail(to, from, subject, bodyText);
+		
 	}
 
 }

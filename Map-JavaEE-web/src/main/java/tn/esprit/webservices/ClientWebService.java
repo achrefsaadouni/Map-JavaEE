@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -55,4 +56,10 @@ public class ClientWebService {
 	public String deleteProject(@PathParam("idClient") String idClient){
 		return clientRemote.deleteClient(Integer.parseInt(idClient));
 	}
+	//work but must consume JSON
+	@POST
+	@Produces(MediaType.TEXT_PLAIN)
+	public void testSendMail(@QueryParam("to")String to, @QueryParam("from")String from, @QueryParam("subject")String subject, @QueryParam("bodyText")String bodyText) {
+		clientRemote.testSendMail(to, from, subject, bodyText);
 }
+	}
