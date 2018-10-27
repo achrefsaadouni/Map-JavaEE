@@ -2,9 +2,9 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Embeddable;
 
 public class MandatePK implements Serializable{
 	
@@ -12,9 +12,7 @@ public class MandatePK implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Temporal(TemporalType.DATE)
 	private Date dateDebut;
-	@Temporal(TemporalType.DATE)
 	private Date dateFin;
 	private int projetId;
 	private int ressourceId;

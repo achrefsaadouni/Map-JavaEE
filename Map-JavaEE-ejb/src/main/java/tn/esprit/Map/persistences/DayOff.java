@@ -7,7 +7,6 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -43,6 +42,7 @@ public class DayOff implements Serializable {
 	@ManyToMany(mappedBy="dayOffs")
 	private List<Resource> Resources;
 	
+
 	public int getId() {
 		return id;
 	}

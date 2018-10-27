@@ -75,6 +75,7 @@ public class Mandate implements Serializable {
 		this.ressourceId = ressourceId;
 	}
 
+	
 	public Resource getGps() {
 		return gps;
 	}
@@ -111,6 +112,10 @@ public class Mandate implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+
+
+
 
 
 }

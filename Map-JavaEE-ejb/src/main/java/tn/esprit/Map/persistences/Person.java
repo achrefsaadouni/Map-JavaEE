@@ -32,6 +32,8 @@ public class Person implements Serializable {
 	@OneToOne
 	@JsonProperty("inBox")
 	private InBox inBox;
+	@OneToOne
+	private Message message;
 
 
 	public int getId() {

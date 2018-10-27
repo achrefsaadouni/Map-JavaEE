@@ -5,32 +5,24 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-@JsonRootName("JobRequest")
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement
 @Entity
 public class JobRequest implements Serializable {
 	@Id
 	@GeneratedValue
-	@JsonProperty("id")
 	private int id;
 	@Enumerated(EnumType.STRING)
-	@JsonProperty("stateType")
 	private StateType stateType;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("rdvdate")
-	private Date rdvdate;
+	private Date Rdvdate;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("sentdate")
-	private Date sentdate;
-	@JsonProperty("speciality")
+	private Date Sentdate;
 	private String speciality;
-	@JsonProperty("Cv")
-	private String Cv;
 	@OneToOne
-	@JsonProperty("candidate")
 	private Candidate candidate;
-	
+	@XmlElement(name="id")
 	public int getId() {
 		return id;
 	}
@@ -38,6 +30,7 @@ public class JobRequest implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	@XmlElement(name="stateType")
 	public StateType getStateType() {
 		return stateType;
 	}
@@ -46,6 +39,7 @@ public class JobRequest implements Serializable {
 		this.stateType = stateType;
 	}
 	
+	@XmlElement(name="speciality")
 	public String getSpeciality() {
 		return speciality;
 	}
@@ -53,6 +47,7 @@ public class JobRequest implements Serializable {
 	public void setSpeciality(String speciality) {
 		this.speciality = speciality;
 	}
+	@XmlElement(name="candidate")
 	public Candidate getCandidate() {
 		return candidate;
 	}
@@ -60,29 +55,21 @@ public class JobRequest implements Serializable {
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
 	}
-	
-	public String getCv() {
-		return Cv;
-	}
-
-	public void setCv(String cv) {
-		Cv = cv;
-	}
-
+	@XmlElement(name="Rdvdate")
 	public Date getRdvdate() {
-		return rdvdate;
+		return Rdvdate;
 	}
 
 	public void setRdvdate(Date rdvdate) {
-		this.rdvdate = rdvdate;
+		Rdvdate = rdvdate;
 	}
-
+	@XmlElement(name="Sentdate")
 	public Date getSentdate() {
-		return sentdate;
+		return Sentdate;
 	}
 
 	public void setSentdate(Date sentdate) {
-		this.sentdate = sentdate;
+		Sentdate = sentdate;
 	}
 	
 

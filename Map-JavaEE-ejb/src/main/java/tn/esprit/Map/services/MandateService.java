@@ -1,10 +1,8 @@
 package tn.esprit.Map.services;
 
-
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,7 +11,6 @@ import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 import tn.esprit.Map.persistences.Mandate;
-import tn.esprit.Map.persistences.MandateId;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
@@ -22,34 +19,22 @@ import tn.esprit.Map.persistences.Skill;
 public class MandateService implements MandateServiceLocal {
 	@PersistenceContext(unitName = "MAP")
 	EntityManager em;
-	@EJB
-	Mail mail;
 
 	@Override
 	public Resource SearchResourceBySkill(Skill skill) {
-
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean isAvailable(int resourceId, int requestId) {
-		Resource resource = em.find(Resource.class, resourceId);
-		Request request = em.find(Request.class, requestId);
-		TypedQuery<Mandate> query = em
-				.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId order by m.dateFin desc", Mandate.class);
-		query.setParameter("rId", resourceId);
-		List<Mandate> results = query.getResultList();
-		if (results == null || results.isEmpty()) {
-			return true;
-		}
-
+	public boolean isAvailable(int resourceId) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void notify(String receiver, String topic, String textMessage) {
-
-		mail.send(receiver, topic, textMessage);
+	public void notify(String receiver) {
+		// TODO Auto-generated method stub
 
 	}
 
@@ -105,52 +90,33 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public boolean archive() {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate",
-				Mandate.class);
-		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
-		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
-		query.setParameter("rid", ressourceId);
-		query.setParameter("pId", projetId);
-		Mandate mandate = query.getSingleResult();
-		return mandate.getRessource().getSalary() * mandate.getRessource().getTaux();
+	public float calculateCost(Mandate mandate) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public void AlertEndMandate(Mandate mandate) {
+		// TODO Auto-generated method stub
 
 	}
 
+	
+
 	@Override
-	public void addMandate(int requestId, int resourceId) {
-		Request request = em.find(Request.class, requestId);
-		Mandate mandate = new Mandate();
-		MandateId mandateId = new MandateId();
-		mandateId.setDateDebut(request.getStartDateMondate());
-		mandateId.setDateFin(request.getEndDateMondate());
-		mandateId.setProjetId(request.getProject().getId());
-		mandateId.setRessourceId(resourceId);
-		mandate.setMandateId(mandateId);
-		em.persist(mandate);
+	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId) {
+		return false;
 	}
 
 	@Override
-	public void addGps(int ressourceId, int projetId, Date dateDebut, Date dateFin, int gpsId) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate",
-				Mandate.class);
-		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
-		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
-		query.setParameter("rid", ressourceId);
-		query.setParameter("pId", projetId);
-		Mandate mandate = query.getSingleResult();
-		Resource resource = em.find(Resource.class, gpsId);
-		mandate.setGps(resource);
+	public boolean addMandate(Request request) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

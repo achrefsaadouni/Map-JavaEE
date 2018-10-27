@@ -10,7 +10,6 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -55,12 +54,5 @@ public class ClientWebService {
 	@Path("{idClient}")
 	public String deleteProject(@PathParam("idClient") String idClient){
 		return clientRemote.deleteClient(Integer.parseInt(idClient));
-	}
-	@POST
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("{idClient}")
-	public String archiveClient(@PathParam("idClient") String idClient )
-	{
-		return clientRemote.archiveClient(Integer.parseInt(idClient));
 	}
 }

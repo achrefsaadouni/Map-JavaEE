@@ -32,7 +32,6 @@ public class ProjectService implements ProjectRemote {
 		List<Project> results = query.getResultList();
 //		Client c = new Client();
 //		for (Project p : results) {
-		//stackoverflow
 //			c = p.getClient();
 //			//c.setProjects(results);
 //		}
