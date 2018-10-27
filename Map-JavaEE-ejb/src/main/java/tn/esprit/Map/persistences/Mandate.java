@@ -43,6 +43,7 @@ public class Mandate implements Serializable {
 	@OneToOne
 	private Resource gps;
 
+
 	public Date getDateDebut() {
 		return dateDebut;
 	}
@@ -75,7 +76,7 @@ public class Mandate implements Serializable {
 		this.ressourceId = ressourceId;
 	}
 
-	
+
 	public Resource getGps() {
 		return gps;
 	}
@@ -112,6 +113,10 @@ public class Mandate implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+
+
+
 
 
 
