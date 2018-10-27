@@ -53,7 +53,6 @@ public class Project implements Serializable {
 	@JsonIgnore
 	private Set<Mandate> listeMondats;
 
-
 	public int getId() {
 		return id;
 	}

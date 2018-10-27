@@ -1,5 +1,6 @@
 package tn.esprit.Map.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,7 +50,8 @@ public class MandateService implements MandateServiceLocal {
 	public List<Mandate> getByResource(int resourceId) {
 		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId", Mandate.class);
 		query.setParameter("rId", resourceId);
-		List<Mandate> results = query.getResultList();
+		List<Mandate> results = new ArrayList<>();
+		results = query.getResultList();
 		return results;
 	}
 
@@ -65,7 +67,7 @@ public class MandateService implements MandateServiceLocal {
 	public List<Mandate> getByStartDate(Date startDate) {
 		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.dateDebut = :startDate",
 				Mandate.class);
-		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("startDate", startDate, TemporalType.DATE);
 		List<Mandate> results = query.getResultList();
 		return results;
 	}
@@ -73,7 +75,7 @@ public class MandateService implements MandateServiceLocal {
 	@Override
 	public List<Mandate> getByEndDate(Date endDate) {
 		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.dateFin = :endDate", Mandate.class);
-		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
+		query.setParameter("endDate", endDate, TemporalType.DATE);
 		List<Mandate> results = query.getResultList();
 		return results;
 	}
@@ -82,9 +84,10 @@ public class MandateService implements MandateServiceLocal {
 	public List<Mandate> getByPeriod(Date startDate, Date endDate) {
 		TypedQuery<Mandate> query = em
 				.createQuery("SELECT m FROM Mandate m where m.dateFin BETWEEN :endDate AND :startDate", Mandate.class);
-		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
-		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
-		List<Mandate> results = query.getResultList();
+		query.setParameter("endDate", endDate, TemporalType.DATE);
+		query.setParameter("startDate", startDate, TemporalType.DATE);
+		List<Mandate> results = new ArrayList<>();
+		results = query.getResultList();
 		return results;
 	}
 

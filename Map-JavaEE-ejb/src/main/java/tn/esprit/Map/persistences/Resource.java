@@ -31,13 +31,13 @@ public class Resource extends Person implements Serializable {
 
 	private String jobType;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<DayOff> dayOffs;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Skill> skills;
 
-	@ManyToMany(mappedBy = "resources")
+	@ManyToMany(mappedBy = "resources",fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
 	@JsonIgnore
