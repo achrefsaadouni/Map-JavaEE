@@ -51,10 +51,10 @@ public class Project implements Serializable {
 	private Client client;
 	@OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
 	@JsonProperty("Resources")
-	private List<Resource> resources;
+	private Set<Resource> resources;
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
-	@JsonProperty("ListeMondats")
-	private List<Mandate> listeMondats;
+	@JsonIgnore
+	private Set<Mandate> listeMondats;
 
 
 	public int getId() {
@@ -153,11 +153,11 @@ public class Project implements Serializable {
 		this.client = client;
 	}
 
-	public List<Resource> getResources() {
+	public Set<Resource> getResources() {
 		return resources;
 	}
 
-	public void setResources(List<Resource> resources) {
+	public void setResources(Set<Resource> resources) {
 		this.resources = resources;
 	}
 

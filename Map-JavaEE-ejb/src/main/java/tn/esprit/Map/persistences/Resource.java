@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @DiscriminatorValue(value = "resource")
 public class Resource extends Person implements Serializable {
@@ -35,19 +37,20 @@ public class Resource extends Person implements Serializable {
 	
 	
 	@ManyToMany
-	private List<DayOff> dayOffs;
+	private Set<DayOff> dayOffs;
 	
 	
 	@ManyToMany
-	private List<Skill> skills;
+	private Set<Skill> skills;
 	
 	
 	@ManyToMany(mappedBy = "resources")
-	private List<OrganizationalChart> organizationalCharts;
-	@OneToMany(mappedBy = "ressource")
-	private List<Mandate> listeMondats;
+	private Set<OrganizationalChart> organizationalCharts;
+	@OneToMany(mappedBy = "ressource",fetch=FetchType.EAGER)
+	@JsonIgnore
+	private Set<Mandate> listeMondats;
 
-	public List<Mandate> getListeMondats() {
+	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
 
@@ -147,28 +150,28 @@ public class Resource extends Person implements Serializable {
 
     
     
-	public List<DayOff> getDayOffs() {
+	public Set<DayOff> getDayOffs() {
 		return dayOffs;
 	}
-	public void setDayOffs(List<DayOff> dayOffs) {
+	public void setDayOffs(Set<DayOff> dayOffs) {
 		this.dayOffs = dayOffs;
 	}
 
 	
 	
-	public List<Skill> getSkills() {
+	public Set<Skill> getSkills() {
 		return skills;
 	}
-	public void setSkills(List<Skill> skills) {
+	public void setSkills(Set<Skill> skills) {
 		this.skills = skills;
 	}
 
 	
 	
-	public List<OrganizationalChart> getOrganizationalCharts() {
+	public Set<OrganizationalChart> getOrganizationalCharts() {
 		return organizationalCharts;
 	}
-	public void setOrganizationalCharts(List<OrganizationalChart> organizationalCharts) {
+	public void setOrganizationalCharts(Set<OrganizationalChart> organizationalCharts) {
 		this.organizationalCharts = organizationalCharts;
 	}
 	
