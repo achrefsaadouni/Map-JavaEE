@@ -52,6 +52,9 @@ public class Project implements Serializable {
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Mandate> listeMondats;
+	@OneToOne(mappedBy="project")
+	@JsonIgnore
+	private Request request;
 
 	public int getId() {
 		return id;

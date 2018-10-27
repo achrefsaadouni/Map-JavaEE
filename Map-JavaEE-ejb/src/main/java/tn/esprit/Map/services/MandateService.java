@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -11,6 +12,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
+import tn.esprit.Map.persistences.MailService;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
@@ -20,7 +22,8 @@ import tn.esprit.Map.persistences.Skill;
 public class MandateService implements MandateServiceLocal {
 	@PersistenceContext(unitName = "MAP")
 	EntityManager em;
-
+	@EJB
+	MailService mail ;
 	@Override
 	public Resource SearchResourceBySkill(Skill skill) {
 		// TODO Auto-generated method stub
@@ -34,15 +37,19 @@ public class MandateService implements MandateServiceLocal {
 	}
 
 	@Override
-	public void notify(String receiver) {
-		// TODO Auto-generated method stub
-
+	public void notify(String receiver,String subject,String body) {
+		mail.send(receiver, subject, body);
 	}
 
 	@Override
 	public List<Mandate> getAll() {
+		List<Mandate> results;
 		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m", Mandate.class);
-		List<Mandate> results = query.getResultList();
+		try {
+			results = query.getResultList();
+		} catch (Exception e) {
+			results = new ArrayList<>();
+		}
 		return results;
 	}
 
@@ -106,20 +113,62 @@ public class MandateService implements MandateServiceLocal {
 	@Override
 	public void AlertEndMandate(Mandate mandate) {
 		// TODO Auto-generated method stub
-
-	}
-
-	
-
-	@Override
-	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId) {
-		return false;
 	}
 
 	@Override
-	public boolean addMandate(Request request) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean addGps(int ressourceId, int projetId, Date startDate, Date endDate, int gpsId) {
+		Mandate results;
+		TypedQuery<Mandate> query = em.createQuery(
+				"SELECT m FROM Mandate m where m.dateDebut = :startDate AND m.dateFin = :endDate AND m.projetId = :pId AND  m.ressourceId=:rId",Mandate.class);
+		query.setParameter("startDate", startDate, TemporalType.DATE);
+		query.setParameter("endDate", endDate, TemporalType.DATE);
+		query.setParameter("pId", projetId);
+		query.setParameter("rId", ressourceId);
+		TypedQuery<Resource> query1 = em.createQuery("SELECT r FROM Resource r where r.id=:rId", Resource.class);
+		query1.setParameter("rId", gpsId);
+		Resource resourceGPS;
+		try {
+			resourceGPS = query1.getSingleResult();
+			results = query.getSingleResult();
+			results.setGps(resourceGPS);
+			
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+
+	}
+
+	@Override
+	public boolean addMandate(int requestId, int resourceId) {
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r where r.id=:rId", Request.class);
+		query.setParameter("rId", requestId);
+		Request request;
+		try {
+			request = query.getSingleResult();
+		} catch (Exception e)
+
+		{
+			return false;
+		}
+
+		TypedQuery<Resource> query1 = em.createQuery("SELECT r FROM Resource r where r.id=:rId", Resource.class);
+		query1.setParameter("rId", resourceId);
+		Resource resource;
+		try {
+			resource = query1.getSingleResult();
+		} catch (Exception e) {
+
+			return false;
+		}
+
+		Mandate mandate = new Mandate();
+		mandate.setDateDebut(request.getStartDateMondate());
+		mandate.setDateFin(request.getEndDateMondate());
+		mandate.setProjetId(request.getProject().getId());
+		mandate.setRessourceId(resource.getId());
+		em.persist(mandate);
+		return true;
 	}
 
 }

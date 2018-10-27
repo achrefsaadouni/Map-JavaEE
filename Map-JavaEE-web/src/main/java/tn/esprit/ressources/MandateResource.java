@@ -3,6 +3,7 @@ package tn.esprit.ressources;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
@@ -23,6 +24,23 @@ public class MandateResource {
 	@EJB
 	MandateServiceLocal mandateService;
 
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addMandate(Map<String, String> inputs) {
+		String requestId = inputs.get("requestId");
+		String resourceId = inputs.get("resourceId");
+		Response reponse;
+		if (requestId == null || resourceId == null || !requestId.chars().allMatch(Character::isDigit)
+				|| !resourceId.chars().allMatch(Character::isDigit)) {
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		reponse = mandateService.addMandate(Integer.parseInt(requestId), Integer.parseInt(resourceId))
+				? Response.status(Status.CREATED).build() : Response.status(Status.EXPECTATION_FAILED).build();
+		return reponse;
+
+	}
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMandate(@QueryParam(value = "ressourceId") String ressourceId,
@@ -31,10 +49,8 @@ public class MandateResource {
 		if ((ressourceId == null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
 			if (mandateService.getAll().size() == 0)
 				return Response.status(Status.NO_CONTENT).build();
-
 			else
 				return Response.ok(mandateService.getAll(), MediaType.APPLICATION_JSON).build();
-
 		} else if ((ressourceId != null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
 
 			if (!ressourceId.chars().allMatch(Character::isDigit))
@@ -123,5 +139,38 @@ public class MandateResource {
 
 		else
 			return Response.status(Response.Status.BAD_REQUEST).entity("Requete eronnée").build();
+	}
+
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addGps(Map<String, String> inputs) {
+		Response response;
+		int ressourceId = 0;
+		int projetId = 0;
+		Date dateDebut = null;
+		Date dateFin = null;
+		int gpsId = 0;
+		try {
+			ressourceId = Integer.parseInt(inputs.get("resourceId"));
+			projetId = Integer.parseInt(inputs.get("projectId"));
+			gpsId = Integer.parseInt(inputs.get("gpsId"));
+			dateDebut = simpleDateFormat.parse(inputs.get("startDate"));
+			dateFin = simpleDateFormat.parse(inputs.get("endDate"));
+			response = mandateService.addGps(ressourceId, projetId, dateDebut, dateFin, gpsId)
+					? Response.status(Status.OK).build() : Response.status(Status.FORBIDDEN).build();
+		} catch (Exception e) {
+			return Response.status(Status.BAD_REQUEST).build();
+		}
+		return response;
+	}
+	@Path("notify")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void notify(Map<String, String> inputs){
+	String adresse = inputs.get("email");
+	String subject = inputs.get("subject");
+	String body = inputs.get("body");
+	mandateService.notify(adresse, subject, body);
 	}
 }

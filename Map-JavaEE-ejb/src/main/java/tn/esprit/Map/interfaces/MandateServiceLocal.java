@@ -6,16 +6,15 @@ import java.util.List;
 import javax.ejb.Local;
 
 import tn.esprit.Map.persistences.Mandate;
-import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
 
 @Local
 public interface MandateServiceLocal {
-	public boolean addMandate(Request request);
+	public boolean addMandate(int requestId,int resourceId);
 	public Resource SearchResourceBySkill(Skill skill);
 	public boolean isAvailable(int resourceId);
-	public void notify(String receiver);
+	public void notify(String receiver,String subject,String body);
 	public List<Mandate> getAll();
 	public List<Mandate> getByResource(int resourceId);
 	public List<Mandate> getByProject(int projectId);

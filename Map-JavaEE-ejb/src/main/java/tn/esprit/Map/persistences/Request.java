@@ -13,6 +13,7 @@ public class Request implements Serializable {
 	private String requestedProfil;
 	private String experienceYear;
 	private String educationScolarity;
+	@OneToOne
 	private Project project;
 	private String manager;
 	@Temporal(TemporalType.DATE)
