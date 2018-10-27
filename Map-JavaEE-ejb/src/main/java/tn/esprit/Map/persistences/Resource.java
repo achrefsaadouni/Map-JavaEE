@@ -2,7 +2,6 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -16,6 +15,11 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 @DiscriminatorValue(value = "resource")
 public class Resource extends Person implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String seniority;
 	
 	private String workProfil;
@@ -37,18 +41,6 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("taux")
 	private double taux;
 
-	public Resource() {
-		super();
-		this.taux = 1.8;
-	}
-
-	public double getTaux() {
-		return taux;
-	}
-
-	public void setTaux(double taux) {
-		this.taux = taux;
-	}
 
 	@ManyToMany(fetch=FetchType.EAGER)
 	private Set<DayOff> dayOffs=new HashSet<>();;
@@ -63,27 +55,21 @@ public class Resource extends Person implements Serializable {
 	@JsonIgnore
 	private Set<Mandate> listeMondats=new HashSet<>();
 
-	public Set<Mandate> getListeMondats() {
-	
+
 	@ManyToOne
 	//@JoinColumn(name = "project_id", referencedColumnName = "id",insertable = false, updatable = false)
 	private Project project;
 	
-	
-	@ManyToMany
-	private List<DayOff> dayOffs;
-	
-	
-	@ManyToMany
-	private List<Skill> skills;
-	
-	
-	@ManyToMany(mappedBy = "resources")
-	private List<OrganizationalChart> organizationalCharts;
-	@OneToMany(mappedBy = "ressource")
-	private List<Mandate> listeMondats;
 
-	public List<Mandate> getListeMondats() {
+	public Project getProject() {
+		return project;
+	}
+
+	public void setProject(Project project) {
+		this.project = project;
+	}
+
+	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
 
@@ -174,7 +160,6 @@ public class Resource extends Person implements Serializable {
 	
 	
 
-<<<<<<< HEAD
 	public Set<DayOff> getDayOffs() {
 		return dayOffs;
 	}
@@ -196,42 +181,21 @@ public class Resource extends Person implements Serializable {
 	}
 
 	public void setOrganizationalCharts(Set<OrganizationalChart> organizationalCharts) {
-=======
-	public Project getProject() {
-		return project;
-	}
-    public void setProject(Project project) {
-		this.project = project;
-	}
-
-    
-    
-	public List<DayOff> getDayOffs() {
-		return dayOffs;
-	}
-	public void setDayOffs(List<DayOff> dayOffs) {
-		this.dayOffs = dayOffs;
-	}
-
-	
-	
-	public List<Skill> getSkills() {
-		return skills;
-	}
-	public void setSkills(List<Skill> skills) {
-		this.skills = skills;
-	}
-
-	
-	
-	public List<OrganizationalChart> getOrganizationalCharts() {
-		return organizationalCharts;
-	}
-	public void setOrganizationalCharts(List<OrganizationalChart> organizationalCharts) {
->>>>>>> master
 		this.organizationalCharts = organizationalCharts;
 	}
 	
-	
+
+	public Resource() {
+		super();
+		this.taux = 1.8;
+	}
+
+	public double getTaux() {
+		return taux;
+	}
+
+	public void setTaux(double taux) {
+		this.taux = taux;
+	}
 
 }
