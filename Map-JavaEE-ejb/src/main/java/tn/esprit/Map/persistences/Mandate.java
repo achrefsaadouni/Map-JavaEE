@@ -4,11 +4,14 @@ import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 
+@JsonRootName("mandate")
 @Entity
 public class Mandate implements Serializable {
 
@@ -18,10 +21,10 @@ public class Mandate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@EmbeddedId
 	private MandateId mandateId;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Project projet;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ressourceId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Resource ressource;
 	private float montant;

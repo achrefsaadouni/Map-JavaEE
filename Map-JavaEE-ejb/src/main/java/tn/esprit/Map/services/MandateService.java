@@ -1,5 +1,6 @@
 package tn.esprit.Map.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,23 +24,31 @@ public class MandateService implements MandateServiceLocal {
 	EntityManager em;
 	@EJB
 	Mail mail;
-	
+
 	@Override
 	public Resource SearchResourceBySkill(Skill skill) {
-		
+
 		return null;
 	}
 
 	@Override
-	public boolean isAvailable(int resourceId) {
-		
+	public boolean isAvailable(int resourceId, int requestId) {
+		Resource resource = em.find(Resource.class, resourceId);
+		Request request = em.find(Request.class, requestId);
+		TypedQuery<Mandate> query = em
+				.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId order by m.dateFin desc", Mandate.class);
+		query.setParameter("rId", resourceId);
+		List<Mandate> results = query.getResultList();
+		if (results == null || results.isEmpty()) {
+			return true;
+		}
+
 		return false;
 	}
 
 	@Override
-	public void notify(String receiver ,String topic, String textMessage) {
-		
-		
+	public void notify(String receiver, String topic, String textMessage) {
+
 		mail.send(receiver, topic, textMessage);
 
 	}
@@ -96,31 +105,29 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public boolean archive() {
-		
 		return false;
 	}
 
 	@Override
-	public double calculateCost(int ressourceId,int projetId,Date startDate,Date endDate) {
-		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate", Mandate.class);
+	public double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate) {
+		TypedQuery<Mandate> query = em.createQuery(
+				"SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate",
+				Mandate.class);
 		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
 		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
 		query.setParameter("rid", ressourceId);
 		query.setParameter("pId", projetId);
 		Mandate mandate = query.getSingleResult();
-		return mandate.getRessource().getSalary()*mandate.getRessource().getTaux();
+		return mandate.getRessource().getSalary() * mandate.getRessource().getTaux();
 	}
 
 	@Override
 	public void AlertEndMandate(Mandate mandate) {
-		// TODO Auto-generated method stub
+
 	}
 
-	
-
-
 	@Override
-	public void addMandate(int requestId,int resourceId) {
+	public void addMandate(int requestId, int resourceId) {
 		Request request = em.find(Request.class, requestId);
 		Mandate mandate = new Mandate();
 		MandateId mandateId = new MandateId();
@@ -134,7 +141,9 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public void addGps(int ressourceId, int projetId, Date dateDebut, Date dateFin, int gpsId) {
-		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery(
+				"SELECT m FROM Mandate m where m.ressourceId = :rid AND m.projetId = :pId AND m.dateFin = :endDate AND m.dateDebut =:startDate",
+				Mandate.class);
 		query.setParameter("endDate", new java.util.Date(), TemporalType.DATE);
 		query.setParameter("startDate", new java.util.Date(), TemporalType.DATE);
 		query.setParameter("rid", ressourceId);

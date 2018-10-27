@@ -48,10 +48,10 @@ public class Project implements Serializable {
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
 	@JsonProperty("Client")
 	private Client client;
-	@OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "project")
 	@JsonProperty("Resources")
 	private List<Resource> resources;
-	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "projet")
 	@JsonProperty("ListeMondats")
 	private List<Mandate> listeMondats;
 

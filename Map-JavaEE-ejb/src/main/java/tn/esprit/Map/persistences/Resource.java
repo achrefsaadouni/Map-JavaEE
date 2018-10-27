@@ -5,29 +5,32 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+@JsonRootName("resource")
 @Entity
 @DiscriminatorValue(value = "resource")
 public class Resource extends Person implements Serializable {
-	
+	@JsonProperty("seniority")
 	private String seniority;
-	
+	@JsonProperty("workProfil")
 	private String workProfil;
-	
+	@JsonProperty("note")
 	private float note;
-	
+	@JsonProperty("cv")
 	private String cv;
-	
+	@JsonProperty("picture")
 	private String picture;
-	
+	@JsonProperty("availability")
 	@Enumerated(EnumType.STRING)
 	private AvailabilityType availability;
-	
+	@JsonProperty("businessSector")
 	private String businessSector;
-	
+	@JsonProperty("salary")
 	private float salary;
-	
+	@JsonProperty("jobType")
 	private String jobType;
-	
+	@JsonProperty("taux")
 	private  double taux;
 	
 	

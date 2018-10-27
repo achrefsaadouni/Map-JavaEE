@@ -13,7 +13,7 @@ import tn.esprit.Map.persistences.Skill;
 public interface MandateServiceLocal {
 	public void addMandate(int requestId,int resourceId);
 	public Resource SearchResourceBySkill(Skill skill);
-	public boolean isAvailable(int resourceId);
+	public boolean isAvailable(int resourceId,int requestId);
 	public void notify(String receiver ,String topic, String textMessage);
 	public List<Mandate> getAll();
 	public List<Mandate> getByResource(int resourceId);

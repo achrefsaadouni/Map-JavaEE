@@ -6,20 +6,31 @@ import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+@JsonRootName("person")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
 public class Person implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("id")
 	private int id;
+	@JsonProperty("firstName")
 	private String firstName;
+	@JsonProperty("lastName")
 	private String lastName;
+	@JsonProperty("login")
 	private String login;
+	@JsonProperty("password")
 	private String password;
+	@JsonProperty("email")
 	private String email;
+	@JsonProperty("archived")
 	private int archived;
 	@OneToOne
+	@JsonProperty("inBox")
 	private InBox inBox;
 
 

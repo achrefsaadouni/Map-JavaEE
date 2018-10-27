@@ -78,5 +78,11 @@ public class MandateId implements Serializable {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "MandateId [dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", projetId=" + projetId
+				+ ", ressourceId=" + ressourceId + "]";
+	}
+	
 	
 }
