@@ -1,25 +1,38 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
+import java.util.Date;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 
-@JsonRootName("mandate")
+
 @Entity
+@IdClass(MandatePK.class)
 public class Mandate implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@EmbeddedId
-	private MandateId mandateId;
+	@Id
+	@Temporal(TemporalType.DATE)
+	private Date dateDebut;
+	@Id
+	@Temporal(TemporalType.DATE)
+	private Date dateFin;
+	@Id
+	private int projetId;
+	@Id
+	private int ressourceId;
 	@ManyToOne
 	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Project projet;
@@ -29,13 +42,37 @@ public class Mandate implements Serializable {
 	private float montant;
 	@OneToOne
 	private Resource gps;
-	
-	public MandateId getMandateId() {
-		return mandateId;
+
+	public Date getDateDebut() {
+		return dateDebut;
 	}
 
-	public void setMandateId(MandateId mandateId) {
-		this.mandateId = mandateId;
+	public void setDateDebut(Date dateDebut) {
+		this.dateDebut = dateDebut;
+	}
+
+	public Date getDateFin() {
+		return dateFin;
+	}
+
+	public void setDateFin(Date dateFin) {
+		this.dateFin = dateFin;
+	}
+
+	public int getProjetId() {
+		return projetId;
+	}
+
+	public void setProjetId(int projetId) {
+		this.projetId = projetId;
+	}
+
+	public int getRessourceId() {
+		return ressourceId;
+	}
+
+	public void setRessourceId(int ressourceId) {
+		this.ressourceId = ressourceId;
 	}
 
 	public Resource getGps() {
@@ -74,16 +111,6 @@ public class Mandate implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-	@Override
-	public String toString() {
-		return "Mandate [mandateId=" + mandateId + ", projet=" + projet + ", ressource=" + ressource + ", montant="
-				+ montant + ", gps=" + gps + "]";
-	}
-
-
-
-
 
 
 }

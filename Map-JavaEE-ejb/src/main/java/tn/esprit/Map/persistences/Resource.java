@@ -1,10 +1,13 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -47,22 +50,24 @@ public class Resource extends Person implements Serializable {
 		this.taux = taux;
 	}
 
-	@ManyToMany
-	private List<DayOff> dayOffs;
+	@ManyToMany(fetch=FetchType.EAGER)
+	private Set<DayOff> dayOffs=new HashSet<>();;
+	
+	@ManyToMany(fetch=FetchType.EAGER)
+	private Set<Skill> skills=new HashSet<>();;
 
-	@ManyToMany
-	private List<Skill> skills;
+	@ManyToMany(mappedBy = "resources",fetch=FetchType.EAGER)
+	private Set<OrganizationalChart> organizationalCharts=new HashSet<>();;
+	
+	@OneToMany(mappedBy="ressource",fetch=FetchType.EAGER)
+	@JsonIgnore
+	private Set<Mandate> listeMondats=new HashSet<>();
 
-	@ManyToMany(mappedBy = "resources")
-	private List<OrganizationalChart> organizationalCharts;
-	@OneToMany(mappedBy = "ressource",fetch=FetchType.EAGER)
-	private List<Mandate> listeMondats;
-
-	public List<Mandate> getListeMondats() {
+	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
 
-	public void setListeMondats(List<Mandate> listeMondats) {
+	public void setListeMondats(Set<Mandate> listeMondats) {
 		this.listeMondats = listeMondats;
 	}
 
@@ -138,27 +143,27 @@ public class Resource extends Person implements Serializable {
 		this.jobType = jobType;
 	}
 
-	public List<DayOff> getDayOffs() {
+	public Set<DayOff> getDayOffs() {
 		return dayOffs;
 	}
 
-	public void setDayOffs(List<DayOff> dayOffs) {
+	public void setDayOffs(Set<DayOff> dayOffs) {
 		this.dayOffs = dayOffs;
 	}
 
-	public List<Skill> getSkills() {
+	public Set<Skill> getSkills() {
 		return skills;
 	}
 
-	public void setSkills(List<Skill> skills) {
+	public void setSkills(Set<Skill> skills) {
 		this.skills = skills;
 	}
 
-	public List<OrganizationalChart> getOrganizationalCharts() {
+	public Set<OrganizationalChart> getOrganizationalCharts() {
 		return organizationalCharts;
 	}
 
-	public void setOrganizationalCharts(List<OrganizationalChart> organizationalCharts) {
+	public void setOrganizationalCharts(Set<OrganizationalChart> organizationalCharts) {
 		this.organizationalCharts = organizationalCharts;
 	}
 

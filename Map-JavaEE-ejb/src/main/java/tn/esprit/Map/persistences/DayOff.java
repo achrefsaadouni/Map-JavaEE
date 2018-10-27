@@ -40,7 +40,7 @@ public class DayOff implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StateType stateType;
 	
-	@ManyToMany(mappedBy="dayOffs",fetch=FetchType.EAGER)
+	@ManyToMany(mappedBy="dayOffs")
 	private List<Resource> Resources;
 	
 	public int getId() {

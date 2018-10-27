@@ -2,13 +2,16 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -48,8 +51,9 @@ public class Project implements Serializable {
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
 	@JsonProperty("Client")
 	private Client client;
-	@OneToMany(fetch=FetchType.EAGER)
-	private List<Mandate> listeMondats;
+	@OneToMany(mappedBy="projet",fetch=FetchType.EAGER)
+	@JsonIgnore
+	private Set<Mandate> listeMondats = new HashSet<>();
 
 	public int getId() {
 		return id;
@@ -115,11 +119,11 @@ public class Project implements Serializable {
 		this.picture = picture;
 	}
 
-	public List<Mandate> getListeMondats() {
+	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
 
-	public void setListeMondats(List<Mandate> listeMondats) {
+	public void setListeMondats(Set<Mandate> listeMondats) {
 		this.listeMondats = listeMondats;
 	}
 
