@@ -12,6 +12,6 @@ import tn.esprit.Map.persistences.Message;
 public interface PersonServiceRemote {
 	
 	public int sendMessage(String rec,String sen,String ob,String cont);
-	public String test(Message msg);
+	public String test(Message msg); 
 
 }

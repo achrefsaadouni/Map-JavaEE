@@ -13,6 +13,6 @@ public interface MessageServiceRemote {
 	
 	public int addMessage(Message message);
 	public void deleteMessage(int messageID);
-	public List<Message> AllMessage();
+	public List<Message> AllMessage(); 
 
 }

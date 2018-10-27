@@ -7,6 +7,6 @@ import tn.esprit.Map.persistences.InBox;
 @Remote
 public interface InboxServiceRemote {
 	
-	public int addInbox(InBox inbox);
+	public int addInbox(InBox inbox); 
 
 }

@@ -15,7 +15,7 @@ public class PersonService implements PersonServiceRemote{
 	@PersistenceContext(unitName="MAP")
 	EntityManager em;
 	
-
+ 
 	
 
 	@Override

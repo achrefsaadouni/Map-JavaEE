@@ -13,7 +13,7 @@ public class InboxService implements InboxServiceRemote{
 	EntityManager em;
 	
 	@Override
-	public int addInbox(InBox inbox) {
+	public int addInbox(InBox inbox) { 
 		em.persist(inbox);
 		return 0;
 	}

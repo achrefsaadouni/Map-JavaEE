@@ -16,7 +16,7 @@ public class MessageService implements MessageServiceRemote {
 
 
 	@PersistenceContext(unitName="MAP")
-	EntityManager em;
+	EntityManager em; 
 
 	@Override
 	public int addMessage(Message message) {

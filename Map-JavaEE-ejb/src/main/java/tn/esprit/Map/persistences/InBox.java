@@ -11,7 +11,7 @@ public class InBox implements Serializable {
 	@GeneratedValue
 	private int id;
 
-	@OneToOne(mappedBy="inBox")
+	@OneToOne(mappedBy="inBox") 
 	private Person person;
 	@OneToMany(mappedBy = "inBox")
 	private List<Message> messages;

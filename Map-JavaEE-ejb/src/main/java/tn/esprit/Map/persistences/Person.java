@@ -6,19 +6,31 @@ import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+@JsonRootName("person")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "role")
-@XmlRootElement(name="person")
 public class Person implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("id")
 	private int id;
+	@JsonProperty("firstName")
 	private String firstName;
+	@JsonProperty("lastName")
 	private String lastName;
+	@JsonProperty("login")
 	private String login;
+	@JsonProperty("password")
 	private String password;
+	@JsonProperty("email")
+	private String email;
+	@JsonProperty("archived")
+	private int archived;
 	@OneToOne
+	@JsonProperty("inBox")
 	private InBox inBox;
 	@OneToOne
 	private Message message;
@@ -27,7 +39,6 @@ public class Person implements Serializable {
 	public int getId() {
 		return id;
 	}
-	@XmlAttribute(name="id",required=true)
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -35,7 +46,6 @@ public class Person implements Serializable {
 	public String getFirstName() {
 		return firstName;
 	}
-	@XmlElement(name="firstName")
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -43,7 +53,6 @@ public class Person implements Serializable {
 	public String getLastName() {
 		return lastName;
 	}
-	@XmlElement(name="lastName")
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
@@ -51,7 +60,6 @@ public class Person implements Serializable {
 	public String getLogin() {
 		return login;
 	}
-	@XmlElement(name="login")
 	public void setLogin(String login) {
 		this.login = login;
 	}
@@ -69,6 +77,21 @@ public class Person implements Serializable {
 	}
 	public void setInBoxs(InBox inBox) {
 		this.inBox = inBox;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public void setInBox(InBox inBox) {
+		this.inBox = inBox;
+	}
+	public int isArchived() {
+		return archived;
+	}
+	public void setArchived(int archived) {
+		this.archived = archived;
 	}
 
 
