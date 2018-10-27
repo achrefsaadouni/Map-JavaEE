@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Embeddable
 public class MandateId implements Serializable {
@@ -12,7 +14,9 @@ public class MandateId implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Temporal(TemporalType.DATE)
 	private Date dateDebut;
+	@Temporal(TemporalType.DATE)
 	private Date dateFin;
 	private int projetId;
 	private int ressourceId;

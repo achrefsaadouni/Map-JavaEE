@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -21,16 +20,15 @@ public class Mandate implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@EmbeddedId
 	private MandateId mandateId;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Project projet;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	@JoinColumn(name = "ressourceId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Resource ressource;
 	private float montant;
 	@OneToOne
 	private Resource gps;
-	
 	
 	public MandateId getMandateId() {
 		return mandateId;
@@ -75,6 +73,12 @@ public class Mandate implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "Mandate [mandateId=" + mandateId + ", projet=" + projet + ", ressource=" + ressource + ", montant="
+				+ montant + ", gps=" + gps + "]";
 	}
 
 
