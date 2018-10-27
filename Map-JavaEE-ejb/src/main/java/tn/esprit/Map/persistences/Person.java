@@ -20,6 +20,8 @@ public class Person implements Serializable {
 	private String password;
 	@OneToOne
 	private InBox inBox;
+	@OneToOne
+	private Message message;
 
 
 	public int getId() {

@@ -10,6 +10,8 @@ public class Message implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
+	private String Receiver;
+	private String sender;
 	private String object;
 	private String content;
 	@Temporal(TemporalType.TIMESTAMP)
@@ -17,6 +19,8 @@ public class Message implements Serializable {
 	private TypeMessage typeMessage;
 	@ManyToOne
 	private InBox inBox;
+	@OneToOne(mappedBy="message")
+	private Person person;
 	
 
 	public int getId() {
@@ -66,6 +70,36 @@ public class Message implements Serializable {
 	public void setInBox(InBox inBox) {
 		this.inBox = inBox;
 	}
+
+	public String getReceiver() {
+		return Receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		Receiver = receiver;
+	}
+
+	public String getSender() {
+		return sender;
+	}
+
+	public void setSender(String sender) {
+		this.sender = sender;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
+	}
+
+	public Message() {
+		super();
+	}
+	
+	
 
 
 

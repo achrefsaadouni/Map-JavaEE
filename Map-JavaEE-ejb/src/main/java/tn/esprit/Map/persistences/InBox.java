@@ -10,7 +10,7 @@ public class InBox implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
-	private Person receiver;
+
 	@OneToOne(mappedBy="inBox")
 	private Person person;
 	@OneToMany(mappedBy = "inBox")
@@ -24,13 +24,6 @@ public class InBox implements Serializable {
 		this.id = id;
 	}
 
-	public Person getReceiver() {
-		return receiver;
-	}
-
-	public void setReceiver(Person receiver) {
-		this.receiver = receiver;
-	}
 
 	public Person getPerson() {
 		return person;
