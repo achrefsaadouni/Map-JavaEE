@@ -8,10 +8,7 @@ import javax.persistence.*;
 @Entity
 @DiscriminatorValue(value = "administrator")
 public class Administrator extends Person implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 	@OneToMany(mappedBy = "administrator")
 	private List<Request> requests;
 	
