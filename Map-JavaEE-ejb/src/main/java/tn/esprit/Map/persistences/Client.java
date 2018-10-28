@@ -8,6 +8,7 @@ import javax.jms.JMSSessionMode;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonRootName("client")
@@ -27,6 +28,7 @@ public class Client extends Person implements Serializable {
 	@JsonProperty("address")
 	private String address;
 	@OneToMany(mappedBy = "client")
+	@JsonIgnore
 	@JsonProperty("projects")
 	private List<Project> projects;
 	@JsonProperty("requests")

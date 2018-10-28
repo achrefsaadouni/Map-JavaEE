@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 import tn.esprit.Map.persistences.AvailabilityType;
-import tn.esprit.Map.persistences.DayOff;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
@@ -62,8 +61,22 @@ public class MandateService implements MandateServiceLocal {
 	}
 
 	@Override
-	public void notify(String receiver,String subject,String body) {
-		mail.send(receiver, subject, body);
+	public boolean notif(int resourceId,int requestId,String link) {
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r where r.id=:rId", Request.class);
+		query.setParameter("rId", requestId);
+		Request request;
+		TypedQuery<Resource> query1 = em.createQuery("SELECT r FROM Resource r where r.id=:rId", Resource.class);
+		query1.setParameter("rId", resourceId);
+		Resource resource;
+		try {
+			request = query.getSingleResult();
+			resource = query1.getSingleResult();
+		} catch (Exception e)
+		{
+			return false;
+		}
+		mail.send(resource.getEmail(), "New Mandate",  "You were Appointed to a new request", "following the acceptance of your profile by our client",request.getClient().getNameSociety(),"you are assigned to a new project","Project Name : "+request.getProject().getProjectName(),"","Address : "+request.getProject().getAddress()+" <br>Start Date : "+request.getStartDateMondate()+" <br>End Date : "+request.getEndDateMondate(),link);
+		return true;
 	}
 
 	@Override
