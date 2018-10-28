@@ -33,7 +33,7 @@ public class Client extends Person implements Serializable {
 	private List<Project> projects;
 	@JsonProperty("requests")
 	@OneToMany(mappedBy = "client")
-	private List<Request> requests;
+	private Set<Request> requests;
 
 	public ClientType getClientType() {
 		return clientType;
@@ -80,13 +80,13 @@ public class Client extends Person implements Serializable {
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
 	}
-
-	public List<Request> getRequests() {
+	public Set<Request> getRequests() {
 		return requests;
 	}
-
-	public void setRequests(List<Request> requests) {
+	public void setRequests(Set<Request> requests) {
 		this.requests = requests;
 	}
+
+	
 
 }
