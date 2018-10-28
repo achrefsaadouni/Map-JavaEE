@@ -49,13 +49,12 @@ public class Project implements Serializable {
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
 	@JsonProperty("Client")
 	private Client client;
-	@OneToMany(mappedBy = "project", fetch = FetchType.EAGER)
-	@JsonProperty("Resources")
-	private Set<Resource> resources;
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Mandate> listeMondats;
-
+	@OneToOne(mappedBy="project")
+	@JsonIgnore
+	private Request request;
 
 	public int getId() {
 		return id;
@@ -153,12 +152,6 @@ public class Project implements Serializable {
 		this.client = client;
 	}
 
-	public Set<Resource> getResources() {
-		return resources;
-	}
 
-	public void setResources(Set<Resource> resources) {
-		this.resources = resources;
-	}
 
 }
