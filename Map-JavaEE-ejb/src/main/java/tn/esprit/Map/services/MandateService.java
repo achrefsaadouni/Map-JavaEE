@@ -12,7 +12,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
-import tn.esprit.Map.persistences.MailService;
+import tn.esprit.Map.persistences.AvailabilityType;
+import tn.esprit.Map.persistences.DayOff;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
@@ -31,9 +32,33 @@ public class MandateService implements MandateServiceLocal {
 	}
 
 	@Override
-	public boolean isAvailable(int resourceId) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isAvailable(int resourceId,Date date) {
+			
+		TypedQuery<Resource> query1 = em.createQuery("SELECT r FROM Resource r where r.id=:rId", Resource.class);
+		query1.setParameter("rId", resourceId);
+		Resource resource;
+		try {
+			resource = query1.getSingleResult();
+			
+		} catch (Exception e) {
+			return false;
+		}
+		
+		if (resource.getAvailability()==AvailabilityType.available)
+			return true;
+		else if (resource.getAvailability()==AvailabilityType.availableSoon)
+		{
+			
+			TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId ORDER BY m.dateFin", Mandate.class);
+			query.setParameter("rId", resourceId);
+			try {
+				Mandate mandate = query.getSingleResult();
+				//if(mandate.getDateFin().compareTo(date)>=0 || resource.getDayOffs().)
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		 return false;
 	}
 
 	@Override

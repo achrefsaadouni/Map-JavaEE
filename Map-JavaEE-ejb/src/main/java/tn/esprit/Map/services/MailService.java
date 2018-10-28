@@ -1,4 +1,4 @@
-package tn.esprit.Map.persistences;
+package tn.esprit.Map.services;
 
 
 import javax.ejb.Stateless;
@@ -15,16 +15,21 @@ public class MailService {
   @javax.annotation.Resource(name = "java:jboss/mail/RedHat")
   private Session session;
  
-  public void send(final String addresses, final String subject, final String text) {
+  public void send(final String addresses, final String subject,final String text) {
     try {
       Message message = new MimeMessage(session);
       message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(addresses));
       message.setSubject(subject);
-      message.setText(text);
+      message.setContent(format(text), "text/html; charset=utf-8");
  
       Transport.send(message);
     } catch (Exception e) {
       System.out.println(e);
     }
+  }
+  
+  
+  public String format(final String text){
+	  return text;
   }
 }
