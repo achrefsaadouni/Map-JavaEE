@@ -23,21 +23,10 @@ public class MessageService implements MessageServiceRemote {
 	@Override
 	public int addMessage(Message message) {
 		
-
 		try {
-			//System.out.println(message.getContent());
-			em.persist(message);
-			//System.out.println(message.getObject());
-			/*Query query = em.createQuery("INSERT INTO Message ('Receiver', 'content', 'dateMessage', 'object', 'sender', 'typeMessage', 'inBox_id') VALUES (?, ?, ?, ?, ?, ?, ?)");
-			query.setParameter(1, message.getReceiver());
-			query.setParameter(2, message.getContent());
-			query.setParameter(3,null);
-			query.setParameter(4,message.getObject());
-			query.setParameter(5,message.getSender());
-			query.setParameter(6,1);
-			query.setParameter(7,1);
 			
-			query.executeUpdate();*/
+			em.persist(message);
+			
 		}
 		catch(NullPointerException e){
 			System.out.println("error");
@@ -46,9 +35,10 @@ public class MessageService implements MessageServiceRemote {
 	}
 
 	@Override
-	public void deleteMessage(int messageID) {
+	public int deleteMessage(int messageID) {
 		Message message = em.find(Message.class,messageID);
 		em.remove(message);
+		return message.getId();
 	}
 
 	@Override

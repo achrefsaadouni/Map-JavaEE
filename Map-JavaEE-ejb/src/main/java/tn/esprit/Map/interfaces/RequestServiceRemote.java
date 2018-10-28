@@ -15,6 +15,6 @@ public interface RequestServiceRemote {
 	
 	public void affectClienttToRequest(int requestId , int clientId);
 	public void affectAdminToRequest(int requestId , int adminId);
-	public void deleteRequest(int requestID); 
+	public int deleteRequest(int requestID); 
 
 }   

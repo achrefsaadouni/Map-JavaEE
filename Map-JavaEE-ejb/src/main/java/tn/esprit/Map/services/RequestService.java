@@ -29,7 +29,7 @@ public class RequestService implements RequestServiceRemote{
 	
 	@Override
 	public List<Request> AllRequest() {
-		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request As r", Request.class);
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request  r", Request.class);
 		List<Request> results = query.getResultList();
 		return results;
 	}
@@ -54,10 +54,11 @@ public class RequestService implements RequestServiceRemote{
 	}
 
 	@Override
-	public void deleteRequest(int requestID) {
+	public int deleteRequest(int requestID) {
 		Request request = em.find(Request.class,requestID);
 		System.out.println("requestid : "+request.getId());
 		em.remove(request);
+		return request.getId();
 		
 	}
 	

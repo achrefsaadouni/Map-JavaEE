@@ -12,7 +12,7 @@ import tn.esprit.Map.persistences.Request;
 public interface MessageServiceRemote {
 	
 	public int addMessage(Message message);
-	public void deleteMessage(int messageID);
+	public int deleteMessage(int messageID);
 	public List<Message> AllMessage(); 
 
 }

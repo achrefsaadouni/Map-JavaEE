@@ -4,8 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
+@XmlRootElement(name="request")
 public class Request implements Serializable {
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -35,7 +41,7 @@ public class Request implements Serializable {
 	public int getId() {
 		return id;
 	}
-
+	@XmlAttribute(name="id",required=true)
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -43,7 +49,7 @@ public class Request implements Serializable {
 	public String getRequestedProfil() {
 		return requestedProfil;
 	}
-
+	@XmlElement(name="RequestedProfil")
 	public void setRequestedProfil(String requestedProfil) {
 		this.requestedProfil = requestedProfil;
 	}
@@ -51,7 +57,7 @@ public class Request implements Serializable {
 	public String getExperienceYear() {
 		return experienceYear;
 	}
-
+	@XmlElement(name="ExperienceYear")
 	public void setExperienceYear(String experienceYear) {
 		this.experienceYear = experienceYear;
 	}
@@ -59,7 +65,7 @@ public class Request implements Serializable {
 	public String getEducationScolarity() {
 		return educationScolarity;
 	}
-
+	@XmlElement(name="EducationScolarity")
 	public void setEducationScolarity(String educationScolarity) {
 		this.educationScolarity = educationScolarity;
 	}
@@ -68,7 +74,7 @@ public class Request implements Serializable {
 	public Project getProject() {
 		return project;
 	}
-
+	@XmlElement(name="Project")
 	public void setProject(Project project) {
 		this.project = project;
 	}
@@ -76,7 +82,7 @@ public class Request implements Serializable {
 	public String getManager() {
 		return manager;
 	}
-
+	@XmlElement(name="Manager")
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
@@ -84,7 +90,7 @@ public class Request implements Serializable {
 	public Date getDepositDate() {
 		return depositDate;
 	}
-
+	@XmlElement(name="DepositDate")
 	public void setDepositDate(Date depositDate) {
 		this.depositDate = depositDate;
 	}
@@ -92,7 +98,7 @@ public class Request implements Serializable {
 	public Date getDepositTime() {
 		return depositTime;
 	}
-
+	@XmlElement(name="DepositTime")
 	public void setDepositTime(Date depositTime) {
 		this.depositTime = depositTime;
 	}
@@ -100,7 +106,7 @@ public class Request implements Serializable {
 	public Date getStartDateMondate() {
 		return startDateMondate;
 	}
-
+	@XmlElement(name="StartDateMondate")
 	public void setStartDateMondate(Date startDateMondate) {
 		this.startDateMondate = startDateMondate;
 	}
@@ -108,7 +114,7 @@ public class Request implements Serializable {
 	public Date getEndDateMondate() {
 		return endDateMondate;
 	}
-
+	@XmlElement(name="EndDateMondate")
 	public void setEndDateMondate(Date endDateMondate) {
 		this.endDateMondate = endDateMondate;
 	}
@@ -116,15 +122,15 @@ public class Request implements Serializable {
 	public Administrator getAdministrator() {
 		return administrator;
 	}
-
+	@XmlElement(name="Administrator")
 	public void setAdministrator(Administrator administrator) {
 		this.administrator = administrator;
 	}
-
+    
 	public Client getClient() {
 		return client;
 	}
-
+	@XmlElement(name="Client")
 	public void setClient(Client client) {
 		this.client = client;
 	}
