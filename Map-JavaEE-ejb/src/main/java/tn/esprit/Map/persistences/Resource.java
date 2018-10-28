@@ -48,6 +48,7 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("jobType")
 	private JobType jobType;
 
+	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonProperty("project")
 	private Project project;
@@ -55,6 +56,8 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
+	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", insertable = false, updatable = false),
+			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", insertable = false, updatable = false))
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
 	private Set<DayOff> dayOffs;

@@ -20,14 +20,16 @@ public interface ResourceRemote {
 	public void UpdateResource(Resource r);
 
 	public Boolean ArchiveResource(int resourceId);
-    
+
 	public Boolean UnArchiveResource(int resourceId);
-	
+
 	public Boolean AffectResourceToProject(int resourceId, int ProjectId);
 
 	public String UpdateAffectation(int resourceId, int ProjectId);
 
-    public List<Resource> getResourceArchive();
+	public List<Resource> getResourceArchive();
+	
+	
+	public float moyenneResource(int resourceId);
 
 }
-

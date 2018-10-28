@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import tn.esprit.Map.interfaces.ResourceRemote;
 import tn.esprit.Map.interfaces.SkillRemote;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.ResourceSkill;
@@ -19,6 +20,7 @@ public class SkillService implements SkillRemote {
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
 
+	ResourceRemote resourceRemote;
 	@Override
 	public void AddSkill(Skill skill) {
 		em.persist(skill);
@@ -119,6 +121,7 @@ public class SkillService implements SkillRemote {
 		}
 		for (Skill s : skills) {
 			s.setSkillResources(null);
+			
 		}
 		return skills;
 	}
