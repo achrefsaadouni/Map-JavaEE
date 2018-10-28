@@ -41,7 +41,7 @@ public class MessageWebService {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.TEXT_PLAIN) 
 	@Path("/addMessage")
 	public int addMessage(Message message) {	
 		int MessageId = messgeService.addMessage(message);
