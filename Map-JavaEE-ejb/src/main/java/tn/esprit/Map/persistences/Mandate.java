@@ -38,7 +38,7 @@ public class Mandate implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "ressourceId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Resource ressource;
-	private float montant;
+	private Double montant;
 	@OneToOne
 	private Resource gps;
 
@@ -84,11 +84,11 @@ public class Mandate implements Serializable {
 		this.gps = gps;
 	}
 
-	public float getMontant() {
+	public Double getMontant() {
 		return montant;
 	}
 
-	public void setMontant(float montant) {
+	public void setMontant(Double montant) {
 		this.montant = montant;
 	}
 
