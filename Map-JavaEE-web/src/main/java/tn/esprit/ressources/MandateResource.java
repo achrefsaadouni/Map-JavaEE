@@ -168,9 +168,9 @@ public class MandateResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void notify(Map<String, String> inputs){
-	String adresse = inputs.get("email");
-	String subject = inputs.get("subject");
-	String body = inputs.get("body");
-	mandateService.notify(adresse, subject, body);
+	int resourceId = Integer.parseInt(inputs.get("resourceId"));
+	int requestId = Integer.parseInt(inputs.get("requestId"));
+	String link = inputs.get("link");
+	mandateService.notif(resourceId,requestId,link);
 	}
 }
