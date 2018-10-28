@@ -103,7 +103,7 @@ public class Request implements Serializable {
 	@XmlElement(name="DepositTime")
 	public void setDepositTime(Date depositTime) {
 		this.depositTime = depositTime;
-	}
+	} 
 
 	public Date getStartDateMondate() {
 		return startDateMondate;

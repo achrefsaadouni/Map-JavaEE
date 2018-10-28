@@ -58,7 +58,7 @@ public class RequestService implements RequestServiceRemote{
 	}
 
 	@Override
-	public int deleteRequest(int requestID) {
+	public int deleteRequest(int requestID) { 
 		Request request = em.find(Request.class,requestID);
 		System.out.println("requestid : "+request.getId());
 		em.remove(request);

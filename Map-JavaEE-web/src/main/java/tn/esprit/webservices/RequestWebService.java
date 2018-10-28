@@ -66,7 +66,7 @@ public class RequestWebService {
 	}
 	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)   
 	@Path("/getSortedRequests")
 	public Response ViewSortedMessages() {
 		if (requestService.sortByDate() == null)
