@@ -13,6 +13,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 public class DayOff implements Serializable {
@@ -39,6 +41,7 @@ public class DayOff implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private StateType stateType;
 	
+	@JsonIgnore
 	@ManyToMany(mappedBy="dayOffs")
 	private List<Resource> Resources;
 	

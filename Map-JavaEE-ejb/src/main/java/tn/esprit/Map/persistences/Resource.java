@@ -10,6 +10,7 @@ import javax.validation.constraints.Null;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -48,7 +49,7 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("jobType")
 	private JobType jobType;
 
-	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonProperty("project")
 	private Project project;
@@ -56,20 +57,26 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
-	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", insertable = false, updatable = false),
-			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", insertable = false, updatable = false))
+	@JsonIgnore
+	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", updatable = false),
+			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", updatable = false))
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
 	private Set<DayOff> dayOffs;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
 	@JsonProperty("ResourceSkills")
 	private Set<ResourceSkill> resourceSkills;
 
+	
+	@JsonIgnore
 	@JsonProperty("organizationalCharts")
 	@ManyToMany(mappedBy = "resources", fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
 
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
 	@JsonProperty("listeMondats")
 	private Set<Mandate> listeMondats;

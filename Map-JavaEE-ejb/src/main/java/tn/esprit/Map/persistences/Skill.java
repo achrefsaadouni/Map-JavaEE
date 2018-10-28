@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -20,7 +21,7 @@ public class Skill implements Serializable {
 	@JsonProperty("NameSkill")
 	private String NameSkill;
 
-	
+	@JsonIgnore
 	@JsonProperty("skillResources")
 	@OneToMany(mappedBy="skill" , fetch=FetchType.EAGER)
 	private Set<ResourceSkill> skillResources;
