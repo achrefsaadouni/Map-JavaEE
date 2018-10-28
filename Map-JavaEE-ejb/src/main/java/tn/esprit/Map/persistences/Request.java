@@ -30,6 +30,8 @@ public class Request implements Serializable {
 	private Date startDateMondate;
 	@Temporal(TemporalType.DATE)
 	private Date endDateMondate;
+	private int accept;
+	private float daysMondate;
 	@ManyToOne
 	private Administrator administrator;
 	@ManyToOne
@@ -134,7 +136,24 @@ public class Request implements Serializable {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-
+	
+	
+	public int getAccept() {
+		return accept;
+	}
+	@XmlElement(name="Accept")
+	public void setAccept(int accept) {
+		accept = accept;
+	}
+	
+	public float getDaysMondate() {
+		return daysMondate;
+	}
+	@XmlElement(name="DaysMondate")
+	public void setDaysMondate(float daysMondate) {
+		this.daysMondate = daysMondate;
+	}
+	
 	public Request() {
 		super();
 	}

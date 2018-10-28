@@ -15,6 +15,10 @@ public interface RequestServiceRemote {
 	
 	public void affectClienttToRequest(int requestId , int clientId);
 	public void affectAdminToRequest(int requestId , int adminId);
-	public int deleteRequest(int requestID); 
+	public int deleteRequest(int requestID);
+	public String updateRequest(int requestID);
+    public float calculDaysMondate(Request request);
+    public String updateDaysMondate(int requestID);
+    public List<Request> sortByDate();
 
 }   
