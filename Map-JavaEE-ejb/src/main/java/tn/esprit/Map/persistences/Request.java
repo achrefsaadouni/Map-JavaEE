@@ -132,7 +132,96 @@ public class Request implements Serializable {
 	public Request() {
 		super();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((administrator == null) ? 0 : administrator.hashCode());
+		result = prime * result + ((client == null) ? 0 : client.hashCode());
+		result = prime * result + ((depositDate == null) ? 0 : depositDate.hashCode());
+		result = prime * result + ((depositTime == null) ? 0 : depositTime.hashCode());
+		result = prime * result + ((educationScolarity == null) ? 0 : educationScolarity.hashCode());
+		result = prime * result + ((endDateMondate == null) ? 0 : endDateMondate.hashCode());
+		result = prime * result + ((experienceYear == null) ? 0 : experienceYear.hashCode());
+		result = prime * result + id;
+		result = prime * result + ((manager == null) ? 0 : manager.hashCode());
+		result = prime * result + ((project == null) ? 0 : project.hashCode());
+		result = prime * result + ((requestedProfil == null) ? 0 : requestedProfil.hashCode());
+		result = prime * result + ((startDateMondate == null) ? 0 : startDateMondate.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Request other = (Request) obj;
+		if (administrator == null) {
+			if (other.administrator != null)
+				return false;
+		} else if (!administrator.equals(other.administrator))
+			return false;
+		if (client == null) {
+			if (other.client != null)
+				return false;
+		} else if (!client.equals(other.client))
+			return false;
+		if (depositDate == null) {
+			if (other.depositDate != null)
+				return false;
+		} else if (!depositDate.equals(other.depositDate))
+			return false;
+		if (depositTime == null) {
+			if (other.depositTime != null)
+				return false;
+		} else if (!depositTime.equals(other.depositTime))
+			return false;
+		if (educationScolarity == null) {
+			if (other.educationScolarity != null)
+				return false;
+		} else if (!educationScolarity.equals(other.educationScolarity))
+			return false;
+		if (endDateMondate == null) {
+			if (other.endDateMondate != null)
+				return false;
+		} else if (!endDateMondate.equals(other.endDateMondate))
+			return false;
+		if (experienceYear == null) {
+			if (other.experienceYear != null)
+				return false;
+		} else if (!experienceYear.equals(other.experienceYear))
+			return false;
+		if (id != other.id)
+			return false;
+		if (manager == null) {
+			if (other.manager != null)
+				return false;
+		} else if (!manager.equals(other.manager))
+			return false;
+		if (project == null) {
+			if (other.project != null)
+				return false;
+		} else if (!project.equals(other.project))
+			return false;
+		if (requestedProfil == null) {
+			if (other.requestedProfil != null)
+				return false;
+		} else if (!requestedProfil.equals(other.requestedProfil))
+			return false;
+		if (startDateMondate == null) {
+			if (other.startDateMondate != null)
+				return false;
+		} else if (!startDateMondate.equals(other.startDateMondate))
+			return false;
+		return true;
+	}
 	
+	 
 	
 
 }
