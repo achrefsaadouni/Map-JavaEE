@@ -1,46 +1,74 @@
+
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 @Entity
+@JsonRootName("Resource")
 @DiscriminatorValue(value = "resource")
 public class Resource extends Person implements Serializable {
+	@Enumerated(EnumType.STRING)
+	@JsonProperty("seniority")
+	private SeniorityType seniority;
 
-	private String seniority;
+	@Enumerated(EnumType.STRING)
+	@JsonProperty("workProfil")
+	private WorkType workProfil;
 
-	private String workProfil;
-
+	@JsonProperty("note")
 	private float note;
 
+	@JsonProperty("cv")
 	private String cv;
 
+	@JsonProperty("picture")
 	private String picture;
 
+	@JsonProperty("availability")
 	@Enumerated(EnumType.STRING)
 	private AvailabilityType availability;
 
+	@JsonProperty("businessSector")
 	private String businessSector;
 
+	@JsonProperty("salary")
 	private float salary;
 
-	private String jobType;
+	@Enumerated(EnumType.STRING)
+	@JsonProperty("jobType")
+	private JobType jobType;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonProperty("project")
+	private Project project;
+
+	@JsonProperty("moyenneSkill")
+	private float moyenneSkill;
 
 	@ManyToMany(fetch = FetchType.EAGER)
+	@JsonProperty("dayOffs")
 	private Set<DayOff> dayOffs;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Skill> skills;
+	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
+	@JsonProperty("ResourceSkills")
+	private Set<ResourceSkill> resourceSkills;
 
-	@ManyToMany(mappedBy = "resources",fetch = FetchType.EAGER)
+	@JsonProperty("organizationalCharts")
+	@ManyToMany(mappedBy = "resources", fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
+
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
-	@JsonIgnore
+	@JsonProperty("listeMondats")
 	private Set<Mandate> listeMondats;
 
 	public Set<Mandate> getListeMondats() {
@@ -49,22 +77,6 @@ public class Resource extends Person implements Serializable {
 
 	public void setListeMondats(Set<Mandate> listeMondats) {
 		this.listeMondats = listeMondats;
-	}
-
-	public String getSeniority() {
-		return seniority;
-	}
-
-	public void setSeniority(String seniority) {
-		this.seniority = seniority;
-	}
-
-	public String getWorkProfil() {
-		return workProfil;
-	}
-
-	public void setWorkProfil(String workProfil) {
-		this.workProfil = workProfil;
 	}
 
 	public float getNote() {
@@ -115,12 +127,12 @@ public class Resource extends Person implements Serializable {
 		this.salary = salary;
 	}
 
-	public String getJobType() {
-		return jobType;
+	public Project getProject() {
+		return project;
 	}
 
-	public void setJobType(String jobType) {
-		this.jobType = jobType;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 
 	public Set<DayOff> getDayOffs() {
@@ -131,12 +143,36 @@ public class Resource extends Person implements Serializable {
 		this.dayOffs = dayOffs;
 	}
 
-	public Set<Skill> getSkills() {
-		return skills;
+	public Set<ResourceSkill> getResourceSkills() {
+		return resourceSkills;
 	}
 
-	public void setSkills(Set<Skill> skills) {
-		this.skills = skills;
+	public void setResourceSkills(Set<ResourceSkill> resourceSkills) {
+		this.resourceSkills = resourceSkills;
+	}
+
+	public SeniorityType getSeniority() {
+		return seniority;
+	}
+
+	public void setSeniority(SeniorityType seniority) {
+		this.seniority = seniority;
+	}
+
+	public WorkType getWorkProfil() {
+		return workProfil;
+	}
+
+	public void setWorkProfil(WorkType workProfil) {
+		this.workProfil = workProfil;
+	}
+
+	public JobType getJobType() {
+		return jobType;
+	}
+
+	public void setJobType(JobType jobType) {
+		this.jobType = jobType;
 	}
 
 	public Set<OrganizationalChart> getOrganizationalCharts() {
@@ -145,6 +181,14 @@ public class Resource extends Person implements Serializable {
 
 	public void setOrganizationalCharts(Set<OrganizationalChart> organizationalCharts) {
 		this.organizationalCharts = organizationalCharts;
+	}
+
+	public float getMoyenneSkill() {
+		return moyenneSkill;
+	}
+
+	public void setMoyenneSkill(float moyenneSkill) {
+		this.moyenneSkill = moyenneSkill;
 	}
 
 }
