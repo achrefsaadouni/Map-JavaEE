@@ -7,6 +7,7 @@ import javax.persistence.PersistenceContext;
 
 import tn.esprit.Map.interfaces.PersonServiceRemote;
 import tn.esprit.Map.persistences.Message;
+import tn.esprit.Map.persistences.Person;
 
 
 
@@ -21,6 +22,12 @@ public class PersonService implements PersonServiceRemote{
 	public String test(Message msg) {
 		em.persist(msg);
 		return msg.getContent();
+	}
+
+
+	@Override
+	public Person getPersonById(int id) {
+		return em.find(Person.class, id);
 	}
 
 

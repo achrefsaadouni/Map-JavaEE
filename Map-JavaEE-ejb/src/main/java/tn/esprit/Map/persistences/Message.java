@@ -25,7 +25,7 @@ public class Message implements Serializable {
 	private TypeMessage typeMessage;
 	@ManyToOne
 	private InBox inBox;
-	@OneToOne(mappedBy="message")
+	@OneToOne
 	private Person person;
 	
 

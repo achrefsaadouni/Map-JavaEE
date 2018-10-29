@@ -130,6 +130,14 @@ public class RequestService implements RequestServiceRemote{
 		List<Request> results = query.getResultList();
 		return results;
 	}
+
+
+
+	@Override
+	public Request getRequestById(int requestID) {
+		Request request = em.find(Request.class, requestID);
+		return request;
+	}
 	
 	
 	

@@ -29,10 +29,12 @@ public class Person implements Serializable {
 	private String email;
 	@JsonProperty("archived")
 	private int archived;
+	@JsonProperty("notePerson")
+	private double notePerson;
 	@OneToOne
 	@JsonProperty("inBox")
 	private InBox inBox;
-	@OneToOne
+	@OneToOne(mappedBy="person")
 	private Message message;
 
 
@@ -93,6 +95,21 @@ public class Person implements Serializable {
 	public void setArchived(int archived) {
 		this.archived = archived;
 	}
+	public double getNotePerson() {
+		return notePerson;
+	}
+	public void setNotePerson(double notePerson) {
+		this.notePerson = notePerson;
+	}
+	public Message getMessage() {
+		return message;
+	}
+	public void setMessage(Message message) {
+		this.message = message;
+	}
+	public int getArchived() {
+		return archived;
+	}
 
-
+   
 }
