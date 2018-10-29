@@ -12,6 +12,7 @@ import tn.esprit.Map.interfaces.ResourceRemote;
 import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.ResourceSkill;
 import tn.esprit.Map.persistences.Skill;
 
 @Stateless
@@ -95,14 +96,21 @@ public class ResourceService implements ResourceRemote {
 		if (resources.isEmpty()) {
 			return null;
 		} else
+		for(Resource r : resources){
+			r.setProject(null);
+			r.setDayOffs(null);
+			r.setResourceSkills(null);}
 			return resources;
 	}
 
 	@Override
 	public Resource getResourceById(int idResource) {
 		Query q = em.createQuery("select res from Resource res WHERE res.id= :id");
-		return (Resource) q.setParameter("id", idResource).getSingleResult();
-
+		Resource r =(Resource) q.setParameter("id", idResource).getSingleResult();
+		r.setProject(null);
+		r.setDayOffs(null);
+		r.setResourceSkills(null);
+		return r;
 	}
 
 	@Override
@@ -114,7 +122,32 @@ public class ResourceService implements ResourceRemote {
 				+ "res.workProfil , res.archived , res.email  from Resource res where res.archived=" + valeur;
 		Query query = em.createQuery(requestJPQL);
 		List<Resource> rs = (List<Resource>) query.getResultList();
+		for(Resource r : rs){
+			r.setProject(null);
+			r.setDayOffs(null);
+			r.setResourceSkills(null);}
+			
 		return rs;
+	}
+
+	@Override
+	public float moyenneResource(int idResource) {
+		float moyenne =0;
+		float somme=0;
+		Query q = em.createQuery("SELECT rs FROM ResourceSkill rs where rs.resource.id=:id",ResourceSkill.class);
+		List<ResourceSkill> listeResourceSkill = q.setParameter("id",idResource).getResultList();
+		if(listeResourceSkill.size()==0){
+			return 0;
+		}
+		for(ResourceSkill rs : listeResourceSkill){
+			somme = somme+rs.getRateSkill();
+		}	
+		moyenne =somme/listeResourceSkill.size();
+		Resource r = em.find(Resource.class,idResource);
+		r.setMoyenneSkill(moyenne);
+		return moyenne ;
+		
+		
 	}
 
 }

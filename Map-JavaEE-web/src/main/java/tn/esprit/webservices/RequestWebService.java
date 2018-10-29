@@ -80,5 +80,14 @@ public class RequestWebService {
 
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)   
+	@Path("/getRequestById/{idRequest}")
+	public Response getRequestById(@PathParam("idRequest") String requestID) {
+		
+		return Response.ok(requestService.getRequestById(Integer.parseInt(requestID)), MediaType.APPLICATION_JSON).build();
+
+	}
+	
 
 }

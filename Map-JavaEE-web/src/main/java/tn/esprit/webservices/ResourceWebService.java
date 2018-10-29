@@ -137,5 +137,16 @@ public class ResourceWebService {
 		}
 		return Response.ok(resourceRemote.getResourceById(Integer.parseInt(resourceId)), MediaType.APPLICATION_JSON).build();
 	}
+	
+	
+	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("moyenneResource")
+	public String moyenneResource(@QueryParam("resourceId") String resourceId) {
+		if(resourceRemote.moyenneResource(Integer.parseInt(resourceId)) == 0){
+			return "cette resource ne poséde pas de note";
+		}
+		return String.valueOf(resourceRemote.moyenneResource(Integer.parseInt(resourceId)));
+	}
 
 }

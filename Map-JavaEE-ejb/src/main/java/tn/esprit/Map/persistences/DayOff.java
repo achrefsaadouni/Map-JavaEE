@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 
 
 @Entity
-public class DayOff implements Serializable {
+public class DayOff implements Serializable,Comparable<DayOff> {
 	@Id
 	@GeneratedValue
 	private int id;
@@ -97,6 +97,12 @@ public class DayOff implements Serializable {
 	}
 	public void setResources(List<Resource> resources) {
 		Resources = resources;
+	}
+
+	@Override
+	public int compareTo(DayOff o) {
+	
+		return this.endDate.compareTo(o.endDate);
 	}
 	
 }

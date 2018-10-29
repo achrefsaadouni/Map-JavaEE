@@ -10,6 +10,7 @@ import javax.validation.constraints.Null;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -20,6 +21,8 @@ public class Resource extends Person implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("seniority")
 	private SeniorityType seniority;
+	@JsonProperty("taux")
+	private static double taux;
 
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("workProfil")
@@ -48,6 +51,7 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("jobType")
 	private JobType jobType;
 
+	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonProperty("project")
 	private Project project;
@@ -55,12 +59,16 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
+	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", insertable = false, updatable = false),
+			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", insertable = false, updatable = false))
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
+	@JsonIgnore
 	private Set<DayOff> dayOffs;
 
 	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
 	@JsonProperty("ResourceSkills")
+	@JsonIgnore
 	private Set<ResourceSkill> resourceSkills;
 
 	@JsonProperty("organizationalCharts")
@@ -68,9 +76,10 @@ public class Resource extends Person implements Serializable {
 	private Set<OrganizationalChart> organizationalCharts;
 
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
-	@JsonProperty("listeMondats")
+	@JsonIgnore
 	private Set<Mandate> listeMondats;
-
+	
+	
 	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
@@ -190,5 +199,20 @@ public class Resource extends Person implements Serializable {
 	public void setMoyenneSkill(float moyenneSkill) {
 		this.moyenneSkill = moyenneSkill;
 	}
+
+	
+	
+	public double getTaux() {
+		return taux;
+	}
+
+	public  void setTaux(double taux) {
+		Resource.taux = taux;
+	}
+
+	public Resource() {
+		this.taux = 1.8;
+	}
+	
 
 }
