@@ -27,7 +27,7 @@ public class MailService {
       message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(addresses));
       message.setSubject(subject);
       message.setContent(make_cute_email(email_body_title,email_body_intro_1 , email_receiver , email_body_intro_2, email_company_name, email_company_slogon, company_descrpition, email_link), "text/html; charset=utf-8");
- 
+ System.out.println("send");
       Transport.send(message);
     } catch (Exception e) {
       System.out.println(e);

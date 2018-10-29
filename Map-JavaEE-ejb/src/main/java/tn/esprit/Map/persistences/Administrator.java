@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @DiscriminatorValue(value = "administrator")
 public class Administrator extends Person implements Serializable {

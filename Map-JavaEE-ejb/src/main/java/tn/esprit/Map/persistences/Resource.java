@@ -21,6 +21,8 @@ public class Resource extends Person implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("seniority")
 	private SeniorityType seniority;
+	@JsonProperty("taux")
+	private static double taux;
 
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("workProfil")
@@ -49,7 +51,6 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("jobType")
 	private JobType jobType;
 
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonProperty("project")
 	private Project project;
@@ -57,30 +58,25 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
-	@JsonIgnore
-	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", updatable = false),
-			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", updatable = false))
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
+	@JsonIgnore
 	private Set<DayOff> dayOffs;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
 	@JsonProperty("ResourceSkills")
+	@JsonIgnore
 	private Set<ResourceSkill> resourceSkills;
 
-	
-	@JsonIgnore
 	@JsonProperty("organizationalCharts")
 	@ManyToMany(mappedBy = "resources", fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
 
-	
-	@JsonIgnore
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
-	@JsonProperty("listeMondats")
+	@JsonIgnore
 	private Set<Mandate> listeMondats;
-
+	
+	
 	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
@@ -200,5 +196,20 @@ public class Resource extends Person implements Serializable {
 	public void setMoyenneSkill(float moyenneSkill) {
 		this.moyenneSkill = moyenneSkill;
 	}
+
+	
+	
+	public double getTaux() {
+		return taux;
+	}
+
+	public  void setTaux(double taux) {
+		Resource.taux = taux;
+	}
+
+	public Resource() {
+		this.taux = 1.8;
+	}
+	
 
 }

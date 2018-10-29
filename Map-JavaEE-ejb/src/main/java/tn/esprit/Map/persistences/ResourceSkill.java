@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
@@ -18,19 +17,14 @@ public class ResourceSkill implements Serializable{
 	@JsonProperty("rateSkill")
 	private float rateSkill;
 	
-	
-	
 	@ManyToOne
-	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill", updatable = false)
+	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill")
 	@JsonProperty("skill")
-	@JsonIgnore
 	private Skill skill;
 	
-	
 	@ManyToOne
-	@JoinColumn(name="id" , referencedColumnName="id", updatable = false)
+	@JoinColumn(name="id" , referencedColumnName="id")
 	@JsonProperty("resource")
-	@JsonIgnore
 	private Resource resource;
 
 	public int getIdResourceSkill() {

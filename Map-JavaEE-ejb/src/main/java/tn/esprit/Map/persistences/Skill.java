@@ -21,9 +21,10 @@ public class Skill implements Serializable {
 	@JsonProperty("NameSkill")
 	private String NameSkill;
 
-	@JsonIgnore
+	
 	@JsonProperty("skillResources")
 	@OneToMany(mappedBy="skill" , fetch=FetchType.EAGER)
+	@JsonIgnore
 	private Set<ResourceSkill> skillResources;
 
 	public int getIdSkill() {

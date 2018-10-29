@@ -27,12 +27,11 @@ public class Client extends Person implements Serializable {
 	private String logo;
 	@JsonProperty("address")
 	private String address;
+	@OneToMany(mappedBy = "client",fetch=FetchType.EAGER)
+	@JsonIgnore
+	private List<Project> projects;
 	@OneToMany(mappedBy = "client")
 	@JsonIgnore
-	@JsonProperty("projects")
-	private List<Project> projects;
-	@JsonProperty("requests")
-	@OneToMany(mappedBy = "client")
 	private List<Request> requests;
 
 	public ClientType getClientType() {
