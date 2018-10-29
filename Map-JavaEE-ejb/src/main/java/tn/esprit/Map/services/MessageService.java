@@ -96,7 +96,7 @@ public class MessageService implements MessageServiceRemote {
 	}
 
 	@Override
-	public String updateMessage(Person personne) {
+	public String updateMessage(Person personne) { 
 		Query query = em.createQuery("update Person p set p.notePerson= :notePerson where p.id= :personneId");
 		query.setParameter("notePerson",calculNotePerson(personne));
 		query.setParameter("personneId", personne.getId());

@@ -95,7 +95,7 @@ public class Person implements Serializable {
 	public void setArchived(int archived) {
 		this.archived = archived;
 	}
-	public double getNotePerson() {
+	public double getNotePerson() { 
 		return notePerson;
 	}
 	public void setNotePerson(double notePerson) {

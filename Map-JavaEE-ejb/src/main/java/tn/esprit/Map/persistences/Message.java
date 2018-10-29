@@ -22,7 +22,7 @@ public class Message implements Serializable {
 	private String content;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateMessage;
-	private TypeMessage typeMessage;
+	private TypeMessage typeMessage; 
 	@ManyToOne
 	private InBox inBox;
 	@OneToOne
