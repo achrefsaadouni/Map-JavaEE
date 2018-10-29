@@ -21,6 +21,6 @@ public interface MessageServiceRemote {
 	public long countProblemMessageByPerson(Person personne);
 	public double calculNotePerson(Person personne);
 	public String updateMessage(Person personne);
-	public List<Message> allMessageSortedByPerson(); 
+	public List<Message> allMessageSortedByPerson();  
 
 }
