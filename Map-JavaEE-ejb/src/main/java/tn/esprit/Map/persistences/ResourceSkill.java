@@ -17,13 +17,15 @@ public class ResourceSkill implements Serializable{
 	@JsonProperty("rateSkill")
 	private float rateSkill;
 	
+	
+	
 	@ManyToOne
-	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill")
+	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill", insertable = false, updatable = false)
 	@JsonProperty("skill")
 	private Skill skill;
 	
 	@ManyToOne
-	@JoinColumn(name="id" , referencedColumnName="id")
+	@JoinColumn(name="id" , referencedColumnName="id", insertable = false, updatable = false)
 	@JsonProperty("resource")
 	private Resource resource;
 

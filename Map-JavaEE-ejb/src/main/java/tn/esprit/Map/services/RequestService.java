@@ -1,10 +1,12 @@
 package tn.esprit.Map.services;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 
@@ -59,11 +61,87 @@ public class RequestService implements RequestServiceRemote{
 		System.out.println("requestid : "+request.getId());
 		em.remove(request);
 		return request.getId();
-		
+
+	}
+
+
+
+	@Override
+	public String updateRequest(int requestId) {
+		Query query = em.createQuery("update Request r set r.accept= :accept where r.id= :requestId");
+		query.setParameter("accept",1);
+		query.setParameter("requestId", requestId);
+		int update = query.executeUpdate();
+		if (update == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}  
+
+
+
+	@Override
+	public float calculDaysMondate(Request request) {
+		//Request request = em.find(Request.class,requestID);
+		 /*SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+		 String dateBeforeString = request.getStartDateMondate();
+		 String dateAfterString = request.getEndDateMondate();*/
+		float daysBetween = 0;
+		 try {
+		       Date dateBefore = request.getStartDateMondate();
+		       Date dateAfter = request.getEndDateMondate();
+		       long difference = dateAfter.getTime() - dateBefore.getTime();
+		        daysBetween = (difference / (1000*60*60*24));
+	               /* You can also convert the milliseconds to days using this method
+	                * float daysBetween = 
+	                *         TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS)
+	                */
+		       
+		 } catch (Exception e) {
+		       e.printStackTrace();
+		 }
+		return daysBetween;
+	}
+
+
+
+	@Override
+	public String updateDaysMondate(int requestID) {
+		Request request = em.find(Request.class, requestID);
+		Query query = em.createQuery("update Request r set r.daysMondate= :daysMondate where r.id= :requestId");
+		query.setParameter("daysMondate",this.calculDaysMondate(request));
+		query.setParameter("requestId", requestID);
+		int update = query.executeUpdate();
+		if (update == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
+
+
+	@Override
+	public List<Request> sortByDate() {
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request  r ORDER BY daysMondate DESC", Request.class);
+		List<Request> results = query.getResultList();
+		return results;
+	}
+
+
+
+	@Override
+	public Request getRequestById(int requestID) {
+		Request request = em.find(Request.class, requestID);
+		return request;
 	}
 	
 	
+	
+
+	}
 
 	
-}
+	
 

@@ -29,9 +29,11 @@ public class Client extends Person implements Serializable {
 	private String address;
 	@OneToMany(mappedBy = "client",fetch=FetchType.EAGER)
 	@JsonIgnore
+	@JsonProperty("projects")
 	private List<Project> projects;
+	
+	@JsonProperty("requests")
 	@OneToMany(mappedBy = "client")
-	@JsonIgnore
 	private List<Request> requests;
 
 	public ClientType getClientType() {
@@ -79,13 +81,14 @@ public class Client extends Person implements Serializable {
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
 	}
-
 	public List<Request> getRequests() {
 		return requests;
 	}
-
 	public void setRequests(List<Request> requests) {
 		this.requests = requests;
 	}
+	
+
+	
 
 }
