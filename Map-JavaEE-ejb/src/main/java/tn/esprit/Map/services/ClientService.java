@@ -3,7 +3,10 @@ package tn.esprit.Map.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -11,16 +14,26 @@ import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.ClientRemote;
 import tn.esprit.Map.persistences.Client;
+import tn.esprit.Map.persistences.ClientType;
+import tn.esprit.Map.persistences.Contract;
 import tn.esprit.Map.persistences.Project;
+import tn.esprit.Map.utilities.CryptPasswordMD5;
+import tn.esprit.Map.utilities.DecryptPasswordMD5;
+import tn.esprit.Map.utilities.Mail_API;
+import tn.esprit.Map.utilities.RandomPassword;
+
 
 @Stateless
 public class ClientService implements ClientRemote {
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
-
+	private Mail_API mailAPI = new Mail_API();
+	private RandomPassword randomPassword = new RandomPassword();
+	private CryptPasswordMD5 cryptPasswordMD5 = new CryptPasswordMD5();
 	@Override
 	public List<Client> getAllClients() {
-		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c", Client.class);
+		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c where c.archived= :archvied", Client.class);
+		query.setParameter("archvied",0);
 		List<Client> results = query.getResultList();
 		for (Client c : results) {
 			c.setProjects(null);
@@ -29,10 +42,36 @@ public class ClientService implements ClientRemote {
 		return results;
 	}
 
+	public static boolean isValidEmailAddress(String email) {
+		   boolean result = true;
+		   try {
+		      InternetAddress emailAddr = new InternetAddress(email);
+		      emailAddr.validate();
+		   } catch (AddressException ex) {
+		      result = false;
+		   }
+		   return result;
+		}
+	
 	@Override
-	public int addClient(Client c) {
-		em.persist(c);
-		return c.getId();
+	public String addClient(Client client) {
+		String password ;
+		String cryptedPassword;
+		if(!isValidEmailAddress(client.getEmail()))
+		{
+			return "You must enter a valid mail";
+		}
+		else
+		{
+			password =randomPassword.generateRandomPassword();
+			cryptedPassword=cryptPasswordMD5.cryptWithMD5(password);
+		client.setPassword(cryptedPassword);
+		client.setLogin(client.getFirstName()+" "+client.getLastName());
+		client.setClientType(ClientType.newClient);
+		em.persist(client);
+		mailAPI.sendEmail(client.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login : "+client.getLogin()+" Password : "+password);
+		}
+		return "Client has been saved into data base with this id :"+ client.getId() +"   "+password;
 	}
 
 	@Override
@@ -46,7 +85,6 @@ public class ClientService implements ClientRemote {
 		query.setParameter("nameSociety", client.getNameSociety());
 		query.setParameter("logo", client.getLogo());
 		query.setParameter("clientCategory", client.getClientCategory());
-		
 		query.setParameter("clientId", client.getId());
 		int modified = query.executeUpdate();
 		if (modified == 1) {
@@ -59,11 +97,56 @@ public class ClientService implements ClientRemote {
 	@Override
 	public String deleteClient(int clientId) {
 		Client client = em.find(Client.class,clientId);
+		Query query =  em.createQuery("Select c from Contract c where c.client= :client");
+	    query.setParameter("client", client);
+	    Contract contract = (Contract) query.getSingleResult();
+		Query queryGetProjects = em.createQuery("select p from Project p where p.client = :client");
+		Query queryUpdateProject = em.createQuery("update Project p set client= :client where p.id= :projectId");
+		queryGetProjects.setParameter("client",client);
+		List<Project> projectsClient =queryGetProjects.getResultList();
+		for(Project project : projectsClient)
+		{
+			//project.setClient(null); --> didn't work
+			//cause of insertable = false, updatable = false
+			queryUpdateProject.setParameter("client", null);
+			queryUpdateProject.setParameter("projectId", project.getId());
+			queryUpdateProject.executeUpdate();		
+		}
 		if(client.getId()!=-1){
+			em.remove(contract);
 			em.remove(client);
 			return "deleted";
 		}
 		return "error";
 	}
+
+	@Override
+	public void testSendMail(String to, String from, String subject, String bodyText) {
+		mailAPI.sendEmail(to, from, subject, bodyText);
+		
+	}
+
+	@Override
+	public String archiveClient(int clientId) {
+		Client client = em.find(Client.class,clientId);
+		client.setArchived(1);
+		return "archived done";
+	}
+
+	@Override
+	public String testDecrypt(int IdClient) {
+		Client client  = em.find(Client.class, IdClient);
+		 String crypt = "It0uwhYF";
+		 String clientPassword =client.getPassword(); 
+		String hash =  cryptPasswordMD5.cryptWithMD5(crypt);
+		if(hash.equals(clientPassword)){
+			return"EQUUUUUUUAAALS";
+		}
+		else{
+			return"Noooooooot equal" ;
+		}
+		 
+	}
+	
 
 }
