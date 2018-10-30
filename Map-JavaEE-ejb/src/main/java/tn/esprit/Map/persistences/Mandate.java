@@ -1,37 +1,23 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
-import java.util.Date;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 
 
 @Entity
-@IdClass(MandatePK.class)
 public class Mandate implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Id
-	@Temporal(TemporalType.DATE)
-	private Date dateDebut;
-	@Id
-	@Temporal(TemporalType.DATE)
-	private Date dateFin;
-	@Id
-	private int projetId;
-	@Id
-	private int ressourceId;
+	@EmbeddedId
+	private MandateId mandateId;
 	@ManyToOne
 	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
 	private Project projet;
@@ -41,40 +27,25 @@ public class Mandate implements Serializable {
 	private Double montant;
 	@OneToOne
 	private Resource gps;
+	private boolean archived;
 
-
-	public Date getDateDebut() {
-		return dateDebut;
+	public boolean getArchived() {
+		return archived;
 	}
 
-	public void setDateDebut(Date dateDebut) {
-		this.dateDebut = dateDebut;
+	public void setArchived(boolean archived) {
+		this.archived = archived;
 	}
 
-	public Date getDateFin() {
-		return dateFin;
+	
+
+	public MandateId getMandateId() {
+		return mandateId;
 	}
 
-	public void setDateFin(Date dateFin) {
-		this.dateFin = dateFin;
+	public void setMandateId(MandateId mandateId) {
+		this.mandateId = mandateId;
 	}
-
-	public int getProjetId() {
-		return projetId;
-	}
-
-	public void setProjetId(int projetId) {
-		this.projetId = projetId;
-	}
-
-	public int getRessourceId() {
-		return ressourceId;
-	}
-
-	public void setRessourceId(int ressourceId) {
-		this.ressourceId = ressourceId;
-	}
-
 
 	public Resource getGps() {
 		return gps;
@@ -91,7 +62,6 @@ public class Mandate implements Serializable {
 	public void setMontant(Double montant) {
 		this.montant = montant;
 	}
-
 
 	public Project getProjet() {
 		return projet;
@@ -112,14 +82,5 @@ public class Mandate implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
-
-
-
-
-
-
-
-
 
 }
