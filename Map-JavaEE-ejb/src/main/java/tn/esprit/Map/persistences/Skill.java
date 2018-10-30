@@ -27,6 +27,12 @@ public class Skill implements Serializable {
 	@JsonIgnore
 	private Set<ResourceSkill> skillResources;
 
+	@JsonProperty("listeProjects")
+	@ManyToMany(mappedBy="listeSkills" , fetch=FetchType.EAGER)
+	@JsonIgnore
+	private Set<Project> listeProjects;
+
+	
 	public int getIdSkill() {
 		return IdSkill;
 	}

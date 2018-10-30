@@ -173,4 +173,5 @@ public class MandateResource {
 	String link = inputs.get("link");
 	mandateService.notif(resourceId,requestId,link);
 	}
+	
 }

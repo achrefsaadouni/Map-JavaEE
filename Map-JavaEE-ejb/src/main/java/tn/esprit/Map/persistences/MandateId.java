@@ -3,14 +3,20 @@ package tn.esprit.Map.persistences;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-public class MandatePK implements Serializable{
-	
+@Embeddable
+public class MandateId implements Serializable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@Temporal(TemporalType.DATE)
 	private Date dateDebut;
+	@Temporal(TemporalType.DATE)
 	private Date dateFin;
 	private int projetId;
 	private int ressourceId;
@@ -38,6 +44,9 @@ public class MandatePK implements Serializable{
 	public void setRessourceId(int ressourceId) {
 		this.ressourceId = ressourceId;
 	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,7 +65,7 @@ public class MandatePK implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MandatePK other = (MandatePK) obj;
+		MandateId other = (MandateId) obj;
 		if (dateDebut == null) {
 			if (other.dateDebut != null)
 				return false;
