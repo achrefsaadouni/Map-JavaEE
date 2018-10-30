@@ -13,26 +13,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 public class Skill implements Serializable {
 
-	@JsonProperty("IdSkill")
+	@JsonProperty("idSkill")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int IdSkill;
 	
-	@JsonProperty("NameSkill")
+	@JsonProperty("nameSkill")
 	private String NameSkill;
 
-	
+	@JsonIgnore
 	@JsonProperty("skillResources")
 	@OneToMany(mappedBy="skill" , fetch=FetchType.EAGER)
-	@JsonIgnore
 	private Set<ResourceSkill> skillResources;
 
-	@JsonProperty("listeProjects")
-	@ManyToMany(mappedBy="listeSkills" , fetch=FetchType.EAGER)
-	@JsonIgnore
-	private Set<Project> listeProjects;
-
-	
 	public int getIdSkill() {
 		return IdSkill;
 	}

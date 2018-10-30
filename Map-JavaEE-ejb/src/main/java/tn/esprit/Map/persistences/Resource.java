@@ -21,9 +21,10 @@ public class Resource extends Person implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("seniority")
 	private SeniorityType seniority;
-	@JsonProperty("taux")
-	private static double taux;
 
+	@JsonProperty("taux")
+    private static double taux;
+	
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("workProfil")
 	private WorkType workProfil;
@@ -50,8 +51,9 @@ public class Resource extends Person implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("jobType")
 	private JobType jobType;
-
-	@JoinColumn(name = "projetId", referencedColumnName = "id", insertable = false, updatable = false)
+	
+	
+	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonProperty("project")
 	private Project project;
@@ -59,27 +61,30 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
-	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", insertable = false, updatable = false),
-			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", insertable = false, updatable = false))
+	
+	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", updatable = false),
+			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", updatable = false))
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
-	@JsonIgnore
 	private Set<DayOff> dayOffs;
 
-	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
-	@JsonProperty("ResourceSkills")
 	@JsonIgnore
+	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
+	@JsonProperty("resourceSkills")
 	private Set<ResourceSkill> resourceSkills;
 
+	
+	@JsonIgnore
 	@JsonProperty("organizationalCharts")
 	@ManyToMany(mappedBy = "resources", fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
 
-	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
+	
 	@JsonIgnore
+	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
+	@JsonProperty("listeMondats")
 	private Set<Mandate> listeMondats;
-	
-	
+
 	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
@@ -200,19 +205,22 @@ public class Resource extends Person implements Serializable {
 		this.moyenneSkill = moyenneSkill;
 	}
 
-	
-	
-	public double getTaux() {
+	@Override
+	public String toString() {
+		return "Resource [seniority=" + seniority +"]";
+	}
+
+	public static double getTaux() {
 		return taux;
 	}
 
-	public  void setTaux(double taux) {
+	public static void setTaux(double taux) {
 		Resource.taux = taux;
 	}
 
-	public Resource() {
-		this.taux = 1.8;
-	}
 	
-
+	
+	
+	
+	
 }
