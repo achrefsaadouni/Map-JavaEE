@@ -1,6 +1,5 @@
 package tn.esprit.Map.services;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -24,8 +23,7 @@ public class RequestService implements RequestServiceRemote{
 
 	@Override
 	public int addRequest(Request request) {
-		em.persist(request); 
-		updateDaysMondate(request.getId());
+		em.persist(request);  
 		return request.getId();
 	}
     
@@ -58,12 +56,12 @@ public class RequestService implements RequestServiceRemote{
 	}
 
 	@Override
-	public int deleteRequest(int requestID) { 
+	public int deleteRequest(int requestID) {
 		Request request = em.find(Request.class,requestID);
 		System.out.println("requestid : "+request.getId());
 		em.remove(request);
 		return request.getId();
-		
+
 	}
 
 
@@ -141,9 +139,9 @@ public class RequestService implements RequestServiceRemote{
 	
 	
 	
-	
-	
+
+	}
 
 	
-}
+	
 
