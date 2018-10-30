@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -28,7 +29,7 @@ public class MandateResource {
 	@EJB
 	MandateServiceLocal mandateService;
 	
-	@EJB
+	@Inject
 	@AuthenticatedUser
 	Person authenticatedUser;
 	
