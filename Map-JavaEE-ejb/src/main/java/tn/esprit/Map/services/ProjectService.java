@@ -123,7 +123,7 @@ public class ProjectService implements ProjectRemote {
 		});
 		
 		if(contracts.size() == 0){
-			return "Client must have a contract";
+			return "client must have a contract";
 		}
 		
 		for (Contract contract : contracts) {
