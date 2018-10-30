@@ -17,6 +17,6 @@ public interface PersonServiceRemote {
 	public Person getPersonById(int id);
 	public String test(Message msg); 
 	public boolean login (String username,String password);
-	public Person findArtsukiByEmail(String email);
+	public Person findPersonByEmail(String email);
  
 }

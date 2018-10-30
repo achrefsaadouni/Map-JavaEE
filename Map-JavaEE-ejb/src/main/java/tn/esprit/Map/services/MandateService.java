@@ -25,6 +25,7 @@ import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.MandateId;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.Skill;
 
 @Stateless
 public class MandateService implements MandateServiceLocal {
@@ -378,10 +379,31 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Resource> SearchResourceBySkill(int requestId) {
-		// List<Resource> listeresource =
-		// skillremote.orderResourcesOfSkill(skillId);
-
-		return null;
+		Request request;
+		List<Skill> listSkillsRequired = new ArrayList<>();
+		List<Resource> listeRecourceNeeded = new ArrayList<>();
+		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
+		query.setParameter("rId", requestId);
+		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m", Resource.class);
+		try {
+			request = query.getSingleResult();
+			List<Resource> resources = query1.getResultList();
+			listSkillsRequired.addAll(request.getProject().getListeSkills());
+			resources.forEach(e -> {
+				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
+				if (resourceskills.size() == listSkillsRequired.size()) {
+					int i = 0;
+					while (resourceskills.get(i).equals(listSkillsRequired.get(i)) && i < resourceskills.size()) {
+						i++;
+					}
+					if (i == resourceskills.size())
+						listeRecourceNeeded.add(e);
+				}
+			});
+			return listeRecourceNeeded;
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override

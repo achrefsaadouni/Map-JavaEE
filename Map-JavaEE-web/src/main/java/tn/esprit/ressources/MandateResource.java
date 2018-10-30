@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
-import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -15,7 +14,7 @@ import javax.ws.rs.core.Response.Status;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 import tn.esprit.Map.persistences.Person;
-import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.Role;
 import tn.esprit.utlities.AuthenticatedUser;
 import tn.esprit.utlities.Secured;
 
@@ -28,22 +27,20 @@ public class MandateResource {
 
 	@EJB
 	MandateServiceLocal mandateService;
-	@Inject
+	
+	@EJB
 	@AuthenticatedUser
 	Person authenticatedUser;
 	
 	
-	
-	
-	
-	
-	
-	
-	
+
 	@POST
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addMandate(Map<String, String> inputs) {
+		if (authenticatedUser.getRoleT() == Role.Admin)
+		{
 		String requestId = inputs.get("requestId");
 		String resourceId = inputs.get("resourceId");
 		Response reponse;
@@ -54,8 +51,14 @@ public class MandateResource {
 		reponse = mandateService.addMandate(Integer.parseInt(requestId), Integer.parseInt(resourceId))
 				? Response.status(Status.CREATED).build() : Response.status(Status.NOT_ACCEPTABLE).build();
 		return reponse;
-
+		}
+				
+				return Response.status(Status.BAD_REQUEST).build();
 	}
+	
+	
+	
+	
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -85,19 +88,6 @@ public class MandateResource {
 			}
 
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 		
 		else if ((ressourceId != null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
@@ -218,8 +208,7 @@ public class MandateResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response notify(Map<String, String> inputs){
-		System.out.println(authenticatedUser.getRoleT());
-		if (authenticatedUser.getRoleT().equals("resource"))
+		if (authenticatedUser.getRoleT() == Role.Admin)
 {
 	int resourceId = Integer.parseInt(inputs.get("resourceId"));
 	int requestId = Integer.parseInt(inputs.get("requestId"));

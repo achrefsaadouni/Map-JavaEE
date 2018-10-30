@@ -19,7 +19,8 @@ public class AuthenticatedUserProducer {
     @RequestScoped
     @AuthenticatedUser
     private Person authenticatedUser;
-
+    private String role;
+    
     public void handleAuthenticationEvent(@Observes @AuthenticatedUser String mail) {
         this.authenticatedUser = findUser(mail);
     }
@@ -27,7 +28,7 @@ public class AuthenticatedUserProducer {
     private Person findUser(String mail) {
         // Hit the the database or a service to find a user by its username and return it
         // Return the User instance
-    	return personManager.findArtsukiByEmail(mail);
+    	return personManager.findPersonByEmail(mail);
     }
 
 }

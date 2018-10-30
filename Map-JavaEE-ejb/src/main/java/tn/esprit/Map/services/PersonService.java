@@ -44,7 +44,7 @@ public class PersonService implements PersonServiceRemote{
 
 
 	@Override
-	public Person findArtsukiByEmail(String mail) {
+	public Person findPersonByEmail(String mail) {
 		Query query=em.createQuery("select a from Person a where a.email = :mail").setParameter("mail", mail);
 		List<Person>person=query.getResultList();
 		if(person.size()>0)

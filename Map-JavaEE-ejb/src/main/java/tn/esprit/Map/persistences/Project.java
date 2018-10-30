@@ -58,6 +58,14 @@ public class Project implements Serializable {
 	@ManyToMany
 	private Set<Skill> listeSkills;
 	
+	public Set<Skill> getListeSkills() {
+		return listeSkills;
+	}
+
+	public void setListeSkills(Set<Skill> listeSkills) {
+		this.listeSkills = listeSkills;
+	}
+
 	public int getId() {
 		return id;
 	}
