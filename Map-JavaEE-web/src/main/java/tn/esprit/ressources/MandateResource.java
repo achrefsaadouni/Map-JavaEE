@@ -7,12 +7,17 @@ import java.util.Map;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
+import tn.esprit.Map.persistences.Person;
+import tn.esprit.Map.persistences.Resource;
+import tn.esprit.utlities.AuthenticatedUser;
+import tn.esprit.utlities.Secured;
 
 @Path("mandate")
 @ManagedBean
@@ -23,7 +28,18 @@ public class MandateResource {
 
 	@EJB
 	MandateServiceLocal mandateService;
-
+	@Inject
+	@AuthenticatedUser
+	Person authenticatedUser;
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -197,14 +213,22 @@ public class MandateResource {
 		}
 		return response;
 	}
+	@Secured
 	@Path("notify")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void notify(Map<String, String> inputs){
+	public Response notify(Map<String, String> inputs){
+		System.out.println(authenticatedUser.getRoleT());
+		if (authenticatedUser.getRoleT().equals("resource"))
+{
 	int resourceId = Integer.parseInt(inputs.get("resourceId"));
 	int requestId = Integer.parseInt(inputs.get("requestId"));
 	String link = inputs.get("link");
 	mandateService.notif(resourceId,requestId,link);
+	return Response.status(Status.OK).build();
+}
+		
+		return Response.status(Status.BAD_REQUEST).build();
 	}
 	
 }
