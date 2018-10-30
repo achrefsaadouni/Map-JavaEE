@@ -56,6 +56,7 @@ public class ContractService implements ContractRemote {
 			c.setProjects(null);
 			c.setRequests(null);
 			c.setInBoxs(null);
+			c.setContracts(null);
 			contracts.add(contract);
 		});
 		return contracts;

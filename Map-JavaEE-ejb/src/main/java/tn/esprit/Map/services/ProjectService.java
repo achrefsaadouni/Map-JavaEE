@@ -49,8 +49,8 @@ public class ProjectService implements ProjectRemote {
 			Project project = arrayToProject(array);
 			Client c = project.getClient();
 			c.setProjects(null);
-			c.setRequests(null);
 			c.setInBoxs(null);
+			c.setRequests(null);
 			projects.add(project);
 		});
 		return projects;

@@ -31,7 +31,7 @@ public class ProjectWebService {
 		
 		if ((idClient == null)&&(startDate==null)&&(endDate ==null)) {
 			if (projectRemote.getAllProjects() == null)
-				return Response.status(Response.Status.NOT_FOUND).entity("\"Access denied\"").build();
+				return Response.status(Response.Status.NOT_FOUND).build();
 
 			if (projectRemote.getAllProjects().size() == 0)
 				return Response.status(Response.Status.BAD_REQUEST).entity("\"No data\"").build();
