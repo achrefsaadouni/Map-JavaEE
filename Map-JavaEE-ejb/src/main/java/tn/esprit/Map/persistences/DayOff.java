@@ -13,32 +13,46 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
+@JsonRootName("DayOff")
 @Entity
-public class DayOff implements Serializable,Comparable<DayOff> {
+public class DayOff implements Serializable {
 	@Id
 	@GeneratedValue
+	@JsonProperty("id")
+
 	private int id;
 	
-	
+	@JsonProperty("startDate")
+
 	@Temporal(TemporalType.DATE)
 	private Date startDate;
 	
-	
+	@JsonProperty("endDate")
+
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
-	
+	@JsonProperty("reason")
+
 	private String reason;
 	
-	
+	@JsonProperty("typeDayOff")
+
 	@Enumerated(EnumType.STRING)
 	private TypeDayOff typeDayOff;
 	
-	
+	@JsonProperty("stateType")
+
 	@Enumerated(EnumType.STRING)
 	private StateType stateType;
 	
+	@JsonIgnore
+	@JsonProperty("resources")
+
 	@ManyToMany(mappedBy="dayOffs")
 	private List<Resource> Resources;
 	
@@ -97,12 +111,6 @@ public class DayOff implements Serializable,Comparable<DayOff> {
 	}
 	public void setResources(List<Resource> resources) {
 		Resources = resources;
-	}
-
-	@Override
-	public int compareTo(DayOff o) {
-	
-		return this.endDate.compareTo(o.endDate);
 	}
 	
 }

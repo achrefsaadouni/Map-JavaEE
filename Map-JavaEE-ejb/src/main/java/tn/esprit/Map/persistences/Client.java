@@ -31,6 +31,8 @@ public class Client extends Person implements Serializable {
 	@JsonIgnore
 	@JsonProperty("projects")
 	private List<Project> projects;
+	@OneToMany(mappedBy = "client")
+	private Set<Contract> contracts;
 	
 	@JsonProperty("requests")
 	@OneToMany(mappedBy = "client")
@@ -73,20 +75,31 @@ public class Client extends Person implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
+	@JsonIgnore
 	public List<Project> getProjects() {
 		return projects;
 	}
-
+	@JsonProperty
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
 	}
+	@JsonIgnore
 	public List<Request> getRequests() {
 		return requests;
 	}
+	@JsonProperty
 	public void setRequests(List<Request> requests) {
 		this.requests = requests;
 	}
+	@JsonIgnore
+	public Set<Contract> getContracts() {
+		return contracts;
+	}
+	@JsonProperty
+	public void setContracts(Set<Contract> contracts) {
+		this.contracts = contracts;
+	}
+	
 	
 
 	

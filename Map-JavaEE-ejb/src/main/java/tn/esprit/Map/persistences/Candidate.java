@@ -1,36 +1,72 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 
 @Entity
 @DiscriminatorValue(value = "candidate")
 public class Candidate extends Person implements Serializable {
 	
-	@OneToOne(mappedBy="candidate")
-	private Test Test;
 	
-	@OneToOne(mappedBy="candidate")
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9041221471384080399L;
+	/**
+	 * 
+	 */
+	
+	@OneToMany(mappedBy="candidate" ,fetch=FetchType.EAGER)
+	private Set<Test> Test;
+	@Enumerated(EnumType.STRING)
+	private CandidateState candidateState ;
+	@JsonIgnore
+	@OneToOne(mappedBy="candidate" )
 	private JobRequest jobRequest;
-	@OneToOne(mappedBy="Candidate")
+	@JsonIgnore
+	@OneToOne(mappedBy="Candidate" )
 	private CandidateFolder CandidateFolder;
+	@OneToOne
+	private Project project;
 	
-
+	public Set<Test> getTest() {
+		return Test;
+	}
+	public void setTest(Set<Test> test) {
+		Test = test;
+	}
+	public CandidateState getCandidateState() {
+		return candidateState;
+	}
+	public void setCandidateState(CandidateState candidateState) {
+		this.candidateState = candidateState;
+	}
 	public JobRequest getJobRequest() {
 		return jobRequest;
 	}
-
 	public void setJobRequest(JobRequest jobRequest) {
 		this.jobRequest = jobRequest;
 	}
-
-	public Test getTechnicalTest() {
-		return Test;
+	public CandidateFolder getCandidateFolder() {
+		return CandidateFolder;
 	}
-
-	public void setTechnicalTest(Test technicalTest) {
-		Test = technicalTest;
+	public void setCandidateFolder(CandidateFolder candidateFolder) {
+		CandidateFolder = candidateFolder;
 	}
+	public Project getProject() {
+		return project;
+	}
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	
+
+
 	
 }
