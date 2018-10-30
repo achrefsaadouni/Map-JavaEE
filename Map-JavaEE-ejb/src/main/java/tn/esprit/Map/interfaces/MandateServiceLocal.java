@@ -31,4 +31,5 @@ public interface MandateServiceLocal {
 	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId);
 	public void UpdateAvailability(int resourceId,AvailabilityType availabilityType);
 	public void AlertEndMandate(Timer timer);
+	public void Suggestion(List<String> listeResources,int clientId);
 }

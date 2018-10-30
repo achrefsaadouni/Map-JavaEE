@@ -20,6 +20,7 @@ import javax.persistence.TypedQuery;
 import tn.esprit.Map.interfaces.MandateServiceLocal;
 import tn.esprit.Map.interfaces.SkillRemote;
 import tn.esprit.Map.persistences.AvailabilityType;
+import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.DayOff;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.MandateId;
@@ -425,6 +426,25 @@ public class MandateService implements MandateServiceLocal {
 			return true;
 		} catch (Exception e) {
 			return false;
+		}
+
+	}
+
+	@Override
+	public void Suggestion(List<String> listeResource, int clientId) {
+
+		TypedQuery<Client> query1 = em.createQuery("SELECT c FROM Client c where c.id=:rId", Client.class);
+		query1.setParameter("rId", clientId);
+		Client client;
+		try {
+			client = query1.getSingleResult();
+			listeResource.forEach(e -> {
+				TypedQuery<Resource> query2 = em.createQuery("SELECT c FROM Client c where c.id=:rId", Resource.class);
+				query2.setParameter("rId", clientId);
+				mail.sendSuggestion(query2.getSingleResult(), client.getEmail());
+			});
+		} catch (Exception e) {
+
 		}
 
 	}
