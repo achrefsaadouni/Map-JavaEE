@@ -53,7 +53,7 @@ public class ProjectWebService {
 				return Response.status(Response.Status.NOT_FOUND).build();
 
 			if (projectRemote.getProjectsByDate(startDate,endDate).size() == 0)
-				return Response.status(Response.Status.BAD_REQUEST).entity("No data").build();
+				return Response.status(Response.Status.BAD_REQUEST).entity("\"No data\"").build();
 
 			else
 				return Response.ok(projectRemote.getProjectsByDate(startDate,endDate), MediaType.APPLICATION_JSON).build();

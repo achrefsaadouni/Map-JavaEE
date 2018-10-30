@@ -144,7 +144,7 @@ public class ProjectService implements ProjectRemote {
 		query.setParameter("client", client);
 		query.setParameter("projectId", projectId);
 		
-		if (projectCount > 0) {
+		if (projectCount > 1) {
 			client.setClientType(ClientType.currentClient);
 			modified = query.executeUpdate();
 		} else {
@@ -271,7 +271,19 @@ public class ProjectService implements ProjectRemote {
 		return "error";
 		}
 	
-
+	public Project arrayToProjectWithoutClient(Object[] array) {
+		Project project = new Project();
+		project.setId((int) array[0]);
+		project.setProjectName((String) array[1]);
+		project.setStartDate((Date) array[2]);
+		project.setEndDate((Date) array[3]);
+		project.setAddress((String) array[4]);
+		project.setTotalNumberResource((int) array[5]);
+		project.setLevioNumberResource((int) array[6]);
+		project.setPicture((String) array[7]);
+		project.setProjectType((ProjectType) array[8]);
+		return project;
+	}
 
 	public List<Project> getProjectsByDate(String startDate, String endDate) {
 
@@ -288,18 +300,14 @@ public class ProjectService implements ProjectRemote {
 		Query query = em.createQuery(
 				"select  p.id ,p.projectName , p.startDate"
 				+ " , p.endDate , p.address , p.totalNumberResource ," + " p.levioNumberResource,p.picture ,"
-				+ " p.projectType ,p.client from Project p "
+				+ " p.projectType  from Project p "
 				+ "where    p.startDate >= :startDate AND p.endDate   <= :endDate");
 		query.setParameter("startDate", startDateConvert);
 		query.setParameter("endDate", endDateConvert);
 		List<Object[]> res = query.getResultList();
 		List<Project> projects = new ArrayList<Project>();
 		res.forEach(array -> {
-			Project project = arrayToProject(array);
-			Client c = project.getClient();
-			c.setProjects(null);
-			c.setRequests(null);
-			c.setInBoxs(null);
+			Project project = arrayToProjectWithoutClient(array);
 			projects.add(project);
 		});
 		return projects;
@@ -309,11 +317,11 @@ public class ProjectService implements ProjectRemote {
 	@Override
 	public String sumAmountProject(String startDate, String endDate) {
 		List<Project> projects = getProjectsByDate(startDate,endDate);
-		float sum = 0 ;
+		Double sum = null ;
 		Query query = em.createQuery("select m.montant from Mandate m where m.projet = :project");
 		for(Project project : projects){
 			query.setParameter("project", project);
-			sum +=(float) query.getSingleResult();
+			sum +=(Double) query.getSingleResult();
 		}
 		
 		return "you have spent between "+startDate+" and " +endDate+ " : "+sum;

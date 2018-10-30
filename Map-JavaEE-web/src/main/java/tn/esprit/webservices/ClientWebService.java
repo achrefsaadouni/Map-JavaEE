@@ -30,7 +30,7 @@ public class ClientWebService {
 			return Response.status(Response.Status.NOT_FOUND).build();
 
 		if (clientRemote.getAllClients().size() == 0)
-			return Response.status(Response.Status.BAD_REQUEST).entity("No data").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("\"No data\"").build();
 
 		else
 			return Response.ok(clientRemote.getAllClients(), MediaType.APPLICATION_JSON).build();

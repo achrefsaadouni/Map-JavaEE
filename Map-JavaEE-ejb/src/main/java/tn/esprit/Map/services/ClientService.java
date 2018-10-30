@@ -71,7 +71,7 @@ public class ClientService implements ClientRemote {
 		em.persist(client);
 		mailAPI.sendEmail(client.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login : "+client.getLogin()+" Password : "+password);
 		}
-		return "Client has been saved into data base with this id :"+ client.getId() +"   "+password;
+		return "Client has been saved into data base with this id :"+ client.getId();
 	}
 
 	@Override
