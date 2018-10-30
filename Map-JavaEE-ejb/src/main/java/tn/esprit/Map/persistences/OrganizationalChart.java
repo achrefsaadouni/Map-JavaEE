@@ -19,7 +19,10 @@ public class OrganizationalChart implements Serializable {
 	private String nameAssignmentManagerClient;
 	@OneToMany(mappedBy = "organizationalChart")
 	private List<Project> projects;
+	
 	@ManyToMany
+	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", insertable = false, updatable = false),
+	   inverseJoinColumns=@JoinColumn(referencedColumnName="id", insertable = false, updatable = false))
 	private List<Resource> resources;
 
 	public int getId() {

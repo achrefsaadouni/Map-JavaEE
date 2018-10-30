@@ -74,7 +74,7 @@ public class ResourceService implements ResourceRemote {
 		if (resource.isArchived() == 0 && resource.getAvailability() == AvailabilityType.available) {
 			resource.setAvailability(AvailabilityType.unavailable);
 			resource.setProject(projet);
-			em.persist(resource);
+			em.merge(resource);
 			return true;
 		}
 
@@ -83,16 +83,10 @@ public class ResourceService implements ResourceRemote {
 	}
 
 	@Override
-	public Boolean UpdateAffectation(int resourceId, int projetId) {
-		Resource resource = em.find(Resource.class, resourceId);
-		Project projet = em.find(Project.class, projetId);
-		if(projet == null){ return false;}
-		resource.setProject(projet);
-		em.merge(resource);
-		return true;
+	public String UpdateAffectation(int resourceId, int ProjectId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
-	
 
 	@Override
 	public List<tn.esprit.Map.persistences.Resource> listResource() {
@@ -103,6 +97,8 @@ public class ResourceService implements ResourceRemote {
 			return null;
 		} else
 		for(Resource r : resources){
+			r.setProject(null);
+			r.setDayOffs(null);
 			r.setResourceSkills(null);}
 			return resources;
 	}
@@ -120,12 +116,16 @@ public class ResourceService implements ResourceRemote {
 	@Override
 	public List<Resource> getResourceArchive() {
 		int valeur = 1;
-		String requestJPQL = "select res  from Resource res where res.archived=" + valeur;
+		String requestJPQL = "select res.id , res.firstName , res.lastName , "
+				+ "res.login , res.password  , res.availability , res.businessSector , "
+				+ "res.cv , res.jobType , res.note , res.picture , res.salary, res.seniority , "
+				+ "res.workProfil , res.archived , res.email  from Resource res where res.archived=" + valeur;
 		Query query = em.createQuery(requestJPQL);
 		List<Resource> rs = (List<Resource>) query.getResultList();
 		for(Resource r : rs){
-			r.setResourceSkills(null);
-			}
+			r.setProject(null);
+			r.setDayOffs(null);
+			r.setResourceSkills(null);}
 			
 		return rs;
 	}
@@ -148,30 +148,6 @@ public class ResourceService implements ResourceRemote {
 		return moyenne ;
 		
 		
-	}
-
-	@Override
-	public Boolean noteResource(int resourceId, float note) {
-		Query q = em.createQuery("SELECT r FROM Resource r WHERE r.id = :id",Resource.class);
-		List<Resource> resources = (List<Resource>)q.setParameter("id",resourceId).getResultList();
-		if(resources.size()==0){
-			return false;
-		}
-		
-		if(note<0 || note > 20){
-			return false;
-		}
-		resources.get(0).setNote(note);
-		return true;
-	}
-
-	@Override
-	public Boolean DeleteAffectation(int resourceId) {
-		Resource resource = em.find(Resource.class, resourceId);
-		resource.setAvailability(AvailabilityType.available);
-		resource.setProject(null);
-		em.merge(resource);
-		return true;
 	}
 
 }

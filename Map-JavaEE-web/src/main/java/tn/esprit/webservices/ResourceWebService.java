@@ -146,43 +146,7 @@ public class ResourceWebService {
 		if(resourceRemote.moyenneResource(Integer.parseInt(resourceId)) == 0){
 			return "cette resource ne poséde pas de note";
 		}
-		resourceRemote.moyenneResource(Integer.parseInt(resourceId));
 		return String.valueOf(resourceRemote.moyenneResource(Integer.parseInt(resourceId)));
-	}
-
-	
-	@PUT
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("noteResource")
-	public String noteResource(@QueryParam("resourceId") String resourceId ,@QueryParam("note") String note) {
-		if(resourceRemote.noteResource(Integer.parseInt(resourceId) , Float.parseFloat(note)) == false){
-			return "pas de note";
-		}
-		resourceRemote.noteResource(Integer.parseInt(resourceId) , Float.parseFloat(note));
-		return "note ajoutée";
-	}
-
-	
-	@PUT
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("UpdateAffectation")
-	public String UpdateAffectation(@QueryParam("resourceId") String resourceId ,@QueryParam("projetId") String projetId ) {
-		if(resourceRemote.UpdateAffectation(Integer.parseInt(resourceId) ,Integer.parseInt(projetId)) == false){
-			return "pas de note";
-		}
-		resourceRemote.UpdateAffectation(Integer.parseInt(resourceId) ,Integer.parseInt(projetId));
-		return "Affectation updated";
-	}
-	
-	@PUT
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("DeleteAffectation")
-	public String DeleteAffectation(@QueryParam("resourceId") String resourceId ) {
-		if(resourceRemote.DeleteAffectation(Integer.parseInt(resourceId)) == false){
-			return "pas de projet";
-		}
-		resourceRemote.DeleteAffectation(Integer.parseInt(resourceId));
-		return "Affectation deleted";
 	}
 
 }

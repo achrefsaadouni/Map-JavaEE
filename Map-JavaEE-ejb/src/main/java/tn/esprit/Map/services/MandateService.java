@@ -3,40 +3,38 @@ package tn.esprit.Map.services;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZoneId;import java.util.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
+
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.ejb.Timer;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
+
 import tn.esprit.Map.interfaces.MandateServiceLocal;
-import tn.esprit.Map.interfaces.SkillRemote;
 import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.DayOff;
 import tn.esprit.Map.persistences.Mandate;
-import tn.esprit.Map.persistences.MandateId;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.Skill;
 
 @Stateless
 public class MandateService implements MandateServiceLocal {
 	@PersistenceContext(unitName = "MAP")
 	EntityManager em;
-
 	@EJB
 	MailService mail;
 
-	@EJB
-	SkillRemote skillremote;
 
 	@Override
 	public boolean isAvailable(int resourceId, Date date) {
@@ -55,9 +53,8 @@ public class MandateService implements MandateServiceLocal {
 			return true;
 		else if (resource.getAvailability() == AvailabilityType.availableSoon) {
 
-			TypedQuery<Mandate> query = em.createQuery(
-					"SELECT m FROM Mandate m where m.mandateId.ressourceId=:rId ORDER BY m.mandateId.dateFin AND m.archived = false",
-					Mandate.class);
+			TypedQuery<Mandate> query = em
+					.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId ORDER BY m.dateFin", Mandate.class);
 			query.setParameter("rId", resourceId);
 			try {
 				Mandate mandate = query.getSingleResult();
@@ -69,7 +66,7 @@ public class MandateService implements MandateServiceLocal {
 						return d2.getEndDate().compareTo(d1.getEndDate());
 					}
 				});
-				if (mandate.getMandateId().getDateFin().compareTo(date) >= 0) {
+				if (mandate.getDateFin().compareTo(date) >= 0) {
 					return false;
 				} else {
 					if (dayOffs.isEmpty())
@@ -125,7 +122,7 @@ public class MandateService implements MandateServiceLocal {
 	@Override
 	public List<Mandate> getAll() {
 		List<Mandate> results;
-		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m WHERE m.archived = false", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m", Mandate.class);
 		try {
 			results = query.getResultList();
 		} catch (Exception e) {
@@ -136,23 +133,16 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Mandate> getByResource(int resourceId) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.ressourceId=:rId AND m.archived = false", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.ressourceId=:rId", Mandate.class);
 		query.setParameter("rId", resourceId);
-		List<Mandate> results;
-		try {
-			results = query.getResultList();
-			return results;
-		} catch (Exception e) {
-			return new ArrayList<Mandate>();
-		}
-
+		List<Mandate> results = new ArrayList<>();
+		results = query.getResultList();
+		return results;
 	}
 
 	@Override
 	public List<Mandate> getByProject(int projectId) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.projetId = :pId AND m.archived = false", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.projetId = :pId", Mandate.class);
 		query.setParameter("pId", projectId);
 		List<Mandate> results = query.getResultList();
 		return results;
@@ -160,8 +150,7 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Mandate> getByStartDate(Date startDate) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.dateDebut = :startDate AND m.archived = false",
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.dateDebut = :startDate",
 				Mandate.class);
 		query.setParameter("startDate", startDate, TemporalType.DATE);
 		List<Mandate> results = query.getResultList();
@@ -170,8 +159,7 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Mandate> getByEndDate(Date endDate) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.dateFin = :endDate AND m.archived = false", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m where m.dateFin = :endDate", Mandate.class);
 		query.setParameter("endDate", endDate, TemporalType.DATE);
 		List<Mandate> results = query.getResultList();
 		return results;
@@ -179,9 +167,8 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Mandate> getByPeriod(Date startDate, Date endDate) {
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.dateFin BETWEEN :endDate AND :startDate AND m.archived = false",
-				Mandate.class);
+		TypedQuery<Mandate> query = em
+				.createQuery("SELECT m FROM Mandate m where m.dateFin BETWEEN :endDate AND :startDate", Mandate.class);
 		query.setParameter("endDate", endDate, TemporalType.DATE);
 		query.setParameter("startDate", startDate, TemporalType.DATE);
 		List<Mandate> results = new ArrayList<>();
@@ -189,10 +176,12 @@ public class MandateService implements MandateServiceLocal {
 		return results;
 	}
 
+	
+
 	@Override
 	public Double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate, int gpsId) {
 		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.dateDebut = :startDate AND m.mandateId.dateFin = :endDate AND m.mandateId.projetId = :pId AND  m.mandateId.ressourceId=:rId AND m.archived = false",
+				"SELECT m FROM Mandate m where m.dateDebut = :startDate AND m.dateFin = :endDate AND m.projetId = :pId AND  m.ressourceId=:rId",
 				Mandate.class);
 		query.setParameter("startDate", startDate, TemporalType.DATE);
 		query.setParameter("endDate", endDate, TemporalType.DATE);
@@ -214,14 +203,13 @@ public class MandateService implements MandateServiceLocal {
 	@Override
 	public boolean addGps(int ressourceId, int projetId, Date startDate, Date endDate, int gpsId) {
 		Mandate results;
-		TypedQuery<Mandate> query = em
-				.createQuery("SELECT m FROM Mandate m where m.mandateId = :m AND m.archived = false", Mandate.class);
-		MandateId mandateId = new MandateId();
-		mandateId.setDateDebut(startDate);
-		mandateId.setDateFin(endDate);
-		mandateId.setProjetId(projetId);
-		mandateId.setRessourceId(ressourceId);
-		query.setParameter("m", mandateId);
+		TypedQuery<Mandate> query = em.createQuery(
+				"SELECT m FROM Mandate m where m.dateDebut = :startDate AND m.dateFin = :endDate AND m.projetId = :pId AND  m.ressourceId=:rId",
+				Mandate.class);
+		query.setParameter("startDate", startDate, TemporalType.DATE);
+		query.setParameter("endDate", endDate, TemporalType.DATE);
+		query.setParameter("pId", projetId);
+		query.setParameter("rId", ressourceId);
 		TypedQuery<Resource> query1 = em.createQuery("SELECT r FROM Resource r where r.id=:rId", Resource.class);
 		query1.setParameter("rId", gpsId);
 		Resource resourceGPS;
@@ -261,18 +249,14 @@ public class MandateService implements MandateServiceLocal {
 		}
 
 		Mandate mandate = new Mandate();
-		MandateId mandateId = new MandateId();
-
-		mandateId.setDateDebut(request.getStartDateMondate());
-		mandateId.setDateFin(request.getEndDateMondate());
-		mandateId.setProjetId(request.getProject().getId());
-		mandateId.setRessourceId(resource.getId());
+		mandate.setDateDebut(request.getStartDateMondate());
+		mandate.setDateFin(request.getEndDateMondate());
+		mandate.setProjetId(request.getProject().getId());
+		mandate.setRessourceId(resource.getId());
 		mandate.setMontant(0.0);
-		mandate.setMandateId(mandateId);
-		mandate.setArchived(false);
 		try {
 			em.persist(mandate);
-			UpdateAvailability(mandate.getMandateId().getRessourceId(), AvailabilityType.unavailable);
+			UpdateAvailability(mandate.getRessourceId(), AvailabilityType.unavailable);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -280,13 +264,12 @@ public class MandateService implements MandateServiceLocal {
 
 	}
 
-	@Schedule(second = "00", minute = "00", hour = "00")
-	public void AlertEndMandate(Timer timer) {
+	@Schedule(second = "00", minute = "31", hour = "21")
+	public void execute(Timer timer) throws ParseException {
 		System.out.println(getDate());
 		String pattern = "yyyy-MM-dd";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT  m FROM Mandate m where m.mandateId.dateFin = :d AND m.archived = false", Mandate.class);
+		TypedQuery<Mandate> query = em.createQuery("SELECT  m FROM Mandate m where m.dateFin = :d", Mandate.class);
 
 		try {
 			query.setParameter("d", simpleDateFormat.parse(getDate()), TemporalType.DATE);
@@ -294,7 +277,7 @@ public class MandateService implements MandateServiceLocal {
 			if (!mandates.isEmpty()) {
 				mandates.forEach(e -> {
 					notifEndProject(e);
-					UpdateAvailability(e.getMandateId().getRessourceId(), AvailabilityType.availableSoon);
+					UpdateAvailability(e.getRessourceId(), AvailabilityType.availableSoon);
 				});
 
 			} else
@@ -330,10 +313,9 @@ public class MandateService implements MandateServiceLocal {
 				"will end in just 40 days",
 				"Mr/Ms " + mandate.getRessource().getLastName() + " " + mandate.getRessource().getFirstName(), "",
 				"We want to thank you for your hard work and always remember Levio is  proud of your work <br> you can check further information in the link",
-				"http://localhost:18080/Map-JavaEE-web/MAP/mandate?dateFin=" + mandate.getMandateId().getDateFin()
-						+ "&dateDebut=" + mandate.getMandateId().getDateDebut() + "&ressourceId="
-						+ mandate.getMandateId().getRessourceId() + "&projetId="
-						+ mandate.getMandateId().getProjetId());
+				"http://localhost:18080/Map-JavaEE-web/MAP/mandate?dateFin=" + mandate.getDateFin() + "&dateDebut="
+						+ mandate.getDateDebut() + "&ressourceId=" + mandate.getRessourceId() + "&projetId="
+						+ mandate.getProjetId());
 		mail.send(mandate.getProjet().getClient().getEmail(), "End Mandate", "Alert End Of Mandate",
 				"Levio Administration want to Inform you that the project", mandate.getProjet().getProjectName(),
 				"will end in just 40 days",
@@ -341,17 +323,16 @@ public class MandateService implements MandateServiceLocal {
 						+ mandate.getProjet().getClient().getFirstName(),
 				"",
 				"We want to thank you for your hard work and always remember Levio is  proud of your work <br> you can check further information in the link",
-				"http://localhost:18080/Map-JavaEE-web/MAP/mandate?dateFin=" + mandate.getMandateId().getDateFin()
-						+ "&dateDebut=" + mandate.getMandateId().getDateDebut() + "&ressourceId="
-						+ mandate.getMandateId().getRessourceId() + "&projetId="
-						+ mandate.getMandateId().getProjetId());
+				"http://localhost:18080/Map-JavaEE-web/MAP/mandate?dateFin=" + mandate.getDateFin() + "&dateDebut="
+						+ mandate.getDateDebut() + "&ressourceId=" + mandate.getRessourceId() + "&projetId="
+						+ mandate.getProjetId());
 		return true;
 	}
 
 	@Override
 	public Mandate getMandate(int ressourceId, int projetId, Date startDate, Date endDate) {
 		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.mandateId.dateDebut = :startDate AND m.mandateId.dateFin = :endDate AND m.mandateId.projetId = :pId AND  m.mandateId.ressourceId=:rId AND m.archived = false",
+				"SELECT m FROM Mandate m where m.dateDebut = :startDate AND m.dateFin = :endDate AND m.projetId = :pId AND  m.ressourceId=:rId",
 				Mandate.class);
 		query.setParameter("startDate", startDate, TemporalType.DATE);
 		query.setParameter("endDate", endDate, TemporalType.DATE);
@@ -376,58 +357,20 @@ public class MandateService implements MandateServiceLocal {
 
 		}
 	}
+	
+	
 
 	@Override
-	public List<Resource> SearchResourceBySkill(int requestId) {
-		// List<Resource> listeresource =
-		// skillremote.orderResourcesOfSkill(skillId);
-
+	public Resource SearchResourceBySkill(Skill skill) {
+		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
+	
 	@Override
-	@Schedule(second = "00", minute = "37", hour = "20")
-	public void archive(Timer timer) {
-		List<Mandate> results;
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.archived = false AND CURRENT_DATE = m.mandateId.dateFin",
-				Mandate.class);
-		try {
-			results = query.getResultList();
-			results.forEach(e -> {
-				e.setArchived(true);
-			});
-		} catch (Exception e) {
-		}
-	}
-
-	@Override
-	public List<Mandate> getAllTypeMandate() {
-
-		List<Mandate> results;
-		TypedQuery<Mandate> query = em.createQuery("SELECT m FROM Mandate m WHERE m.archived = true", Mandate.class);
-		try {
-			results = query.getResultList();
-		} catch (Exception e) {
-			results = new ArrayList<>();
-		}
-		return results;
-	}
-
-	@Override
-	public boolean restore(int ressourceId, int projetId, Date startDate, Date endDate) {
-		Mandate results;
-		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.archived = false AND CURRENT_DATE = m.mandateId.dateFin",
-				Mandate.class);
-		try {
-			results = query.getSingleResult();
-			results.setArchived(false);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-
+	public boolean archive() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

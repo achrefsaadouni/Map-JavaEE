@@ -36,7 +36,7 @@ public class MandateResource {
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		reponse = mandateService.addMandate(Integer.parseInt(requestId), Integer.parseInt(resourceId))
-				? Response.status(Status.CREATED).build() : Response.status(Status.EXPECTATION_FAILED).build();
+				? Response.status(Status.CREATED).build() : Response.status(Status.NOT_ACCEPTABLE).build();
 		return reponse;
 
 	}
@@ -51,7 +51,40 @@ public class MandateResource {
 				return Response.status(Status.NO_CONTENT).build();
 			else
 				return Response.ok(mandateService.getAll(), MediaType.APPLICATION_JSON).build();
-		} else if ((ressourceId != null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
+		} 
+		
+		
+		else if ((ressourceId != null) && (projetId != null) && (dateDebut != null) && (dateFin != null)) {
+
+			if (!ressourceId.chars().allMatch(Character::isDigit))
+				return Response.status(Status.BAD_REQUEST).build();
+
+			if (mandateService.getByResource(Integer.parseInt(ressourceId)).size() == 0)
+				return Response.status(Status.NO_CONTENT).build();
+
+			else {
+				return Response
+						.ok(mandateService.getMandate(Integer.parseInt(ressourceId), Integer.parseInt(projetId), simpleDateFormat.parse(dateDebut), simpleDateFormat.parse(dateFin)), MediaType.APPLICATION_JSON)
+						.header("Access-Control-Allow-Origin", "*").build();
+			}
+
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		else if ((ressourceId != null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
 
 			if (!ressourceId.chars().allMatch(Character::isDigit))
 				return Response.status(Status.BAD_REQUEST).build();
@@ -173,5 +206,4 @@ public class MandateResource {
 	String link = inputs.get("link");
 	mandateService.notif(resourceId,requestId,link);
 	}
-	
 }

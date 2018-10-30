@@ -55,9 +55,7 @@ public class Project implements Serializable {
 	@OneToOne(mappedBy="project")
 	@JsonIgnore
 	private Request request;
-	@ManyToMany
-	private Set<Skill> listeSkills;
-	
+
 	public int getId() {
 		return id;
 	}

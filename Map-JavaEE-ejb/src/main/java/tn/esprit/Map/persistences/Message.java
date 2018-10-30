@@ -20,12 +20,12 @@ public class Message implements Serializable {
 	private String sender;
 	private String object;
 	private String content;
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP) 
 	private Date dateMessage;
-	private TypeMessage typeMessage;
+	private TypeMessage typeMessage; 
 	@ManyToOne
 	private InBox inBox;
-	@OneToOne(mappedBy="message")
+	@OneToOne
 	private Person person;
 	
 

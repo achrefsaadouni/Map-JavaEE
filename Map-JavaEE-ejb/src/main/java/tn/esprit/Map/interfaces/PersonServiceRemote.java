@@ -1,8 +1,11 @@
 package tn.esprit.Map.interfaces;
 
+import java.util.List;
+
 import javax.ejb.Remote;
 
 import tn.esprit.Map.persistences.Message;
+import tn.esprit.Map.persistences.Person;
 
 
 
@@ -11,7 +14,7 @@ import tn.esprit.Map.persistences.Message;
 @Remote
 public interface PersonServiceRemote {
 	
-	
+	public Person getPersonById(int id);
 	public String test(Message msg); 
 
 }
