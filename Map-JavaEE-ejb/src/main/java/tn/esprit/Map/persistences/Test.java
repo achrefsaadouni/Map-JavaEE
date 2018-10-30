@@ -1,41 +1,49 @@
 package tn.esprit.Map.persistences;
 
-import java.io.File;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonRootName;
+import tn.esprit.Map.persistences.Candidate;
 
+@JsonRootName("Test")
 @Entity
-
 public class Test implements Serializable {
 	@Id
 	
 	@GeneratedValue
 	private int id ; 
+	
 	@Enumerated(EnumType.STRING)
 	private TestType TestType;
+
 	@Enumerated(EnumType.STRING)
 	private TestResult result;
+	
 	@Temporal(TemporalType.DATE)
 	private Date testDeadLine;
 	
-	private File TestFile ;
+	private Timestamp testUploadTime;
 	
-	private File TestResponseFile ;
+	private String TestFile ;
+	
+	private String TestResponseFile ;
 	
 	private String Employment_Letter;
 	
-	@OneToOne
+	@JsonIgnore
+	@ManyToOne
 	private Candidate candidate;
 
 	public int getId() {
@@ -62,19 +70,29 @@ public class Test implements Serializable {
 		this.testDeadLine = testDeadLine;
 	}
 
-	public File getTestFile() {
+
+
+	public TestType getTestType() {
+		return TestType;
+	}
+
+	public void setTestType(TestType testType) {
+		TestType = testType;
+	}
+
+	public String getTestFile() {
 		return TestFile;
 	}
 
-	public void setTestFile(File testFile) {
+	public void setTestFile(String testFile) {
 		TestFile = testFile;
 	}
 
-	public File getTestResponseFile() {
+	public String getTestResponseFile() {
 		return TestResponseFile;
 	}
 
-	public void setTestResponseFile(File testResponseFile) {
+	public void setTestResponseFile(String testResponseFile) {
 		TestResponseFile = testResponseFile;
 	}
 
@@ -92,6 +110,14 @@ public class Test implements Serializable {
 
 	public void setCandidate(Candidate candidate) {
 		this.candidate = candidate;
+	}
+
+	public Date getTestUploadTime() {
+		return testUploadTime;
+	}
+
+	public void setTestUploadTime(Timestamp testUploadTime) {
+		this.testUploadTime = testUploadTime;
 	}
 
 	
