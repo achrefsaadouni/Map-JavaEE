@@ -215,7 +215,7 @@ public class Resource extends Person implements Serializable {
 	}
 
 	public  void setTaux(double taux) {
-		Resource.taux = taux;
+		this.taux = taux;
 	}
 
 	

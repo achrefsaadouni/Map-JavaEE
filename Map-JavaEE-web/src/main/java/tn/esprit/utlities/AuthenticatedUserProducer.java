@@ -19,7 +19,6 @@ public class AuthenticatedUserProducer {
     @RequestScoped
     @AuthenticatedUser
     private Person authenticatedUser;
-    private String role;
     
     public void handleAuthenticationEvent(@Observes @AuthenticatedUser String mail) {
         this.authenticatedUser = findUser(mail);
