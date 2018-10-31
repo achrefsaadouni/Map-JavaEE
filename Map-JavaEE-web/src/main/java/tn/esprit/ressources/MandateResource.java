@@ -244,15 +244,20 @@ public class MandateResource {
 			Date dateFin = null;
 			Response response;
 			try {
-				ressourceId = Integer.parseInt(inputs.get("resourceId"));
 				projetId = Integer.parseInt(inputs.get("projectId"));
+				ressourceId = Integer.parseInt(inputs.get("resourceId"));
 				dateDebut = simpleDateFormat.parse(inputs.get("startDate"));
 				dateFin = simpleDateFormat.parse(inputs.get("endDate"));
 				Double montant = mandateService.calculateCost(ressourceId, projetId, dateDebut, dateFin);
 				return Response.status(Status.OK).build();
+				
 			} catch (Exception e) {
+				try{
+					Double montant = mandateService.CostProject(projetId);
+					return Response.status(Status.OK).entity(montant).build();
+				}catch(Exception e1){
 				return Response.status(Status.BAD_REQUEST).build();
-			}
+			}}
 
 		}
 		return Response.status(Response.Status.FORBIDDEN).entity("Acces denied").build();

@@ -33,4 +33,5 @@ public interface MandateServiceLocal {
 	public void UpdateAvailability(int resourceId,AvailabilityType availabilityType);
 	public void AlertEndMandate(Timer timer);
 	public double ScoreSkill(Resource resource,List<Skill>skills);
+	public double CostProject(int projectId);
 }

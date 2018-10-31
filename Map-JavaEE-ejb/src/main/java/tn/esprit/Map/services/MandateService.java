@@ -509,4 +509,17 @@ public class MandateService implements MandateServiceLocal {
 		return score;
 	}
 
+	@Override
+	public double CostProject(int projectId) {
+		double totalcost = 0.0;
+		for (Mandate e : getByProject(projectId)) {
+			totalcost = totalcost+ calculateCost(e.getMandateId().getRessourceId(), e.getMandateId().getProjetId(), e.getMandateId().getDateDebut(), e.getMandateId().getDateFin());
+
+		}
+	
+		return totalcost;
+	}
+	
+	
+
 }
