@@ -4,7 +4,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 
 import tn.esprit.Map.interfaces.PersonServiceRemote;
 import tn.esprit.Map.persistences.Person;

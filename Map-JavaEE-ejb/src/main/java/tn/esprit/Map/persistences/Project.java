@@ -55,7 +55,8 @@ public class Project implements Serializable {
 	@OneToOne(mappedBy="project")
 	@JsonIgnore
 	private Request request;
-	@ManyToMany
+	@JsonIgnore
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Skill> listeSkills;
 	
 	public Set<Skill> getListeSkills() {

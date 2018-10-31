@@ -28,53 +28,52 @@ public class MandateResource {
 
 	@EJB
 	MandateServiceLocal mandateService;
-	
+
 	@Inject
 	@AuthenticatedUser
 	Person authenticatedUser;
-	
-	
 
 	@POST
 	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addMandate(Map<String, String> inputs) {
-		if (authenticatedUser.getRoleT() == Role.Admin)
-		{
-		String requestId = inputs.get("requestId");
-		String resourceId = inputs.get("resourceId");
-		Response reponse;
-		if (requestId == null || resourceId == null || !requestId.chars().allMatch(Character::isDigit)
-				|| !resourceId.chars().allMatch(Character::isDigit)) {
-			return Response.status(Status.NOT_ACCEPTABLE).build();
+		if (authenticatedUser.getRoleT() == Role.Admin) {
+			String requestId = inputs.get("requestId");
+			String resourceId = inputs.get("resourceId");
+			Response reponse;
+			if (requestId == null || resourceId == null || !requestId.chars().allMatch(Character::isDigit)
+					|| !resourceId.chars().allMatch(Character::isDigit)) {
+				return Response.status(Status.NOT_ACCEPTABLE).build();
+			}
+			reponse = mandateService.addMandate(Integer.parseInt(requestId), Integer.parseInt(resourceId))
+					? Response.status(Status.CREATED).build() : Response.status(Status.NOT_ACCEPTABLE).build();
+			return reponse;
 		}
-		reponse = mandateService.addMandate(Integer.parseInt(requestId), Integer.parseInt(resourceId))
-				? Response.status(Status.CREATED).build() : Response.status(Status.NOT_ACCEPTABLE).build();
-		return reponse;
-		}
-				
-				return Response.status(Status.BAD_REQUEST).build();
+
+		return Response.status(Status.BAD_REQUEST).build();
 	}
-	
-	
-	
-	
 
 	@GET
+	@Secured
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getMandate(@QueryParam(value = "ressourceId") String ressourceId,
 			@QueryParam(value = "projetId") String projetId, @QueryParam(value = "dateDebut") String dateDebut,
-			@QueryParam(value = "dateFin") String dateFin) throws ParseException {
-		if ((ressourceId == null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
+			@QueryParam(value = "dateFin") String dateFin, @QueryParam(value = "archive") String archive)
+			throws ParseException {
+		if ((ressourceId == null) && (projetId == null) && (dateDebut == null) && (dateFin == null)
+				&& (archive == null)) {
 			if (mandateService.getAll().size() == 0)
 				return Response.status(Status.NO_CONTENT).build();
 			else
 				return Response.ok(mandateService.getAll(), MediaType.APPLICATION_JSON).build();
-		} 
-		
-		
-		else if ((ressourceId != null) && (projetId != null) && (dateDebut != null) && (dateFin != null)) {
+		} else if ((ressourceId == null) && (projetId == null) && (dateDebut == null) && (dateFin == null)
+				&& (archive.equals("show"))) {
+			if (mandateService.getAllTypeMandate().size() == 0)
+				return Response.status(Status.NO_CONTENT).build();
+			else
+				return Response.ok(mandateService.getAllTypeMandate(), MediaType.APPLICATION_JSON).build();
+		} else if ((ressourceId != null) && (projetId != null) && (dateDebut != null) && (dateFin != null)) {
 
 			if (!ressourceId.chars().allMatch(Character::isDigit))
 				return Response.status(Status.BAD_REQUEST).build();
@@ -83,14 +82,14 @@ public class MandateResource {
 				return Response.status(Status.NO_CONTENT).build();
 
 			else {
-				return Response
-						.ok(mandateService.getMandate(Integer.parseInt(ressourceId), Integer.parseInt(projetId), simpleDateFormat.parse(dateDebut), simpleDateFormat.parse(dateFin)), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+				return Response.ok(
+						mandateService.getMandate(Integer.parseInt(ressourceId), Integer.parseInt(projetId),
+								simpleDateFormat.parse(dateDebut), simpleDateFormat.parse(dateFin)),
+						MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 			}
 
 		}
-		
-		
+
 		else if ((ressourceId != null) && (projetId == null) && (dateDebut == null) && (dateFin == null)) {
 
 			if (!ressourceId.chars().allMatch(Character::isDigit))
@@ -184,41 +183,97 @@ public class MandateResource {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Secured
 	public Response addGps(Map<String, String> inputs) {
-		Response response;
-		int ressourceId = 0;
-		int projetId = 0;
-		Date dateDebut = null;
-		Date dateFin = null;
-		int gpsId = 0;
-		try {
-			ressourceId = Integer.parseInt(inputs.get("resourceId"));
-			projetId = Integer.parseInt(inputs.get("projectId"));
-			gpsId = Integer.parseInt(inputs.get("gpsId"));
-			dateDebut = simpleDateFormat.parse(inputs.get("startDate"));
-			dateFin = simpleDateFormat.parse(inputs.get("endDate"));
-			response = mandateService.addGps(ressourceId, projetId, dateDebut, dateFin, gpsId)
-					? Response.status(Status.OK).build() : Response.status(Status.FORBIDDEN).build();
-		} catch (Exception e) {
-			return Response.status(Status.BAD_REQUEST).build();
+		if (authenticatedUser.getRoleT() == Role.Admin) {
+			Response response = Response.status(Status.BAD_REQUEST).build();
+			;
+			int ressourceId = 0;
+			int projetId = 0;
+			Date dateDebut = null;
+			Date dateFin = null;
+			int gpsId = 0;
+			try {
+
+				ressourceId = Integer.parseInt(inputs.get("resourceId"));
+				projetId = Integer.parseInt(inputs.get("projectId"));
+				dateDebut = simpleDateFormat.parse(inputs.get("startDate"));
+				dateFin = simpleDateFormat.parse(inputs.get("endDate"));
+				gpsId = Integer.parseInt(inputs.get("gpsId"));
+				response = mandateService.addGps(ressourceId, projetId, dateDebut, dateFin, gpsId)
+						? Response.status(Status.OK).build() : Response.status(Status.FORBIDDEN).build();
+				System.out.println("add gps");
+			} catch (Exception e) {
+				try {
+					response = mandateService.restore(ressourceId, projetId, dateDebut, dateFin)
+							? Response.status(Status.OK).build() : Response.status(Status.BAD_REQUEST).build();
+				} catch (Exception e2) {
+					return Response.status(Status.NOT_ACCEPTABLE).build();
+				}
+			}
+			return response;
 		}
-		return response;
+		return Response.status(Response.Status.FORBIDDEN).entity("Acces denied").build();
 	}
+
 	@Secured
 	@Path("notify")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response notify(Map<String, String> inputs){
-		if (authenticatedUser.getRoleT() == Role.Admin)
-{
-	int resourceId = Integer.parseInt(inputs.get("resourceId"));
-	int requestId = Integer.parseInt(inputs.get("requestId"));
-	String link = inputs.get("link");
-	mandateService.notif(resourceId,requestId,link);
-	return Response.status(Status.OK).build();
-}
-		
+	public Response notify(Map<String, String> inputs) {
+		if (authenticatedUser.getRoleT() == Role.Admin) {
+			int resourceId = Integer.parseInt(inputs.get("resourceId"));
+			int requestId = Integer.parseInt(inputs.get("requestId"));
+			String link = inputs.get("link");
+			mandateService.notif(resourceId, requestId, link);
+			return Response.status(Status.OK).build();
+		}
+
 		return Response.status(Status.BAD_REQUEST).build();
 	}
-	
+
+	@Secured
+	@Path("cost")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response cost(Map<String, String> inputs) {
+		if (authenticatedUser.getRoleT() == Role.Admin) {
+			int ressourceId = 0;
+			int projetId = 0;
+			Date dateDebut = null;
+			Date dateFin = null;
+			Response response;
+			try {
+				ressourceId = Integer.parseInt(inputs.get("resourceId"));
+				projetId = Integer.parseInt(inputs.get("projectId"));
+				dateDebut = simpleDateFormat.parse(inputs.get("startDate"));
+				dateFin = simpleDateFormat.parse(inputs.get("endDate"));
+				Double montant = mandateService.calculateCost(ressourceId, projetId, dateDebut, dateFin);
+				return Response.status(Status.OK).build();
+			} catch (Exception e) {
+				return Response.status(Status.BAD_REQUEST).build();
+			}
+
+		}
+		return Response.status(Response.Status.FORBIDDEN).entity("Acces denied").build();
+	}
+
+	@Secured
+	@Path("suggetion")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response suggestion(Map<String, String> inputs) {
+		if (authenticatedUser.getRoleT() == Role.Admin) {
+			int requestId = 0;
+			try {
+				requestId = Integer.parseInt(inputs.get("requestId"));
+				return Response.ok(mandateService.SearchResourceBySkill(requestId), MediaType.APPLICATION_JSON)
+						.header("Access-Control-Allow-Origin", "*").build();
+			} catch (Exception e) {
+				return Response.status(Status.BAD_REQUEST).build();
+			}
+		}
+		return Response.status(Response.Status.FORBIDDEN).entity("Acces denied").build();
+	}
+
 }
