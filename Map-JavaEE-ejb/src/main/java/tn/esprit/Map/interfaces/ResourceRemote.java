@@ -31,8 +31,9 @@ public interface ResourceRemote {
 
 	public List<Resource> getResourceArchive();
 	
-	public Boolean noteResource(int resourceId , float note);
+	public Boolean noteResource(int resourceId, int clientId , float note);
 	
 	public float moyenneResource(int resourceId);
+	public List<Resource> ListResourceParMoyenne();
 
 }

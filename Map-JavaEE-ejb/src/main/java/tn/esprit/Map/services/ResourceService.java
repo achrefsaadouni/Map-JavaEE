@@ -8,11 +8,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+
 import tn.esprit.Map.interfaces.ResourceRemote;
 import tn.esprit.Map.persistences.AvailabilityType;
+import tn.esprit.Map.persistences.Client;
+import tn.esprit.Map.persistences.Note;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.ResourceSkill;
+import tn.esprit.Map.persistences.Role;
 import tn.esprit.Map.persistences.Skill;
 
 @Stateless
@@ -21,7 +25,9 @@ public class ResourceService implements ResourceRemote {
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
 
+	
 	@Override
+	
 	public void AddResource(Resource resource) {
 		resource.setAvailability(AvailabilityType.available);
 		resource.setArchived(0);
@@ -150,17 +156,22 @@ public class ResourceService implements ResourceRemote {
 	}
 
 	@Override
-	public Boolean noteResource(int resourceId, float note) {
-		Query q = em.createQuery("SELECT r FROM Resource r WHERE r.id = :id",Resource.class);
-		List<Resource> resources = (List<Resource>)q.setParameter("id",resourceId).getResultList();
-		if(resources.size()==0){
+	public Boolean noteResource(int resourceId, int clientId , float note) {
+		Resource resource = em.find(Resource.class, resourceId);
+		Client client = em.find(Client.class, clientId);
+		Query q = em.createQuery("SELECT n FROM Note n WHERE n.resource =:resource AND n.client=:client");
+		List<Note> notes = (List<Note>)q.setParameter("resource", resource).setParameter("client", client).getResultList();
+		if(notes.size()!=0){
 			return false;
 		}
-		
 		if(note<0 || note > 20){
 			return false;
 		}
-		resources.get(0).setNote(note);
+		Note n = new Note();
+		n.setResource(resource);
+		n.setClient(client);
+		n.setNoteResource(note);
+		em.persist(n);
 		return true;
 	}
 
@@ -171,6 +182,19 @@ public class ResourceService implements ResourceRemote {
 		resource.setProject(null);
 		em.merge(resource);
 		return true;
+	}
+
+	@Override
+	public List<Resource> ListResourceParMoyenne() {
+		Query q = em.createQuery("SELECT r FROM Resource r Where r.archived = :archived AND r.availability = :Availibility AND r.roleT =:role "
+				+ "ORDER BY r.moyenneSkill DESC");
+		List<Resource> liste =(List<Resource>) q.setParameter("archived", 0).setParameter("Availibility", AvailabilityType.available)
+				.setParameter("role", Role.Resource).getResultList();
+		if(liste.size()==0){
+			return null;
+		}
+		return liste;
+			
 	}
 
 }
