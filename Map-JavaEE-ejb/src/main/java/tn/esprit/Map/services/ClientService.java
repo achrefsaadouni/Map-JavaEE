@@ -18,7 +18,6 @@ import tn.esprit.Map.persistences.ClientType;
 import tn.esprit.Map.persistences.Contract;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.utilities.CryptPasswordMD5;
-import tn.esprit.Map.utilities.DecryptPasswordMD5;
 import tn.esprit.Map.utilities.Mail_API;
 import tn.esprit.Map.utilities.RandomPassword;
 
