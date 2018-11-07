@@ -9,6 +9,7 @@ import javax.ejb.Local;
 import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.Skill;
 
 @Local
 public interface MandateServiceLocal {
@@ -27,8 +28,10 @@ public interface MandateServiceLocal {
 	public Mandate getMandate(int ressourceId,int projetId,Date dateDebut,Date dateFin);
 	public void archive(Timer timer);
 	public boolean restore(int ressourceId, int projetId, Date startDate, Date endDate);
-	public Double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate, int gpsId);
+	public Double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate);
 	public boolean addGps(int ressourceId,int projetId,Date dateDebut,Date dateFin, int gpsId);
 	public void UpdateAvailability(int resourceId,AvailabilityType availabilityType);
 	public void AlertEndMandate(Timer timer);
+	public double ScoreSkill(Resource resource,List<Skill>skills);
+	public double CostProject(int projectId);
 }

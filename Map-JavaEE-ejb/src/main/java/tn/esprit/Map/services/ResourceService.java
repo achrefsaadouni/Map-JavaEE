@@ -28,7 +28,6 @@ public class ResourceService implements ResourceRemote {
 		resource.setArchived(0);
 		resource.setMoyenneSkill(0);
 		em.persist(resource);
-
 	}
 
 	@Override

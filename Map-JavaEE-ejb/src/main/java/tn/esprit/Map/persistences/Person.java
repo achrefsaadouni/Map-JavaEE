@@ -36,13 +36,14 @@ public class Person implements Serializable {
 	private InBox inBox;
 	@OneToOne(mappedBy="person")
 	private Message message;
-	private String roleT;
+	@Enumerated(EnumType.STRING)
+	private Role roleT;
 	
 
-	public String getRoleT() {
+	public Role getRoleT() {
 		return roleT;
 	}
-	public void setRoleT(String role) {
+	public void setRoleT(Role role) {
 		this.roleT = role;
 	}
 	public int getId() {
@@ -76,7 +77,6 @@ public class Person implements Serializable {
 	public String getPassword() {
 		return password;
 	}
-	@XmlElement(name="password")
 	public void setPassword(String password) {
 		this.password = password;
 	}

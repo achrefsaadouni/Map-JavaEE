@@ -86,7 +86,7 @@ public class SkillService implements SkillRemote {
 	public List<Skill> orderSkillsOfResource(int ResourceId) {
 		Resource r = em.find(Resource.class, ResourceId);
 		Query q = em.createQuery(
-				"SELECT DISTINCT rs.skill FROM ResourceSkill rs where rs.resource=:r ORDER BY rs.rateSkill ");
+				"SELECT DISTINCT rs.skill FROM ResourceSkill rs where rs.resource=:r ORDER BY rs.rateSkill desc");
 		List<Skill> listeSkill = (List<Skill>) q.setParameter("r", r).getResultList();
 
 		for (Skill s : listeSkill) {

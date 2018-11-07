@@ -10,8 +10,9 @@ public class Request implements Serializable {
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
 	private int id;
-	private String requestedProfil;
-	private String experienceYear;
+	@Enumerated(EnumType.STRING)
+	private WorkType requestedProfil;
+	private int experienceYear;
 	private String educationScolarity;
 	@OneToOne
 	private Project project;
@@ -29,8 +30,10 @@ public class Request implements Serializable {
 	@ManyToOne
 	@JoinColumn(insertable = false, updatable = false)
 	private Client client;
+	@OneToOne
+	private Resource suggessedResource; 
+		
 	
-
 	
 	public int getId() {
 		return id;
@@ -40,19 +43,19 @@ public class Request implements Serializable {
 		this.id = id;
 	}
 
-	public String getRequestedProfil() {
+	public WorkType getRequestedProfil() {
 		return requestedProfil;
 	}
 
-	public void setRequestedProfil(String requestedProfil) {
+	public void setRequestedProfil(WorkType requestedProfil) {
 		this.requestedProfil = requestedProfil;
 	}
 
-	public String getExperienceYear() {
+	public int getExperienceYear() {
 		return experienceYear;
 	}
 
-	public void setExperienceYear(String experienceYear) {
+	public void setExperienceYear(int experienceYear) {
 		this.experienceYear = experienceYear;
 	}
 
@@ -143,7 +146,7 @@ public class Request implements Serializable {
 		result = prime * result + ((depositTime == null) ? 0 : depositTime.hashCode());
 		result = prime * result + ((educationScolarity == null) ? 0 : educationScolarity.hashCode());
 		result = prime * result + ((endDateMondate == null) ? 0 : endDateMondate.hashCode());
-		result = prime * result + ((experienceYear == null) ? 0 : experienceYear.hashCode());
+		result = prime * result + experienceYear;
 		result = prime * result + id;
 		result = prime * result + ((manager == null) ? 0 : manager.hashCode());
 		result = prime * result + ((project == null) ? 0 : project.hashCode());
@@ -191,10 +194,7 @@ public class Request implements Serializable {
 				return false;
 		} else if (!endDateMondate.equals(other.endDateMondate))
 			return false;
-		if (experienceYear == null) {
-			if (other.experienceYear != null)
-				return false;
-		} else if (!experienceYear.equals(other.experienceYear))
+		if (experienceYear != other.experienceYear)
 			return false;
 		if (id != other.id)
 			return false;
@@ -208,10 +208,7 @@ public class Request implements Serializable {
 				return false;
 		} else if (!project.equals(other.project))
 			return false;
-		if (requestedProfil == null) {
-			if (other.requestedProfil != null)
-				return false;
-		} else if (!requestedProfil.equals(other.requestedProfil))
+		if (requestedProfil != other.requestedProfil)
 			return false;
 		if (startDateMondate == null) {
 			if (other.startDateMondate != null)
@@ -220,6 +217,17 @@ public class Request implements Serializable {
 			return false;
 		return true;
 	}
+
+	public Resource getSuggessedResource() {
+		return suggessedResource;
+	}
+
+	public void setSuggessedResource(Resource suggessedResource) {
+		this.suggessedResource = suggessedResource;
+	}
+
+
+
 	
 	 
 	

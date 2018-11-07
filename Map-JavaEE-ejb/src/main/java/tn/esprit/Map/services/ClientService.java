@@ -18,7 +18,6 @@ import tn.esprit.Map.persistences.ClientType;
 import tn.esprit.Map.persistences.Contract;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.utilities.CryptPasswordMD5;
-import tn.esprit.Map.utilities.DecryptPasswordMD5;
 import tn.esprit.Map.utilities.Mail_API;
 import tn.esprit.Map.utilities.RandomPassword;
 
@@ -30,6 +29,7 @@ public class ClientService implements ClientRemote {
 	private Mail_API mailAPI = new Mail_API();
 	private RandomPassword randomPassword = new RandomPassword();
 	private CryptPasswordMD5 cryptPasswordMD5 = new CryptPasswordMD5();
+	
 	@Override
 	public List<Client> getAllClients() {
 		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c where c.archived= :archvied", Client.class);

@@ -26,7 +26,6 @@ import javax.ws.rs.core.UriInfo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import tn.esprit.Map.interfaces.PersonServiceRemote;
-import tn.esprit.Map.persistences.Person;
 
 @Path("/authentication")
 @RequestScoped

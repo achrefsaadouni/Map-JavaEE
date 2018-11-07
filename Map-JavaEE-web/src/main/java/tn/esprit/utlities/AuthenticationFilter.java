@@ -4,7 +4,6 @@ package tn.esprit.utlities;
 import java.io.IOException;
 import java.security.Key;
 import java.security.Principal;
-import java.util.logging.Logger;
 
 import javax.annotation.Priority;
 import javax.crypto.spec.SecretKeySpec;
@@ -18,8 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 
 @Secured

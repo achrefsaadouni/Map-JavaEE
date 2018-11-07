@@ -23,7 +23,7 @@ public class Resource extends Person implements Serializable {
 	private SeniorityType seniority;
 
 	@JsonProperty("taux")
-    private static double taux;
+    private  double taux;
 	
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("workProfil")
@@ -82,7 +82,6 @@ public class Resource extends Person implements Serializable {
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
-	@JsonProperty("listeMondats")
 	private Set<Mandate> listeMondats;
 
 	public Set<Mandate> getListeMondats() {
@@ -210,12 +209,12 @@ public class Resource extends Person implements Serializable {
 		return "Resource [seniority=" + seniority +"]";
 	}
 
-	public static double getTaux() {
+	public double getTaux() {
 		return taux;
 	}
 
-	public static void setTaux(double taux) {
-		Resource.taux = taux;
+	public  void setTaux(double taux) {
+		this.taux = taux;
 	}
 
 	
