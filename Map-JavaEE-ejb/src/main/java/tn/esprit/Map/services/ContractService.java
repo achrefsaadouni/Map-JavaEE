@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import tn.esprit.Map.interfaces.ContractRemote;
 import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.Contract;
+import tn.esprit.Map.persistences.Project;
 
 @Stateless
 public class ContractService implements ContractRemote {
@@ -32,6 +33,7 @@ public class ContractService implements ContractRemote {
 		}
 		return "Contract has been saved into data base with this id : "+contract.getId();
 	}
+	
 	
 	public Contract arrayToContract(Object[] array) {
 		Contract contract = new Contract();
@@ -60,6 +62,21 @@ public class ContractService implements ContractRemote {
 			contracts.add(contract);
 		});
 		return contracts;
+	}
+
+
+	@Override
+	public String updateContract(Contract contract) {
+		Query query=em.createQuery("update Contract c set c.startDate= :startDate , c.endDate= :endDate where c.id= :idContract");
+		query.setParameter("startDate", contract.getStartDate());
+		query.setParameter("endDate", contract.getEndDate());
+		query.setParameter("idContract", contract.getId());
+		int modified = query.executeUpdate();
+		if (modified == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
 	}
 
 }

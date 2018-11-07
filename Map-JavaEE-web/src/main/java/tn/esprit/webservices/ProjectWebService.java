@@ -7,21 +7,29 @@ import java.util.Date;
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import tn.esprit.Map.interfaces.ProjectRemote;
 import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.Person;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.ProjectType;
+import tn.esprit.utlities.AuthenticatedUser;
+import tn.esprit.utlities.Secured;
+
 
 @Path("/projects")
 @ManagedBean
 public class ProjectWebService {
 	@EJB
 	ProjectRemote projectRemote;
+	@Inject
+	@AuthenticatedUser
+	Person authenticatedUser;
 
 	
 
@@ -48,7 +56,7 @@ public class ProjectWebService {
 			else
 				return Response.ok(projectRemote.getAllProjectByClient(Integer.parseInt(idClient)), MediaType.APPLICATION_JSON).build();
 		}
-		else /*if((idClient == null)&&(startDate!=null)&&(endDate !=null))*/{
+		else{
 			if (projectRemote.getProjectsByDate(startDate,endDate) == null)
 				return Response.status(Response.Status.NOT_FOUND).build();
 
@@ -59,6 +67,7 @@ public class ProjectWebService {
 				return Response.ok(projectRemote.getProjectsByDate(startDate,endDate), MediaType.APPLICATION_JSON).build();
 		}
 
+
 	}
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
@@ -67,17 +76,21 @@ public class ProjectWebService {
 	{
 		return projectRemote.sumAmountProject(startDate, endDate);
 	}
-
+	
+	@Secured
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public String postProject(@QueryParam("idClient") String idClient, @QueryParam("idProject") String idProject,
-			Project project) throws ParseException {
+	public String postProject(@QueryParam("idClient") String idClient, @QueryParam("idProject") String idProject,Project project) throws ParseException {
+		if (authenticatedUser.getRoleT().equals("Admin"))
+		{
 		if ((idClient == null) && (idProject == null)) {
 			return projectRemote.addProject(project);
 		} else {
 			return projectRemote.assignProjectToClient(Integer.parseInt(idClient), Integer.parseInt(idProject));
 		}
+		}
+		return "Access denied";
 	}
 
 	

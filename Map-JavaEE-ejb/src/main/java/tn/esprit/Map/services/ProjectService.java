@@ -82,10 +82,10 @@ public class ProjectService implements ProjectRemote {
 		return contract;
 	}
 	
-
+	
 	@Override
 	public String addProject(Project project) {
-	
+		
 			
 		if (project.getEndDate().compareTo(project.getStartDate()) < 0) {
 			return "End date must be after start date";
@@ -298,10 +298,7 @@ public class ProjectService implements ProjectRemote {
 			e.printStackTrace();
 		}
 		Query query = em.createQuery(
-				"select  p.id ,p.projectName , p.startDate"
-				+ " , p.endDate , p.address , p.totalNumberResource ," + " p.levioNumberResource,p.picture ,"
-				+ " p.projectType  from Project p "
-				+ "where    p.startDate >= :startDate AND p.endDate   <= :endDate");
+				"select  p.id ,p.projectName , p.startDate , p.endDate , p.address , p.totalNumberResource ," + " p.levioNumberResource,p.picture , p.projectType  from Project p where    p.startDate >= :startDate AND p.endDate   <= :endDate");
 		query.setParameter("startDate", startDateConvert);
 		query.setParameter("endDate", endDateConvert);
 		List<Object[]> res = query.getResultList();
@@ -317,11 +314,20 @@ public class ProjectService implements ProjectRemote {
 	@Override
 	public String sumAmountProject(String startDate, String endDate) {
 		List<Project> projects = getProjectsByDate(startDate,endDate);
-		Double sum = null ;
-		Query query = em.createQuery("select m.montant from Mandate m where m.projet = :project");
+		
+		Query query = em.createQuery("select m from Mandate m where m.projet = :project");
+		double sum = 0 ;
+		Mandate mandate = new Mandate();
 		for(Project project : projects){
 			query.setParameter("project", project);
-			sum +=(Double) query.getSingleResult();
+			
+			try {
+			 mandate = (Mandate) query.getSingleResult();
+			 mandate.setRessource(null);}
+			catch(javax.persistence.NoResultException ex){
+				return "No project affected to mandate" ;
+			}
+			sum +=mandate.getMontant();
 		}
 		
 		return "you have spent between "+startDate+" and " +endDate+ " : "+sum;
