@@ -30,8 +30,10 @@ public class Request implements Serializable {
 	@ManyToOne
 	@JoinColumn(insertable = false, updatable = false)
 	private Client client;
+	@OneToOne
+	private Resource suggessedResource; 
+		
 	
-
 	
 	public int getId() {
 		return id;
@@ -214,6 +216,14 @@ public class Request implements Serializable {
 		} else if (!startDateMondate.equals(other.startDateMondate))
 			return false;
 		return true;
+	}
+
+	public Resource getSuggessedResource() {
+		return suggessedResource;
+	}
+
+	public void setSuggessedResource(Resource suggessedResource) {
+		this.suggessedResource = suggessedResource;
 	}
 
 
