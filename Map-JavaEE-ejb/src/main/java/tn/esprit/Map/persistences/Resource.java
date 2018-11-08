@@ -84,6 +84,12 @@ public class Resource extends Person implements Serializable {
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
 	private Set<Mandate> listeMondats;
 
+	@OneToOne
+    @JoinColumn(name="RessoruceP")
+    private Resource ressource ;
+
+	
+	
 	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
