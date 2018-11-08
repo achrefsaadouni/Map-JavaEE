@@ -409,45 +409,46 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Resource> SearchResourceBySkill(int requestId) {
-		Request request;
-		List<Skill> listSkillsRequired = new ArrayList<>();
-		List<Resource> listeRecourceNeeded = new ArrayList<>();
-		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
-		query.setParameter("rId", requestId);
-		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m", Resource.class);
-		try {
-			request = query.getSingleResult();
-			List<Resource> resources = query1.getResultList();
-			listSkillsRequired.addAll(request.getProject().getListeSkills());
-			resources.forEach(e -> {
-				if(isAvailable(e.getId(),request.getStartDateMondate()) && e.getWorkProfil() == request.getRequestedProfil()){
-					System.out.println("here");
-					if( (request.getExperienceYear()>=3 && e.getSeniority()==SeniorityType.Senior) || (request.getExperienceYear()<3 && e.getSeniority()==SeniorityType.Junior) ){
-				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
-				if (resourceskills.containsAll(listSkillsRequired)) {
-						listeRecourceNeeded.add(e);
-				}
-				
-					}}
-			});
-			Collections.sort(listeRecourceNeeded, new Comparator<Resource>() {
-				@Override
-				public int compare(Resource r1, Resource r2) {
-					
-					if(ScoreSkill(r1,listSkillsRequired)>ScoreSkill(r2,listSkillsRequired))
-						return -1;
-					else if (ScoreSkill(r2,listSkillsRequired)==ScoreSkill(r2,listSkillsRequired))
-						return 0;
-					else return 1;
-					
-				}
-			});
-			
-			return listeRecourceNeeded;
-			
-		} catch (Exception e) {
-			return null;
-		}
+//		Request request;
+//		List<Skill> listSkillsRequired = new ArrayList<>();
+//		List<Resource> listeRecourceNeeded = new ArrayList<>();
+//		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
+//		query.setParameter("rId", requestId);
+//		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m", Resource.class);
+//		try {
+//			request = query.getSingleResult();
+//			List<Resource> resources = query1.getResultList();
+//			listSkillsRequired.addAll(request.getProject().getListeSkills());
+//			resources.forEach(e -> {
+//				if(isAvailable(e.getId(),request.getStartDateMondate()) && e.getWorkProfil() == request.getRequestedProfil()){
+//					System.out.println("here");
+//					if( (request.getExperienceYear()>=3 && e.getSeniority()==SeniorityType.Senior) || (request.getExperienceYear()<3 && e.getSeniority()==SeniorityType.Junior) ){
+//				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
+//				if (resourceskills.containsAll(listSkillsRequired)) {
+//						listeRecourceNeeded.add(e);
+//				}
+//				
+//					}}
+//			});
+//			Collections.sort(listeRecourceNeeded, new Comparator<Resource>() {
+//				@Override
+//				public int compare(Resource r1, Resource r2) {
+//					
+//					if(ScoreSkill(r1,listSkillsRequired)>ScoreSkill(r2,listSkillsRequired))
+//						return -1;
+//					else if (ScoreSkill(r2,listSkillsRequired)==ScoreSkill(r2,listSkillsRequired))
+//						return 0;
+//					else return 1;
+//					
+//				}
+//			});
+//			
+//			return listeRecourceNeeded;
+//			
+//		} catch (Exception e) {
+//			return null;
+//		}
+		return null ;
 	}
 
 	@Override

@@ -55,20 +55,20 @@ public class Project implements Serializable {
 	@OneToOne(mappedBy="project")
 	@JsonIgnore
 	private Request request;
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Skill> listeSkills;
+//	@JsonIgnore
+//	@ManyToMany(fetch = FetchType.EAGER)
+//	private Set<Skill> listeSkills;
 	
 	@OneToMany(mappedBy="project")
 	private Set<ProjectSkill> projectSkills;
 	
-	public Set<Skill> getListeSkills() {
-		return listeSkills;
-	}
-
-	public void setListeSkills(Set<Skill> listeSkills) {
-		this.listeSkills = listeSkills;
-	}
+//	public Set<Skill> getListeSkills() {
+//		return listeSkills;
+//	}
+//
+//	public void setListeSkills(Set<Skill> listeSkills) {
+//		this.listeSkills = listeSkills;
+//	}
 
 	public int getId() {
 		return id;
