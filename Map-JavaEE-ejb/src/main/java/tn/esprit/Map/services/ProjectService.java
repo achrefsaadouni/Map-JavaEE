@@ -153,7 +153,7 @@ public class ProjectService implements ProjectRemote {
 		if (modified == 1) {
 			return "success";
 		} else {
-			return "fail";
+			return "faiiil";
 		}
 		
 
