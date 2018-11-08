@@ -12,6 +12,7 @@ import javax.persistence.Query;
 import tn.esprit.Map.interfaces.ResourceRemote;
 import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.Client;
+import tn.esprit.Map.persistences.JobType;
 import tn.esprit.Map.persistences.Note;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Resource;
@@ -79,6 +80,13 @@ public class ResourceService implements ResourceRemote {
 		if (resource.isArchived() == 0 && resource.getAvailability() == AvailabilityType.available) {
 			resource.setAvailability(AvailabilityType.unavailable);
 			resource.setProject(projet);
+			if(resource.getJobType()==JobType.LevioResource){
+				projet.setLevioNumberResource(projet.getLevioNumberResource()+1);
+			}
+			else{
+				projet.setTotalNumberResource(projet.getTotalNumberResource()+1);
+				
+			}
 			em.persist(resource);
 			return true;
 		}
@@ -174,6 +182,7 @@ public class ResourceService implements ResourceRemote {
 		em.persist(n);
 		return true;
 	}
+
 
 	@Override
 	public Boolean DeleteAffectation(int resourceId) {

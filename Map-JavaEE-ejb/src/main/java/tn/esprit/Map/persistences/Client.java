@@ -27,10 +27,15 @@ public class Client extends Person implements Serializable {
 	private String logo;
 	@JsonProperty("address")
 	private String address;
-	@OneToMany(mappedBy = "client",fetch=FetchType.EAGER)
+	
+	
+	@OneToMany(mappedBy = "client")
 	@JsonIgnore
 	@JsonProperty("projects")
 	private List<Project> projects;
+	
+	
+	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private Set<Contract> contracts;
 	
@@ -41,8 +46,10 @@ public class Client extends Person implements Serializable {
 	private Set<Note> noteclient;
 	
 	@JsonProperty("requests")
-	@OneToMany(mappedBy = "client")
+	@JsonIgnore
+	@OneToMany(mappedBy = "client",fetch=FetchType.EAGER)
 	private List<Request> requests;
+	
 
 	public ClientType getClientType() {
 		return clientType;

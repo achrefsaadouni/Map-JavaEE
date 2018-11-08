@@ -33,7 +33,6 @@ public class ResourceWebService {
 
 	@EJB
 	ResourceRemote resourceRemote;
-
 	@Inject
 	@AuthenticatedUser
 	Person authenticatedUser;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Timer;
+import javax.ejb.Timer;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
@@ -23,8 +23,11 @@ import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.DayOff;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.MandateId;
+import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.ResourceSkill;
+import tn.esprit.Map.persistences.SeniorityType;
 import tn.esprit.Map.persistences.Skill;
 
 @Stateless
@@ -52,7 +55,8 @@ public class MandateService implements MandateServiceLocal {
 		}
 
 		if (resource.getAvailability() == AvailabilityType.available)
-			return true;
+			{System.out.println("available");
+			return true;}
 		else if (resource.getAvailability() == AvailabilityType.availableSoon) {
 
 			TypedQuery<Mandate> query = em.createQuery(
@@ -110,16 +114,17 @@ public class MandateService implements MandateServiceLocal {
 		try {
 			request = query.getSingleResult();
 			resource = query1.getSingleResult();
+			mail.send(resource.getEmail(), "New Mandate", "You were Appointed to a new request",
+					"following the acceptance of your profile by our client", request.getClient().getNameSociety(),
+					"you are assigned to a new project", "Project Name : " + request.getProject().getProjectName(), "",
+					"Address : " + request.getProject().getAddress() + " <br>Start Date : " + request.getStartDateMondate()
+							+ " <br>End Date : " + request.getEndDateMondate(),
+					link);
+			return true;
 		} catch (Exception e) {
 			return false;
 		}
-		mail.send(resource.getEmail(), "New Mandate", "You were Appointed to a new request",
-				"following the acceptance of your profile by our client", request.getClient().getNameSociety(),
-				"you are assigned to a new project", "Project Name : " + request.getProject().getProjectName(), "",
-				"Address : " + request.getProject().getAddress() + " <br>Start Date : " + request.getStartDateMondate()
-						+ " <br>End Date : " + request.getEndDateMondate(),
-				link);
-		return true;
+		
 	}
 
 	@Override
@@ -190,7 +195,7 @@ public class MandateService implements MandateServiceLocal {
 	}
 
 	@Override
-	public Double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate, int gpsId) {
+	public Double calculateCost(int ressourceId, int projetId, Date startDate, Date endDate) {
 		TypedQuery<Mandate> query = em.createQuery(
 				"SELECT m FROM Mandate m where m.mandateId.dateDebut = :startDate AND m.mandateId.dateFin = :endDate AND m.mandateId.projetId = :pId AND  m.mandateId.ressourceId=:rId AND m.archived = false",
 				Mandate.class);
@@ -199,11 +204,16 @@ public class MandateService implements MandateServiceLocal {
 		query.setParameter("pId", projetId);
 		query.setParameter("rId", ressourceId);
 		try {
-			if (query.getSingleResult().getMontant() == 0)
-				;
+			if (query.getSingleResult().getMontant() == 0.0)
+
 			{
-				query.getSingleResult().setMontant(query.getSingleResult().getRessource().getSalary()
-						* query.getSingleResult().getRessource().getTaux());
+				final long MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+				long delta = endDate.getTime() - startDate.getTime();
+
+				Double montant = query.getSingleResult().getRessource().getSalary()
+						* query.getSingleResult().getRessource().getTaux() * (delta / (MILLISECONDS_PER_DAY));
+				System.out.println(montant);
+				query.getSingleResult().setMontant(montant);
 			}
 			return query.getSingleResult().getMontant();
 		} catch (Exception e) {
@@ -270,9 +280,23 @@ public class MandateService implements MandateServiceLocal {
 		mandate.setMontant(0.0);
 		mandate.setMandateId(mandateId);
 		mandate.setArchived(false);
+		
 		try {
 			em.persist(mandate);
 			UpdateAvailability(mandate.getMandateId().getRessourceId(), AvailabilityType.unavailable);
+			notif(mandate.getRessource().getId(),requestId,"http://localhost:18080/Map-JavaEE-web/MAP/mandate?ressourceId="+resourceId+"&projetId="+mandate.getMandateId().getProjetId()+"&dateDebut="+convertDate(mandate.getMandateId().getDateDebut())+"&dateFin="+convertDate(mandate.getMandateId().getDateFin()));
+			TypedQuery<Project> query3 = em.createQuery("SELECT r FROM Project r where r.id=:raa", Project.class);
+			query.setParameter("raa", mandate.getProjet().getId());
+			Project project;
+			try {
+				project = query3.getSingleResult();
+				project.setLevioNumberResource(project.getLevioNumberResource()+1);
+				project.setTotalNumberResource(project.getTotalNumberResource()+1);
+			} catch (Exception e)
+
+			{
+				return false;
+			}
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -321,6 +345,12 @@ public class MandateService implements MandateServiceLocal {
 
 		return dateFormat.format(currentDatePlus);
 
+	}
+	public String convertDate(Date date)
+	{
+		String DATE_FORMAT = "yyyy-MM-dd";
+		DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
+		return dateFormat.format(date);
 	}
 
 	@Override
@@ -379,31 +409,46 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public List<Resource> SearchResourceBySkill(int requestId) {
-		Request request;
-		List<Skill> listSkillsRequired = new ArrayList<>();
-		List<Resource> listeRecourceNeeded = new ArrayList<>();
-		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
-		query.setParameter("rId", requestId);
-		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m", Resource.class);
-		try {
-			request = query.getSingleResult();
-			List<Resource> resources = query1.getResultList();
-			listSkillsRequired.addAll(request.getProject().getListeSkills());
-			resources.forEach(e -> {
-				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
-				if (resourceskills.size() == listSkillsRequired.size()) {
-					int i = 0;
-					while (resourceskills.get(i).equals(listSkillsRequired.get(i)) && i < resourceskills.size()) {
-						i++;
-					}
-					if (i == resourceskills.size())
-						listeRecourceNeeded.add(e);
-				}
-			});
-			return listeRecourceNeeded;
-		} catch (Exception e) {
-			return null;
-		}
+//		Request request;
+//		List<Skill> listSkillsRequired = new ArrayList<>();
+//		List<Resource> listeRecourceNeeded = new ArrayList<>();
+//		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
+//		query.setParameter("rId", requestId);
+//		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m", Resource.class);
+//		try {
+//			request = query.getSingleResult();
+//			List<Resource> resources = query1.getResultList();
+//			listSkillsRequired.addAll(request.getProject().getListeSkills());
+//			resources.forEach(e -> {
+//				if(isAvailable(e.getId(),request.getStartDateMondate()) && e.getWorkProfil() == request.getRequestedProfil()){
+//					System.out.println("here");
+//					if( (request.getExperienceYear()>=3 && e.getSeniority()==SeniorityType.Senior) || (request.getExperienceYear()<3 && e.getSeniority()==SeniorityType.Junior) ){
+//				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
+//				if (resourceskills.containsAll(listSkillsRequired)) {
+//						listeRecourceNeeded.add(e);
+//				}
+//				
+//					}}
+//			});
+//			Collections.sort(listeRecourceNeeded, new Comparator<Resource>() {
+//				@Override
+//				public int compare(Resource r1, Resource r2) {
+//					
+//					if(ScoreSkill(r1,listSkillsRequired)>ScoreSkill(r2,listSkillsRequired))
+//						return -1;
+//					else if (ScoreSkill(r2,listSkillsRequired)==ScoreSkill(r2,listSkillsRequired))
+//						return 0;
+//					else return 1;
+//					
+//				}
+//			});
+//			
+//			return listeRecourceNeeded;
+//			
+//		} catch (Exception e) {
+//			return null;
+//		}
+		return null ;
 	}
 
 	@Override
@@ -437,18 +482,45 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public boolean restore(int ressourceId, int projetId, Date startDate, Date endDate) {
-		Mandate results;
 		TypedQuery<Mandate> query = em.createQuery(
-				"SELECT m FROM Mandate m where m.archived = false AND CURRENT_DATE = m.mandateId.dateFin",
+				"SELECT m FROM Mandate m where m.mandateId.dateDebut = :startDate AND m.mandateId.dateFin = :endDate AND m.mandateId.projetId = :pId AND  m.mandateId.ressourceId=:rId",
 				Mandate.class);
+		query.setParameter("startDate", startDate, TemporalType.DATE);
+		query.setParameter("endDate", endDate, TemporalType.DATE);
+		query.setParameter("pId", projetId);
+		query.setParameter("rId", ressourceId);
 		try {
-			results = query.getSingleResult();
+			Mandate results = query.getSingleResult();
 			results.setArchived(false);
+			System.out.println("qsdqsd");
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 
 	}
+
+	@Override
+	public double ScoreSkill(Resource resource,List<Skill>skills) {
+		double score = 0.0;
+		for (ResourceSkill e : resource.getResourceSkills()) {
+			if(skills.contains(e.getSkill()))
+			score += e.getRateSkill();
+		}
+		return score;
+	}
+
+	@Override
+	public double CostProject(int projectId) {
+		double totalcost = 0.0;
+		for (Mandate e : getByProject(projectId)) {
+			totalcost = totalcost+ calculateCost(e.getMandateId().getRessourceId(), e.getMandateId().getProjetId(), e.getMandateId().getDateDebut(), e.getMandateId().getDateFin());
+
+		}
+	
+		return totalcost;
+	}
+	
+	
 
 }

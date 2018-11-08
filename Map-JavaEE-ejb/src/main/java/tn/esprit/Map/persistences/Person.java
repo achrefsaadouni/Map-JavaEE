@@ -77,7 +77,6 @@ public class Person implements Serializable {
 	public String getPassword() {
 		return password;
 	}
-	@XmlElement(name="password")
 	public void setPassword(String password) {
 		this.password = password;
 	}

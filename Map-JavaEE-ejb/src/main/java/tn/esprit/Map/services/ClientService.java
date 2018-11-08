@@ -18,7 +18,6 @@ import tn.esprit.Map.persistences.ClientType;
 import tn.esprit.Map.persistences.Contract;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.utilities.CryptPasswordMD5;
-import tn.esprit.Map.utilities.DecryptPasswordMD5;
 import tn.esprit.Map.utilities.Mail_API;
 import tn.esprit.Map.utilities.RandomPassword;
 
@@ -72,7 +71,7 @@ public class ClientService implements ClientRemote {
 		em.persist(client);
 		mailAPI.sendEmail(client.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login : "+client.getLogin()+" Password : "+password);
 		}
-		return "Client has been saved into data base with this id :"+ client.getId() +"   "+password;
+		return "Client has been saved into data base with this id :"+ client.getId();
 	}
 
 	@Override

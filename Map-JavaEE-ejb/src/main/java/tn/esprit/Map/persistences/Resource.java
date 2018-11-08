@@ -225,6 +225,4 @@ public class Resource extends Person implements Serializable {
 		this.noteClient = noteClient;
 	}
 	
-	
-
 }

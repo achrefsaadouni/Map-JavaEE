@@ -14,10 +14,10 @@ import tn.esprit.Map.interfaces.ProjectLocal;
 public class StartUpService extends HttpServlet {
 	@EJB
 	ProjectServiceLocal projectLocal;
-
+//86400000 = 1 jours
 	public void init() throws ServletException {
-//		Timer timerObj = new Timer(true);
-//		timerObj.scheduleAtFixedRate(projectLocal, 0, 5000);
+		//Timer timerObj = new Timer(true);
+		//timerObj.scheduleAtFixedRate(projectLocal, 0, 5000);
 	}
 
 }
