@@ -23,8 +23,8 @@ public class Resource extends Person implements Serializable {
 	private SeniorityType seniority;
 
 	@JsonProperty("taux")
-    private  double taux;
-	
+	private double taux;
+
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("workProfil")
 	private WorkType workProfil;
@@ -51,9 +51,7 @@ public class Resource extends Person implements Serializable {
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("jobType")
 	private JobType jobType;
-	
-	
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JsonProperty("project")
 	private Project project;
@@ -61,9 +59,7 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
-	
-	@JoinTable(joinColumns=@JoinColumn(referencedColumnName="id", updatable = false),
-			   inverseJoinColumns=@JoinColumn(name="dayoff", referencedColumnName="id", updatable = false))
+	@JoinTable(joinColumns = @JoinColumn(referencedColumnName = "id", updatable = false), inverseJoinColumns = @JoinColumn(name = "dayoff", referencedColumnName = "id", updatable = false))
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
 	private Set<DayOff> dayOffs;
@@ -73,23 +69,21 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("resourceSkills")
 	private Set<ResourceSkill> resourceSkills;
 
-	
+	@JsonIgnore
+	@OneToMany(mappedBy = "resource", fetch = FetchType.EAGER)
+	@JsonProperty("noteResource")
+	private Set<Note> noteClient;
+
 	@JsonIgnore
 	@JsonProperty("organizationalCharts")
 	@ManyToMany(mappedBy = "resources", fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
 
-	
 	@JsonIgnore
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
+	@JsonProperty("listeMondats")
 	private Set<Mandate> listeMondats;
 
-	@OneToOne
-    @JoinColumn(name="RessoruceP")
-    private Resource ressource ;
-
-	
-	
 	public Set<Mandate> getListeMondats() {
 		return listeMondats;
 	}
@@ -212,19 +206,24 @@ public class Resource extends Person implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Resource [seniority=" + seniority +"]";
+		return "Resource [seniority=" + seniority + "]";
 	}
 
 	public double getTaux() {
 		return taux;
 	}
 
-	public  void setTaux(double taux) {
+	public void setTaux(double taux) {
 		this.taux = taux;
 	}
 
-	
-	
+	public Set<Note> getNoteClient() {
+		return noteClient;
+	}
+
+	public void setNoteClient(Set<Note> noteClient) {
+		this.noteClient = noteClient;
+	}
 	
 	
 	

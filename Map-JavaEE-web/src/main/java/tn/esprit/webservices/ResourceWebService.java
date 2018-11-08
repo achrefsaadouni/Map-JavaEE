@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -16,9 +17,13 @@ import javax.ws.rs.core.MediaType;
 
 import javax.ws.rs.core.Response;
 import tn.esprit.Map.interfaces.ResourceRemote;
+import tn.esprit.Map.persistences.Person;
 import tn.esprit.Map.persistences.Resource;
+import tn.esprit.Map.persistences.Role;
 import tn.esprit.Map.persistences.Skill;
 import tn.esprit.Map.services.ResourceService;
+import tn.esprit.utlities.AuthenticatedUser;
+import tn.esprit.utlities.Secured;
 
 @ManagedBean
 @Path("/Resources")
@@ -28,6 +33,10 @@ public class ResourceWebService {
 
 	@EJB
 	ResourceRemote resourceRemote;
+	@Inject
+	@AuthenticatedUser
+	Person authenticatedUser;
+
 
 	
 	@GET
@@ -154,12 +163,16 @@ public class ResourceWebService {
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("noteResource")
-	public String noteResource(@QueryParam("resourceId") String resourceId ,@QueryParam("note") String note) {
-		if(resourceRemote.noteResource(Integer.parseInt(resourceId) , Float.parseFloat(note)) == false){
+	@Secured
+	public String noteResource(@QueryParam("resourceId") String resourceId , @QueryParam("clientId") String clientId ,@QueryParam("note") String note) {
+		if (authenticatedUser.getRoleT() == Role.Client)
+		{
+		if(resourceRemote.noteResource(Integer.parseInt(resourceId),Integer.parseInt(clientId) , Float.parseFloat(note)) == false){
 			return "pas de note";
 		}
-		resourceRemote.noteResource(Integer.parseInt(resourceId) , Float.parseFloat(note));
-		return "note ajoutée";
+		resourceRemote.noteResource(Integer.parseInt(resourceId) ,Integer.parseInt(clientId), Float.parseFloat(note));
+		return "note ajoutée";}
+		return "Access denied";
 	}
 
 	
