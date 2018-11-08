@@ -36,6 +36,7 @@ public class Person implements Serializable {
 	private InBox inBox;
 	@OneToOne(mappedBy="person")
 	private Message message;
+	@Enumerated(EnumType.STRING)
 	private Role roleT;
 	
 
