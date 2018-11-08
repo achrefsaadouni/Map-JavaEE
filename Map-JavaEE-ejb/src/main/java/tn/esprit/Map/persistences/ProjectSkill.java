@@ -4,12 +4,24 @@ import java.io.Serializable;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class ProjectSkill implements Serializable{
 	@EmbeddedId
 	private PK_ProjectSkill Pk_ProjectSkill;
+	
+	@ManyToOne
+	@JoinColumn(name="idProject",referencedColumnName="id",insertable=false,updatable=false)
+	private Project project;
+	
+	@ManyToOne
+	@JoinColumn(name="idSkill",referencedColumnName="IdSkill",insertable=false,updatable=false)
+	private Skill skill;
+	
 	private int percentage;
+	
 	public ProjectSkill() {
 		super();
 	}
@@ -30,32 +42,7 @@ public class ProjectSkill implements Serializable{
 	public void setPercentage(int percentage) {
 		this.percentage = percentage;
 	}
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((Pk_ProjectSkill == null) ? 0 : Pk_ProjectSkill.hashCode());
-		result = prime * result + percentage;
-		return result;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		ProjectSkill other = (ProjectSkill) obj;
-		if (Pk_ProjectSkill == null) {
-			if (other.Pk_ProjectSkill != null)
-				return false;
-		} else if (!Pk_ProjectSkill.equals(other.Pk_ProjectSkill))
-			return false;
-		if (percentage != other.percentage)
-			return false;
-		return true;
-	}
+
 	
 	
 }

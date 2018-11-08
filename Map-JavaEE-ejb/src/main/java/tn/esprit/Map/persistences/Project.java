@@ -59,6 +59,9 @@ public class Project implements Serializable {
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Skill> listeSkills;
 	
+	@OneToMany(mappedBy="project")
+	private Set<ProjectSkill> projectSkills;
+	
 	public Set<Skill> getListeSkills() {
 		return listeSkills;
 	}
@@ -162,6 +165,10 @@ public class Project implements Serializable {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+
+
+	
+	
 
 
 

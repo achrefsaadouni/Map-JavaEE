@@ -26,6 +26,10 @@ public class Skill implements Serializable {
 	@OneToMany(mappedBy="skill" , fetch=FetchType.EAGER)
 	private Set<ResourceSkill> skillResources;
 
+	@OneToMany(mappedBy="skill")
+	private Set<ProjectSkill> projectSkills;
+	
+	
 	public int getIdSkill() {
 		return IdSkill;
 	}
