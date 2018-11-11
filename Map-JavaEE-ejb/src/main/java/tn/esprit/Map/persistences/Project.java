@@ -21,33 +21,33 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class Project implements Serializable {
 	@Id
 	@GeneratedValue
-	@JsonProperty("idProject")
+	@JsonProperty("id")
 	private int id;
-	@JsonProperty("NameProject")
+	@JsonProperty("projectName")
 	private String projectName;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("StartDate")
+	@JsonProperty("startDate")
 	private Date startDate;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("EndDate")
+	@JsonProperty("endDate")
 	private Date endDate;
-	@JsonProperty("Address")
+	@JsonProperty("address")
 	private String address;
-	@JsonProperty("TotalNbResource")
+	@JsonProperty("totalNumberResource")
 	private int totalNumberResource;
-	@JsonProperty("LevioNbResource")
+	@JsonProperty("levioNumberResource")
 	private int levioNumberResource;
-	@JsonProperty("Picture")
+	@JsonProperty("picture")
 	private String picture;
 	@Enumerated(EnumType.STRING)
-	@JsonProperty("ProjectType")
+	@JsonProperty("projectType")
 	private ProjectType projectType;
 	@ManyToOne
-	@JsonProperty("OrganizationalChart")
+	@JsonProperty("organizationalChart")
 	private OrganizationalChart organizationalChart;
 	@ManyToOne	
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
-	@JsonProperty("Client")
+	@JsonProperty("client")
 	private Client client;
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
 	@JsonIgnore
