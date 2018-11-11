@@ -81,7 +81,6 @@ public class Resource extends Person implements Serializable {
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
-	@JsonProperty("listeMondats")
 	private Set<Mandate> listeMondats;
 
 	public Set<Mandate> getListeMondats() {
