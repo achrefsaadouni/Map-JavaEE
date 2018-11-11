@@ -77,20 +77,20 @@ public class ProjectWebService {
 		return projectRemote.sumAmountProject(startDate, endDate);
 	}
 	
-	@Secured
+	//@Secured
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String postProject(@QueryParam("idClient") String idClient, @QueryParam("idProject") String idProject,Project project) throws ParseException {
-		if (authenticatedUser.getRoleT().equals("Admin"))
-		{
+//		if (authenticatedUser.getRoleT().equals("Admin"))
+//		{
 		if ((idClient == null) && (idProject == null)) {
 			return projectRemote.addProject(project);
 		} else {
 			return projectRemote.assignProjectToClient(Integer.parseInt(idClient), Integer.parseInt(idProject));
 		}
-		}
-		return "Access denied";
+		//}
+	//	return "Access denied";
 	}
 
 	

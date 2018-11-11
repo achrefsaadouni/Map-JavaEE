@@ -14,7 +14,7 @@ public class Mail_API {
     // Sender's email ID needs to be mentioned
     //String from = "rahmabasly20@gmail.com";
     final String username = "rahmabasly20@gmail.com";//change accordingly
-    final String password = "24390420r";//change accordingly
+    final String password = "24390420rahma***";//change accordingly
 
     // Assuming you are sending email through relay.jangosmtp.net
     String host = "smtp.gmail.com";

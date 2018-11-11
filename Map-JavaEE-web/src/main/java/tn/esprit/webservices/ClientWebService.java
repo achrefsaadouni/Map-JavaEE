@@ -27,9 +27,9 @@ public class ClientWebService {
 	@EJB
 	ClientRemote clientRemote;
 
-	@Inject
-	@AuthenticatedUser
-	Person authenticatedUser;
+//	@Inject
+//	@AuthenticatedUser
+//	Person authenticatedUser;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -44,16 +44,16 @@ public class ClientWebService {
 			return Response.ok(clientRemote.getAllClients(), MediaType.APPLICATION_JSON).build();
 	}
 
-	@Secured
+	//@Secured
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public String addClient(Client client) {
-		if (authenticatedUser.getRoleT().equals("Admin"))
-		{
+//		if (authenticatedUser.getRoleT().equals("Admin"))
+//		{
 		return clientRemote.addClient(client);
-		}
-		return "Access denied";
+		//}
+		//return "Access denied";
 
 	}
 	
