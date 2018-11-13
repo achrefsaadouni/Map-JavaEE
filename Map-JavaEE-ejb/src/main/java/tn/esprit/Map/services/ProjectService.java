@@ -84,16 +84,31 @@ public class ProjectService implements ProjectRemote {
 	
 	
 	@Override
-	public String addProject(Project project) {
+	public String addProject(Project project,int clientId) {
 		
 			
-		if (project.getEndDate().compareTo(project.getStartDate()) < 0) {
-			return "End date must be after start date";
-		}
-		else
-		{
+//		if (project.getEndDate().compareTo(project.getStartDate()) < 0) {
+//			return "End date must be after start date";
+		
+//		}
+//		else
+//		{
+			//project.setOrganizationalChart(null);
+//			project.setTotalNumberResource(0);
+//			project.setLevioNumberResource(0);
+	
+		
+
+		
 		em.persist(project);
-		}
+		em.flush();
+		Client client = em.find(Client.class, clientId);
+		Query query = em.createQuery("update Project p set p.client= :client where p.id= :projectId");
+		query.setParameter("client",client);
+		query.setParameter("projectId",project.getId());
+		query.executeUpdate();
+		
+		//}
 		return "Project has been saved into data base with this id : "+project.getId();
 	}
 

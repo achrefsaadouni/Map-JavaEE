@@ -43,11 +43,11 @@ public class Project implements Serializable {
 	@JsonProperty("projectType")
 	private ProjectType projectType;
 	@ManyToOne
-	@JsonProperty("organizationalChart")
+	@JsonProperty("organizationalChart_id")
 	private OrganizationalChart organizationalChart;
 	@ManyToOne	
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
-	@JsonProperty("client")
+	@JsonProperty("clientId")
 	private Client client;
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
 	@JsonIgnore
@@ -58,7 +58,7 @@ public class Project implements Serializable {
 //	@JsonIgnore
 //	@ManyToMany(fetch = FetchType.EAGER)
 //	private Set<Skill> listeSkills;
-	
+	@JsonProperty("projectSkills")
 	@OneToMany(mappedBy="project")
 	private Set<ProjectSkill> projectSkills;
 	

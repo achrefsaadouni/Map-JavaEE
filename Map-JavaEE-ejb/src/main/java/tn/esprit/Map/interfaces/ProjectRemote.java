@@ -16,7 +16,7 @@ public interface ProjectRemote {
 	public List<Project>  getAllProjectByClient(int clientId);
 	public List<Project>  getProjectsByDate(String startDate, String endDate);
 	public Project getProjectById(int projectId);
-	public String addProject(Project project);
+	public String addProject(Project project,int clientId);
 	public String updateProject(Project project);
 	public String deleteProject(int projectId);
 	public String archiveProject() throws ParseException;

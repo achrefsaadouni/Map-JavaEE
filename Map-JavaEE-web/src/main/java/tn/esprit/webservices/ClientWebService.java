@@ -44,6 +44,16 @@ public class ClientWebService {
 			return Response.ok(clientRemote.getAllClients(), MediaType.APPLICATION_JSON).build();
 	}
 
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getById")
+	public Client getClientById(@QueryParam("idClient") String idClient) {
+		return clientRemote.getClientById(Integer.parseInt(idClient));
+
+
+	}
+	
 	//@Secured
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
