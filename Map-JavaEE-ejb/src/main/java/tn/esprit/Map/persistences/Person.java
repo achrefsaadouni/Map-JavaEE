@@ -37,6 +37,7 @@ public class Person implements Serializable {
 	@OneToOne(mappedBy="person")
 	private Message message;
 	@Enumerated(EnumType.STRING)
+	@JsonProperty("role")
 	private Role roleT;
 	
 
