@@ -10,6 +10,7 @@ import tn.esprit.Map.persistences.Project;
 @Remote
 public interface ClientRemote {
 	public List<Client> getAllClients();
+	public Client  getClientById(int idClient);
 	public String addClient(Client c);
 	public String updateClientByAdmin(Client client);
 	public String deleteClient(int clientId);

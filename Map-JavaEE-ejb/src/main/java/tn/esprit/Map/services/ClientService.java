@@ -12,6 +12,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import tn.esprit.Map.interfaces.ClientRemote;
 import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.ClientType;
@@ -147,6 +150,13 @@ public class ClientService implements ClientRemote {
 		}
 		 
 	}
+
+	@Override
+	public Client getClientById(int idClient) {
+		return em.find(Client.class,idClient);
+	}
+
+
 	
 
 }
