@@ -124,11 +124,19 @@ public class RequestService implements RequestServiceRemote{
 
 	@Override
 	public List<Request> sortByDate() {
-		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request  r ORDER BY daysMondate DESC", Request.class);
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request  r ORDER BY r.depositDate DESC", Request.class);
 		List<Request> results = query.getResultList();
 		return results;
 	}
-
+	
+	@Override
+	public List<Request> sortByDateClient(int clientId) {
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request  r where r.client.id = :s ORDER BY r.depositDate DESC", Request.class);
+		query.setParameter("s", clientId);
+		List<Request> results = query.getResultList();
+		return results;
+	}
+	
 
 
 	@Override

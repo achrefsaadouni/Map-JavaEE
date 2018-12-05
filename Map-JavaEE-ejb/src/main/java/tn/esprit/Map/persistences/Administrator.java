@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
@@ -15,6 +16,7 @@ public class Administrator extends Person implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@OneToMany(mappedBy = "administrator")
+	@JsonIgnore
 	private List<Request> requests;
 	
 	public List<Request> getRequests() {

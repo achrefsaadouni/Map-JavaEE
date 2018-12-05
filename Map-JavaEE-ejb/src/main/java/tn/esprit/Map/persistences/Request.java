@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Request implements Serializable {
 	@Id
@@ -26,14 +28,14 @@ public class Request implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date endDateMondate;
 	@ManyToOne
+	@JsonIgnore
 	private Administrator administrator;
 	@ManyToOne
 	@JoinColumn(insertable = false, updatable = false)
 	private Client client;
 	@OneToOne
 	private Resource suggessedResource; 
-		
-	
+	private boolean traiter ;
 	
 	public int getId() {
 		return id;
@@ -134,6 +136,14 @@ public class Request implements Serializable {
 
 	public Request() {
 		super();
+	}
+
+	public boolean isTraiter() {
+		return traiter;
+	}
+
+	public void setTraiter(boolean traiter) {
+		this.traiter = traiter;
 	}
 
 	@Override

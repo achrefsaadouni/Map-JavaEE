@@ -7,6 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class ProjectSkill implements Serializable{
 	@EmbeddedId
@@ -14,10 +17,12 @@ public class ProjectSkill implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name="idProject",referencedColumnName="id",insertable=false,updatable=false)
+	@JsonIgnore
 	private Project project;
 	
 	@ManyToOne
 	@JoinColumn(name="idSkill",referencedColumnName="IdSkill",insertable=false,updatable=false)
+	@JsonProperty("skill")
 	private Skill skill;
 	
 	private int percentage;

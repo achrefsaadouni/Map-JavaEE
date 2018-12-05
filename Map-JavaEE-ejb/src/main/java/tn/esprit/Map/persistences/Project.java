@@ -23,7 +23,6 @@ public class Project implements Serializable {
 	@GeneratedValue
 	@JsonProperty("idProject")
 	private int id;
-	@JsonProperty("NameProject")
 	private String projectName;
 	@Temporal(TemporalType.DATE)
 	@JsonProperty("StartDate")
@@ -55,20 +54,11 @@ public class Project implements Serializable {
 	@OneToOne(mappedBy="project")
 	@JsonIgnore
 	private Request request;
-//	@JsonIgnore
-//	@ManyToMany(fetch = FetchType.EAGER)
-//	private Set<Skill> listeSkills;
 	
-	@OneToMany(mappedBy="project")
+	@OneToMany(mappedBy="project", fetch = FetchType.EAGER)
 	private Set<ProjectSkill> projectSkills;
 	
-//	public Set<Skill> getListeSkills() {
-//		return listeSkills;
-//	}
-//
-//	public void setListeSkills(Set<Skill> listeSkills) {
-//		this.listeSkills = listeSkills;
-//	}
+
 
 	public int getId() {
 		return id;
@@ -164,6 +154,14 @@ public class Project implements Serializable {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+
+	public Set<ProjectSkill> getProjectSkills() {
+		return projectSkills;
+	}
+
+	public void setProjectSkills(Set<ProjectSkill> projectSkills) {
+		this.projectSkills = projectSkills;
 	}
 
 

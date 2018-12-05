@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import tn.esprit.Map.interfaces.MandateServiceLocal;
+import tn.esprit.Map.interfaces.RequestServiceRemote;
 import tn.esprit.Map.persistences.Person;
 import tn.esprit.Map.persistences.Role;
 import tn.esprit.utlities.AuthenticatedUser;
@@ -28,6 +29,9 @@ public class MandateResource {
 
 	@EJB
 	MandateServiceLocal mandateService;
+	
+	@EJB
+	RequestServiceRemote requestService;
 
 	@Inject
 	@AuthenticatedUser
@@ -38,7 +42,7 @@ public class MandateResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addMandate(Map<String, String> inputs) {
-		if (authenticatedUser.getRoleT() == Role.Admin) {
+
 			String requestId = inputs.get("requestId");
 			String resourceId = inputs.get("resourceId");
 			Response reponse;
@@ -49,9 +53,7 @@ public class MandateResource {
 			reponse = mandateService.addMandate(Integer.parseInt(requestId), Integer.parseInt(resourceId))
 					? Response.status(Status.CREATED).build() : Response.status(Status.NOT_ACCEPTABLE).build();
 			return reponse;
-		}
 
-		return Response.status(Status.BAD_REQUEST).build();
 	}
 
 	@GET
@@ -221,7 +223,7 @@ public class MandateResource {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response notify(Map<String, String> inputs) {
-		if (authenticatedUser.getRoleT() == Role.Admin) {
+		if (authenticatedUser.getRoleT() == Role.Client) {
 			int resourceId = Integer.parseInt(inputs.get("resourceId"));
 			int requestId = Integer.parseInt(inputs.get("requestId"));
 			String link = inputs.get("link");
@@ -231,6 +233,28 @@ public class MandateResource {
 
 		return Response.status(Status.BAD_REQUEST).build();
 	}
+	
+	
+	@Secured
+	@Path("Summon")
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response notifySummon(Map<String, String> inputs) {
+		if (authenticatedUser.getRoleT() == Role.Client) {
+			String email = inputs.get("email");
+			String date = inputs.get("date");
+			int requestId = Integer.parseInt(inputs.get("requestId"));
+			String link = inputs.get("link");
+			mandateService.notifSummon(email, date, requestId, link);
+			return Response.status(Status.OK).build();
+		}
+
+		return Response.status(Status.BAD_REQUEST).build();
+	}
+	
+	
+	
+	
 
 	@Secured
 	@Path("cost")
@@ -264,7 +288,7 @@ public class MandateResource {
 	}
 
 	@Secured
-	@Path("suggetion")
+	@Path("suggestion")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response suggestion(Map<String, String> inputs) {
@@ -280,5 +304,25 @@ public class MandateResource {
 		}
 		return Response.status(Response.Status.FORBIDDEN).entity("Acces denied").build();
 	}
+	
+	@Secured
+	@Path("request")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response request(@QueryParam(value = "id") String clientId){
+		if (authenticatedUser.getRoleT() == Role.Admin) {
+				return Response.ok(requestService.sortByDate(), MediaType.APPLICATION_JSON).build();
+			
+		}
+		else if (authenticatedUser.getRoleT() == Role.Client && clientId != null)
+		{
+
+				return Response.ok(requestService.sortByDateClient(Integer.parseInt(clientId)), MediaType.APPLICATION_JSON).build();
+		}
+		return Response.status(Response.Status.FORBIDDEN).entity("Acces denied").build();
+		
+		}
+	
+	
 
 }

@@ -10,13 +10,15 @@ import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.Mandate;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
+import tn.esprit.Map.persistences.Suggestion;
 
 @Local
 public interface MandateServiceLocal {
 	public boolean addMandate(int requestId,int resourceId);
-	public List<Resource> SearchResourceBySkill(int requestId);
+	public Suggestion SearchResourceBySkill(int requestId);
 	public boolean isAvailable(int resourceId,Date date);
 	public boolean notif(int resourceId,int requestId,String link);
+	public boolean notifSummon(String email , String date , int requestId,String link);
 	public boolean notifEndProject(Mandate mandate);
 	public List<Mandate> getAll();
 	public List<Mandate> getAllTypeMandate();
@@ -25,6 +27,7 @@ public interface MandateServiceLocal {
 	public List<Mandate> getByStartDate(Date startDate);
 	public List<Mandate> getByEndDate(Date endDate);
 	public List<Mandate> getByPeriod(Date startDate,Date endDate);
+	//public List<Mandate> getByClient(int clientId);
 	public Mandate getMandate(int ressourceId,int projetId,Date dateDebut,Date dateFin);
 	public void archive(Timer timer);
 	public boolean restore(int ressourceId, int projetId, Date startDate, Date endDate);

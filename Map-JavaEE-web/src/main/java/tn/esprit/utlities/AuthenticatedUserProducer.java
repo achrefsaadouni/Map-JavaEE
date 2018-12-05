@@ -19,14 +19,14 @@ public class AuthenticatedUserProducer {
     @AuthenticatedUser
     private Person authenticatedUser;
     
-    public void handleAuthenticationEvent(@Observes @AuthenticatedUser String mail) {
-        this.authenticatedUser = findUser(mail);
+    public void handleAuthenticationEvent(@Observes @AuthenticatedUser String username) {
+        this.authenticatedUser = findUser(username);
     }
 
-    private Person findUser(String mail) {
+    private Person findUser(String username) {
         // Hit the the database or a service to find a user by its username and return it
         // Return the User instance
-    	return personManager.findPersonByEmail(mail);
+    	return personManager.findPersonByUsername(username);
     }
 
 }

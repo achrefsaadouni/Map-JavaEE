@@ -26,6 +26,7 @@ import javax.ws.rs.core.UriInfo;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import tn.esprit.Map.interfaces.PersonServiceRemote;
+import tn.esprit.Map.persistences.Person;
 
 @Path("/authentication")
 @RequestScoped
@@ -56,12 +57,13 @@ public class AutheticationResource {
 
 	            // Authenticate the user using the credentials provided
 	            authenticate(inputs.get("login"), inputs.get("password"));
-
+	            
 	            // Issue a token for the user
-	            String token = issueToken(inputs.get("email"));
-
+	            String token = issueToken(inputs.get("login"));
+	            Person p = 	PersonManager.findPersonByUsername(inputs.get("login"));
+	            p.setToken(token);
 	            // Return the token on the response
-	            return Response.ok(token).build();
+	           return  Response.ok(p, MediaType.APPLICATION_JSON).build();
 
 	        } catch (Exception e) {
 	            return Response.status(Response.Status.FORBIDDEN).build();
@@ -87,7 +89,7 @@ public class AutheticationResource {
 
 			String jwtToken = Jwts.builder().setSubject(username).
 					setIssuer(uriInfo.getAbsolutePath().toString())
-					.setIssuedAt(new Date()).setExpiration(toDate(LocalDateTime.now().plusMinutes(15L)))
+					.setIssuedAt(new Date()).setExpiration(toDate(LocalDateTime.now().plusMinutes(40L)))
 					.signWith(SignatureAlgorithm.HS512, key).compact();
 
 			System.out.println("the returned token is : " + jwtToken);

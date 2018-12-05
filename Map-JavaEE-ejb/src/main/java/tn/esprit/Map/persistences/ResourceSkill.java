@@ -20,18 +20,15 @@ public class ResourceSkill implements Serializable{
 	private float rateSkill;
 	
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill", updatable = false)
 	@JsonProperty("skill")
-	
 	private Skill skill;
 	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="id" , referencedColumnName="id", updatable = false)
 	@JsonProperty("resource")
-	
 	private Resource resource;
 
 	public int getIdResourceSkill() {

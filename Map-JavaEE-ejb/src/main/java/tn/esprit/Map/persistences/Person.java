@@ -39,7 +39,15 @@ public class Person implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private Role roleT;
 	
-
+	private String token;
+	
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	public Role getRoleT() {
 		return roleT;
 	}

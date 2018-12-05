@@ -1,7 +1,10 @@
 package tn.esprit.Map.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -10,6 +13,7 @@ import javax.persistence.Query;
 
 import tn.esprit.Map.interfaces.ResourceRemote;
 import tn.esprit.Map.interfaces.SkillRemote;
+import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.ResourceSkill;
 import tn.esprit.Map.persistences.Skill;
@@ -149,6 +153,19 @@ public class SkillService implements SkillRemote {
 		}
 		return false;
 	}
+
+	@Override
+	public List<Skill> orderSkillsOfProjecte(int ProjectId) {
+		Project r = em.find(Project.class, ProjectId);
+		Query q = em.createQuery(
+				"SELECT DISTINCT rs.skill FROM ProjectSkill rs where rs.project=:r ORDER BY rs.percentage desc");
+		List<Skill> listeSkill = (List<Skill>) q.setParameter("r", r).getResultList();
+		for (Skill s : listeSkill) {
+			s.setSkillResources(null);
+		}
+		return listeSkill;
+	}
+
 
 	/*
 	 * @Override public List<ResourceSkill> SkillsParResource(int idResource) {

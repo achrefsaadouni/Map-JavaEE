@@ -20,5 +20,6 @@ public interface RequestServiceRemote {
 	public float calculDaysMondate(Request request);
 	public String updateDaysMondate(int requestID);
 	public List<Request> sortByDate();
+	public List<Request> sortByDateClient(int clientId);
 
 }   

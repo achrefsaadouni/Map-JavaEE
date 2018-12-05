@@ -29,6 +29,7 @@ import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.ResourceSkill;
 import tn.esprit.Map.persistences.SeniorityType;
 import tn.esprit.Map.persistences.Skill;
+import tn.esprit.Map.persistences.Suggestion;
 
 @Stateless
 public class MandateService implements MandateServiceLocal {
@@ -58,9 +59,23 @@ public class MandateService implements MandateServiceLocal {
 			{System.out.println("available");
 			return true;}
 		else if (resource.getAvailability() == AvailabilityType.availableSoon) {
+			
+			TypedQuery<Request> query3 = em.createQuery("SELECT r FROM Request r where r.suggessedResource.id=:rId", Request.class);
+			query3.setParameter("rId", resourceId);
+			try {
+				if(!query3.getResultList().isEmpty())
+				{
+					return false;
+				}
+
+			} catch (Exception e) {
+				return false;
+			}
+			
+			
 
 			TypedQuery<Mandate> query = em.createQuery(
-					"SELECT m FROM Mandate m where m.mandateId.ressourceId=:rId ORDER BY m.mandateId.dateFin AND m.archived = false",
+					"SELECT m FROM Mandate m where m.mandateId.ressourceId=:rId  AND m.archived = false ORDER BY m.mandateId.dateFin",
 					Mandate.class);
 			query.setParameter("rId", resourceId);
 			try {
@@ -69,7 +84,6 @@ public class MandateService implements MandateServiceLocal {
 				Collections.sort(dayOffs, new Comparator<DayOff>() {
 					@Override
 					public int compare(DayOff d1, DayOff d2) {
-
 						return d2.getEndDate().compareTo(d1.getEndDate());
 					}
 				});
@@ -122,6 +136,7 @@ public class MandateService implements MandateServiceLocal {
 					link);
 			return true;
 		} catch (Exception e) {
+			System.out.println(e);
 			return false;
 		}
 		
@@ -134,6 +149,7 @@ public class MandateService implements MandateServiceLocal {
 		try {
 			results = query.getResultList();
 		} catch (Exception e) {
+			System.out.println(e);
 			results = new ArrayList<>();
 		}
 		return results;
@@ -249,11 +265,13 @@ public class MandateService implements MandateServiceLocal {
 
 	@Override
 	public boolean addMandate(int requestId, int resourceId) {
+		notif(resourceId,requestId,"http://localhost:8993/Mandate/resourceMandate");
 		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r where r.id=:rId", Request.class);
 		query.setParameter("rId", requestId);
 		Request request;
 		try {
-			request = query.getSingleResult();
+		  request = query.getSingleResult();
+		  
 		} catch (Exception e)
 
 		{
@@ -284,19 +302,8 @@ public class MandateService implements MandateServiceLocal {
 		try {
 			em.persist(mandate);
 			UpdateAvailability(mandate.getMandateId().getRessourceId(), AvailabilityType.unavailable);
-			notif(mandate.getRessource().getId(),requestId,"http://localhost:18080/Map-JavaEE-web/MAP/mandate?ressourceId="+resourceId+"&projetId="+mandate.getMandateId().getProjetId()+"&dateDebut="+convertDate(mandate.getMandateId().getDateDebut())+"&dateFin="+convertDate(mandate.getMandateId().getDateFin()));
-			TypedQuery<Project> query3 = em.createQuery("SELECT r FROM Project r where r.id=:raa", Project.class);
-			query.setParameter("raa", mandate.getProjet().getId());
-			Project project;
-			try {
-				project = query3.getSingleResult();
-				project.setLevioNumberResource(project.getLevioNumberResource()+1);
-				project.setTotalNumberResource(project.getTotalNumberResource()+1);
-			} catch (Exception e)
-
-			{
-				return false;
-			}
+			
+			em.remove(request);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -408,47 +415,47 @@ public class MandateService implements MandateServiceLocal {
 	}
 
 	@Override
-	public List<Resource> SearchResourceBySkill(int requestId) {
-//		Request request;
-//		List<Skill> listSkillsRequired = new ArrayList<>();
-//		List<Resource> listeRecourceNeeded = new ArrayList<>();
-//		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
-//		query.setParameter("rId", requestId);
-//		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m", Resource.class);
-//		try {
-//			request = query.getSingleResult();
-//			List<Resource> resources = query1.getResultList();
-//			listSkillsRequired.addAll(request.getProject().getListeSkills());
-//			resources.forEach(e -> {
-//				if(isAvailable(e.getId(),request.getStartDateMondate()) && e.getWorkProfil() == request.getRequestedProfil()){
-//					System.out.println("here");
-//					if( (request.getExperienceYear()>=3 && e.getSeniority()==SeniorityType.Senior) || (request.getExperienceYear()<3 && e.getSeniority()==SeniorityType.Junior) ){
-//				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
-//				if (resourceskills.containsAll(listSkillsRequired)) {
-//						listeRecourceNeeded.add(e);
-//				}
-//				
-//					}}
-//			});
-//			Collections.sort(listeRecourceNeeded, new Comparator<Resource>() {
-//				@Override
-//				public int compare(Resource r1, Resource r2) {
-//					
-//					if(ScoreSkill(r1,listSkillsRequired)>ScoreSkill(r2,listSkillsRequired))
-//						return -1;
-//					else if (ScoreSkill(r2,listSkillsRequired)==ScoreSkill(r2,listSkillsRequired))
-//						return 0;
-//					else return 1;
-//					
-//				}
-//			});
-//			
-//			return listeRecourceNeeded;
-//			
-//		} catch (Exception e) {
-//			return null;
-//		}
-		return null ;
+	public Suggestion SearchResourceBySkill(int requestId) {
+		Suggestion sug = new Suggestion();
+		List<Skill> listSkillsRequired = new ArrayList<>();
+		List<Resource> listeRecourceNeeded = new ArrayList<>();
+		TypedQuery<Request> query = em.createQuery("SELECT m FROM Request m where m.id=:rId", Request.class);
+		query.setParameter("rId", requestId);
+		TypedQuery<Resource> query1 = em.createQuery("SELECT m FROM Resource m where m.archived = 0", Resource.class);
+	try {
+			sug.setRequest(query.getSingleResult());
+			List<Resource> resources = query1.getResultList();
+			listSkillsRequired.addAll(skillremote.orderSkillsOfProjecte(sug.getRequest().getProject().getId()));
+			resources.forEach(e -> {
+				if(isAvailable(e.getId(),sug.getRequest().getStartDateMondate()) && e.getWorkProfil() == sug.getRequest().getRequestedProfil()){
+					System.out.println("here");
+					if( (sug.getRequest().getExperienceYear()>=3 && e.getSeniority()==SeniorityType.Senior) || (sug.getRequest().getExperienceYear()<3 && e.getSeniority()==SeniorityType.Junior) ){
+				List<Skill> resourceskills = skillremote.orderSkillsOfResource(e.getId());
+				if (resourceskills.containsAll(listSkillsRequired)) {
+						listeRecourceNeeded.add(e);
+				}
+				
+					}}
+			});
+		Collections.sort(listeRecourceNeeded, new Comparator<Resource>() {
+				@Override
+				public int compare(Resource r1, Resource r2) {
+					
+					if(ScoreSkill(r1,listSkillsRequired)>ScoreSkill(r2,listSkillsRequired))
+						return -1;
+					else if (ScoreSkill(r2,listSkillsRequired)==ScoreSkill(r2,listSkillsRequired))
+						return 0;
+					else return 1;
+					
+				}
+			});
+			sug.setResources(listeRecourceNeeded);
+			return sug;
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return null;
+		}
 	}
 
 	@Override
@@ -520,6 +527,29 @@ public class MandateService implements MandateServiceLocal {
 	
 		return totalcost;
 	}
+
+	@Override
+	public boolean notifSummon(String email, String date, int requestId,String link) {
+		TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r where r.id=:rId", Request.class);
+		query.setParameter("rId", requestId);
+		Request request;
+		try {
+			request = query.getSingleResult();
+			mail.send(email, "New Summon", "You were Summoned by a  new Client",
+					"following the acceptance of your profile by our client", request.getClient().getNameSociety(),
+					"you may be  assigned to a new project", "Project Name : " + request.getProject().getProjectName(), "",
+					"You need to be present at this Address : " + request.getProject().getAddress() + " <br> by this day : " + date
+							+ " To pass their test for more information you can contact our client at " +request.getClient().getEmail(),
+					link);
+			return true;
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
+		}
+		
+	}
+
+
 	
 	
 
