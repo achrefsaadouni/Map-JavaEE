@@ -87,7 +87,7 @@ public class MandateResource {
 				return Response.ok(
 						mandateService.getMandate(Integer.parseInt(ressourceId), Integer.parseInt(projetId),
 								simpleDateFormat.parse(dateDebut), simpleDateFormat.parse(dateFin)),
-						MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
+						MediaType.APPLICATION_JSON).build();
 			}
 
 		}
@@ -103,7 +103,7 @@ public class MandateResource {
 			else {
 				return Response
 						.ok(mandateService.getByResource(Integer.parseInt(ressourceId)), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+						.build();
 			}
 
 		}
@@ -118,7 +118,7 @@ public class MandateResource {
 
 			else {
 				return Response.ok(mandateService.getByProject(Integer.parseInt(projetId)), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+						.build();
 			}
 
 		}
@@ -136,7 +136,7 @@ public class MandateResource {
 
 			else {
 				return Response.ok(mandateService.getByStartDate(uDate), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+					.build();
 			}
 
 		}
@@ -153,7 +153,7 @@ public class MandateResource {
 
 			else {
 				return Response.ok(mandateService.getByEndDate(uDate), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+						.build();
 			}
 
 		}
@@ -173,7 +173,7 @@ public class MandateResource {
 				return Response.status(Status.NO_CONTENT).build();
 			else {
 				return Response.ok(mandateService.getByPeriod(dDate, fDate), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+						.build();
 			}
 
 		}
@@ -297,7 +297,7 @@ public class MandateResource {
 			try {
 				requestId = Integer.parseInt(inputs.get("requestId"));
 				return Response.ok(mandateService.SearchResourceBySkill(requestId), MediaType.APPLICATION_JSON)
-						.header("Access-Control-Allow-Origin", "*").build();
+						.build();
 			} catch (Exception e) {
 				return Response.status(Status.BAD_REQUEST).build();
 			}
