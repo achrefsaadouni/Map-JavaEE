@@ -5,14 +5,17 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class InBox implements Serializable {
 	@Id
 	@GeneratedValue
 	private int id;
-
 	@OneToOne(mappedBy="inBox") 
 	private Person person;
+	@JsonIgnore
 	@OneToMany(mappedBy = "inBox")
 	private List<Message> messages;
 
@@ -32,11 +35,11 @@ public class InBox implements Serializable {
 	public void setPerson(Person person) {
 		this.person = person;
 	}
-
+	@JsonIgnore
 	public List<Message> getMessages() {
 		return messages;
 	}
-
+	@JsonProperty
 	public void setMessages(List<Message> messages) {
 		this.messages = messages;
 	}
@@ -74,7 +77,12 @@ public class InBox implements Serializable {
 			return false;
 		return true;
 	}
-	
 
+	@Override
+	public String toString() {
+		return "InBox [id=" + id + "]";
+	}
+	
+    
 	 
 }

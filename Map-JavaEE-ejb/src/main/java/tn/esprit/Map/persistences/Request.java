@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+@JsonRootName("request")
 @Entity
 public class Request implements Serializable {
 	@Id
@@ -24,6 +26,8 @@ public class Request implements Serializable {
 	private Date startDateMondate;
 	@Temporal(TemporalType.DATE)
 	private Date endDateMondate;
+	private int accept;
+	private float daysMondate;
 	@ManyToOne
 	private Administrator administrator;
 	@ManyToOne
@@ -127,6 +131,24 @@ public class Request implements Serializable {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	
+
+	public int getAccept() {
+		return accept;
+	}
+
+	public void setAccept(int accept) {
+		this.accept = accept;
+	}
+
+	public float getDaysMondate() {
+		return daysMondate;
+	}
+
+	public void setDaysMondate(float daysMondate) {
+		this.daysMondate = daysMondate;
 	}
 
 	public Request() {

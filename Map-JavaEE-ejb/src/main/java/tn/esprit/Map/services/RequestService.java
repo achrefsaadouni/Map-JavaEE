@@ -3,7 +3,8 @@ package tn.esprit.Map.services;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateful;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -15,15 +16,21 @@ import tn.esprit.Map.persistences.Administrator;
 import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.Request;
 
-@Stateful
+@Stateless
 public class RequestService implements RequestServiceRemote{
 	
 	@PersistenceContext(unitName="MAP")
 	EntityManager em;
-
+	@EJB
+	MailService mail;
+	
 	@Override
-	public int addRequest(Request request) {
-		em.persist(request);  
+	public int addRequest(Request request  , int idc) {
+		Client client = em.find(Client.class, idc);
+		//mail.send(client.getEmail(), "Request accepted", "your request has been accepted", "your request has been accepted","", "", "", "", "", "");
+	    em.persist(request); 
+		updateDaysMondate(request.getId());
+		request.setClient(client);
 		return request.getId();
 	}
     
@@ -68,10 +75,17 @@ public class RequestService implements RequestServiceRemote{
 
 	@Override
 	public String updateRequest(int requestId) {
+		Request request = em.find(Request.class, requestId);
 		Query query = em.createQuery("update Request r set r.accept= :accept where r.id= :requestId");
 		query.setParameter("accept",1);
 		query.setParameter("requestId", requestId);
 		int update = query.executeUpdate();
+		try {
+			Client client = request.getClient();
+			mail.send(client.getEmail(), "Request accepted", "your request has been accepted", "your request has been accepted","", "", "", "", "", "");
+		} catch (Exception e) {
+			System.out.println("pas de client");
+		}
 		if (update == 1) {
 			return "success";
 		} else {

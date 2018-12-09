@@ -31,8 +31,8 @@ public class Client extends Person implements Serializable {
 	@JsonIgnore
 	@JsonProperty("projects")
 	private List<Project> projects;
+	@JsonIgnore
 	
-	@JsonProperty("requests")
 	@OneToMany(mappedBy = "client")
 	private List<Request> requests;
 
@@ -81,9 +81,11 @@ public class Client extends Person implements Serializable {
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
 	}
+	@JsonIgnore
 	public List<Request> getRequests() {
 		return requests;
 	}
+	@JsonProperty
 	public void setRequests(List<Request> requests) {
 		this.requests = requests;
 	}

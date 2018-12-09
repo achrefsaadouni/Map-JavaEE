@@ -10,7 +10,7 @@ import tn.esprit.Map.persistences.Request;
 @Remote
 public interface RequestServiceRemote {
 	
-	public int addRequest(Request request);
+	public int addRequest(Request request ,int id);
 	public List<Request> AllRequest();
 	public Request getRequestById(int requestID);
 	public void affectClienttToRequest(int requestId , int clientId);

@@ -8,6 +8,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -41,11 +42,11 @@ public class RequestWebService {
 	}
 	
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN) 
-	@Path("/addRequest")
-	public int addRequest(Request request) {	
-		int RequestId = requestService.addRequest(request);
+	@Path("/addRequest/{id}")
+	public int addRequest(Request request ,@PathParam("id") int id ) {	
+		int RequestId = requestService.addRequest(request , id);
 		return RequestId;
 	}
 	
@@ -65,5 +66,33 @@ public class RequestWebService {
 
 	}
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)   
+	@Path("/getSortedRequest")
+	public Response getSortedRequest(String requestID) {
+		
+		return Response.ok(requestService.sortByDate(), MediaType.APPLICATION_JSON).build();
+
+	}
+	
+	
+	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("/updateRequest/{idRequest}")
+	public String updateRequest(@PathParam("idRequest") String requestID){
+		return requestService.updateRequest(Integer.parseInt(requestID));
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)   
+	@Path("/getSortedRequests")
+	public Response ViewSortedMessages() {
+		if (requestService.sortByDate() == null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+ 		if (requestService.sortByDate().size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Pas de contenu").build();
+ 		else
+			return Response.ok(requestService.sortByDate(), MediaType.APPLICATION_JSON).build();
+ 	}
 
 }
