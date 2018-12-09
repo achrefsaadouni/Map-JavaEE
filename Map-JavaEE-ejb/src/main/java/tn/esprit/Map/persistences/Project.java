@@ -21,33 +21,32 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class Project implements Serializable {
 	@Id
 	@GeneratedValue
-	@JsonProperty("idProject")
+	@JsonProperty("id")
 	private int id;
-	@JsonProperty("NameProject")
 	private String projectName;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("StartDate")
+	@JsonProperty("startDate")
 	private Date startDate;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("EndDate")
+	@JsonProperty("endDate")
 	private Date endDate;
-	@JsonProperty("Address")
+	@JsonProperty("address")
 	private String address;
-	@JsonProperty("TotalNbResource")
+	@JsonProperty("totalNumberResource")
 	private int totalNumberResource;
-	@JsonProperty("LevioNbResource")
+	@JsonProperty("levioNumberResource")
 	private int levioNumberResource;
-	@JsonProperty("Picture")
+	@JsonProperty("picture")
 	private String picture;
 	@Enumerated(EnumType.STRING)
-	@JsonProperty("ProjectType")
+	@JsonProperty("projectType")
 	private ProjectType projectType;
 	@ManyToOne
-	@JsonProperty("OrganizationalChart")
+	@JsonProperty("organizationalChart_id")
 	private OrganizationalChart organizationalChart;
 	@ManyToOne	
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
-	@JsonProperty("Client")
+	@JsonProperty("clientId")
 	private Client client;
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
 	@JsonIgnore
@@ -55,9 +54,12 @@ public class Project implements Serializable {
 	@OneToOne(mappedBy="project")
 	@JsonIgnore
 	private Request request;
-	@ManyToMany
-	private Set<Skill> listeSkills;
 	
+	@OneToMany(mappedBy="project", fetch = FetchType.EAGER)
+	private Set<ProjectSkill> projectSkills;
+	
+
+
 	public int getId() {
 		return id;
 	}
@@ -153,6 +155,18 @@ public class Project implements Serializable {
 	public void setClient(Client client) {
 		this.client = client;
 	}
+
+	public Set<ProjectSkill> getProjectSkills() {
+		return projectSkills;
+	}
+
+	public void setProjectSkills(Set<ProjectSkill> projectSkills) {
+		this.projectSkills = projectSkills;
+	}
+
+
+	
+	
 
 
 

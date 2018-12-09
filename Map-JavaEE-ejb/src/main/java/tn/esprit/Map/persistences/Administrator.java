@@ -15,8 +15,9 @@ public class Administrator extends Person implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@JsonIgnore
+	
 	@OneToMany(mappedBy = "administrator")
+	@JsonIgnore
 	private List<Request> requests;
 	
 	public List<Request> getRequests() {

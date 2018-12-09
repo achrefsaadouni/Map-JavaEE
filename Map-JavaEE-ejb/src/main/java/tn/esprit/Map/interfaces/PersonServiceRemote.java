@@ -16,5 +16,7 @@ public interface PersonServiceRemote {
 	
 	public Person getPersonById(int id);
 	public String test(Message msg); 
-
+	public boolean login (String username,String password);
+	public Person findPersonByUsername(String username);
+ 
 }

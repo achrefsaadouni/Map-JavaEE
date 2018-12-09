@@ -8,11 +8,16 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+
 import tn.esprit.Map.interfaces.ResourceRemote;
 import tn.esprit.Map.persistences.AvailabilityType;
+import tn.esprit.Map.persistences.Client;
+import tn.esprit.Map.persistences.JobType;
+import tn.esprit.Map.persistences.Note;
 import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.ResourceSkill;
+import tn.esprit.Map.persistences.Role;
 import tn.esprit.Map.persistences.Skill;
 
 @Stateless
@@ -21,13 +26,14 @@ public class ResourceService implements ResourceRemote {
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
 
+	
 	@Override
+	
 	public void AddResource(Resource resource) {
 		resource.setAvailability(AvailabilityType.available);
 		resource.setArchived(0);
 		resource.setMoyenneSkill(0);
 		em.persist(resource);
-
 	}
 
 	@Override
@@ -74,7 +80,14 @@ public class ResourceService implements ResourceRemote {
 		if (resource.isArchived() == 0 && resource.getAvailability() == AvailabilityType.available) {
 			resource.setAvailability(AvailabilityType.unavailable);
 			resource.setProject(projet);
-			em.merge(resource);
+			if(resource.getJobType()==JobType.LevioResource){
+				projet.setLevioNumberResource(projet.getLevioNumberResource()+1);
+			}
+			else{
+				projet.setTotalNumberResource(projet.getTotalNumberResource()+1);
+				
+			}
+			em.persist(resource);
 			return true;
 		}
 
@@ -83,10 +96,16 @@ public class ResourceService implements ResourceRemote {
 	}
 
 	@Override
-	public String UpdateAffectation(int resourceId, int ProjectId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean UpdateAffectation(int resourceId, int projetId) {
+		Resource resource = em.find(Resource.class, resourceId);
+		Project projet = em.find(Project.class, projetId);
+		if(projet == null){ return false;}
+		resource.setProject(projet);
+		em.merge(resource);
+		return true;
 	}
+	
+	
 
 	@Override
 	public List<tn.esprit.Map.persistences.Resource> listResource() {
@@ -96,10 +115,8 @@ public class ResourceService implements ResourceRemote {
 		if (resources.isEmpty()) {
 			return null;
 		} else
-		for(Resource r : resources){
-			r.setProject(null);
-			r.setDayOffs(null);
-			r.setResourceSkills(null);}
+		/*for(Resource r : resources){
+			r.setResourceSkills(null);}*/
 			return resources;
 	}
 
@@ -116,16 +133,12 @@ public class ResourceService implements ResourceRemote {
 	@Override
 	public List<Resource> getResourceArchive() {
 		int valeur = 1;
-		String requestJPQL = "select res.id , res.firstName , res.lastName , "
-				+ "res.login , res.password  , res.availability , res.businessSector , "
-				+ "res.cv , res.jobType , res.note , res.picture , res.salary, res.seniority , "
-				+ "res.workProfil , res.archived , res.email  from Resource res where res.archived=" + valeur;
+		String requestJPQL = "select res  from Resource res where res.archived=" + valeur;
 		Query query = em.createQuery(requestJPQL);
 		List<Resource> rs = (List<Resource>) query.getResultList();
 		for(Resource r : rs){
-			r.setProject(null);
-			r.setDayOffs(null);
-			r.setResourceSkills(null);}
+			r.setResourceSkills(null);
+			}
 			
 		return rs;
 	}
@@ -148,6 +161,49 @@ public class ResourceService implements ResourceRemote {
 		return moyenne ;
 		
 		
+	}
+
+	@Override
+	public Boolean noteResource(int resourceId, int clientId , float note) {
+		Resource resource = em.find(Resource.class, resourceId);
+		Client client = em.find(Client.class, clientId);
+		Query q = em.createQuery("SELECT n FROM Note n WHERE n.resource =:resource AND n.client=:client");
+		List<Note> notes = (List<Note>)q.setParameter("resource", resource).setParameter("client", client).getResultList();
+		if(notes.size()!=0){
+			return false;
+		}
+		if(note<0 || note > 20){
+			return false;
+		}
+		Note n = new Note();
+		n.setResource(resource);
+		n.setClient(client);
+		n.setNoteResource(note);
+		em.persist(n);
+		return true;
+	}
+
+
+	@Override
+	public Boolean DeleteAffectation(int resourceId) {
+		Resource resource = em.find(Resource.class, resourceId);
+		resource.setAvailability(AvailabilityType.available);
+		resource.setProject(null);
+		em.merge(resource);
+		return true;
+	}
+
+	@Override
+	public List<Resource> ListResourceParMoyenne() {
+		Query q = em.createQuery("SELECT r FROM Resource r Where r.archived = :archived AND r.availability = :Availibility AND r.roleT =:role "
+				+ "ORDER BY r.moyenneSkill DESC");
+		List<Resource> liste =(List<Resource>) q.setParameter("archived", 0).setParameter("Availibility", AvailabilityType.available)
+				.setParameter("role", Role.Resource).getResultList();
+		if(liste.size()==0){
+			return null;
+		}
+		return liste;
+			
 	}
 
 }

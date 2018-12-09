@@ -4,28 +4,30 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 @Entity
 @JsonRootName("ResourceSkill")
 public class ResourceSkill implements Serializable{
+	
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
-	@JsonProperty("IdResourceSkill")
+	@JsonProperty("idResourceSkill")
 	private int IdResourceSkill;
 	@JsonProperty("rateSkill")
 	private float rateSkill;
 	
 	
-	
 	@ManyToOne
-	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill", insertable = false, updatable = false)
+	@JoinColumn(name="IdSkill" , referencedColumnName="IdSkill", updatable = false)
 	@JsonProperty("skill")
 	private Skill skill;
 	
+	@JsonIgnore
 	@ManyToOne
-	@JoinColumn(name="id" , referencedColumnName="id", insertable = false, updatable = false)
+	@JoinColumn(name="id" , referencedColumnName="id", updatable = false)
 	@JsonProperty("resource")
 	private Resource resource;
 
@@ -36,7 +38,7 @@ public class ResourceSkill implements Serializable{
 	public void setIdResourceSkill(int idResourceSkill) {
 		IdResourceSkill = idResourceSkill;
 	}
-
+	@JsonIgnore
 	public Skill getSkill() {
 		return skill;
 	}
@@ -44,7 +46,7 @@ public class ResourceSkill implements Serializable{
 	public void setSkill(Skill skill) {
 		this.skill = skill;
 	}
-
+	@JsonIgnore
 	public Resource getResource() {
 		return resource;
 	}
@@ -59,6 +61,11 @@ public class ResourceSkill implements Serializable{
 
 	public void setRateSkill(float rateSkill) {
 		this.rateSkill = rateSkill;
+	}
+
+	@Override
+	public String toString() {
+		return "ResourceSkill [IdResourceSkill=" + IdResourceSkill + ", rateSkill=" + rateSkill + "]";
 	}
 	
 	

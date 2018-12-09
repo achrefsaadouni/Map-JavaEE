@@ -39,10 +39,30 @@ public class Person implements Serializable {
 	@JsonIgnore
 	@OneToOne(mappedBy="person",cascade={CascadeType.REMOVE})
 	private Message message;
-	
+
 	@OneToMany(mappedBy="person2ID")
 	private List<DiscussionChat> discussions;
 
+
+	@Enumerated(EnumType.STRING)
+	@JsonProperty("role")
+	private Role roleT;
+	
+	private String token;
+	
+	
+	public String getToken() {
+		return token;
+	}
+	public void setToken(String token) {
+		this.token = token;
+	}
+	public Role getRoleT() {
+		return roleT;
+	}
+	public void setRoleT(Role role) {
+		this.roleT = role;
+	}
 
 	public int getId() {
 		return id;
@@ -75,7 +95,6 @@ public class Person implements Serializable {
 	public String getPassword() {
 		return password;
 	}
-	@XmlElement(name="password")
 	public void setPassword(String password) {
 		this.password = password;
 	}

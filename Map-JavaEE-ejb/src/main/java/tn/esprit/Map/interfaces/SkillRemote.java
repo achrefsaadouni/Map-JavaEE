@@ -1,6 +1,7 @@
 package tn.esprit.Map.interfaces;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Remote;
 
@@ -29,10 +30,13 @@ public interface SkillRemote {
 
 	public List<Skill> orderSkillsOfResource(int ResourceId);
 	
+	public List<Skill> orderSkillsOfProjecte(int ProjectId);
+	
 	//public List<ResourceSkill> SkillsParResource(int idResource);
 
 	public List<Resource> orderResourcesOfSkill(int SkillId);
 	
 	public Boolean RateSkill(int ResourceId , int SkillId , float rate);
+	
 
 }

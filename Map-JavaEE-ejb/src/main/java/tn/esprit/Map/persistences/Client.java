@@ -27,14 +27,29 @@ public class Client extends Person implements Serializable {
 	private String logo;
 	@JsonProperty("address")
 	private String address;
-	@OneToMany(mappedBy = "client",fetch=FetchType.EAGER)
+	private Double longitude;
+	private Double latitude;
+		
+	@OneToMany(mappedBy = "client")
 	@JsonIgnore
 	@JsonProperty("projects")
 	private List<Project> projects;
 	@JsonIgnore
-	
 	@OneToMany(mappedBy = "client")
+	@JsonProperty("contracts")
+	private Set<Contract> contracts;
+	
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
+	@JsonProperty("noteClient")
+	private Set<Note> noteclient;
+	
+	@JsonProperty("requests")
+	@JsonIgnore
+	@OneToMany(mappedBy = "client",fetch=FetchType.EAGER)
 	private List<Request> requests;
+	
 
 	public ClientType getClientType() {
 		return clientType;
@@ -73,11 +88,11 @@ public class Client extends Person implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-
+	@JsonIgnore
 	public List<Project> getProjects() {
 		return projects;
 	}
-
+	@JsonProperty
 	public void setProjects(List<Project> projects) {
 		this.projects = projects;
 	}
@@ -89,6 +104,33 @@ public class Client extends Person implements Serializable {
 	public void setRequests(List<Request> requests) {
 		this.requests = requests;
 	}
+	@JsonIgnore
+	public Set<Contract> getContracts() {
+		return contracts;
+	}
+	@JsonProperty
+	public void setContracts(Set<Contract> contracts) {
+		this.contracts = contracts;
+	}
+	public Set<Note> getNoteclient() {
+		return noteclient;
+	}
+	public void setNoteclient(Set<Note> noteclient) {
+		this.noteclient = noteclient;
+	}
+	public Double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(Double longitude) {
+		this.longitude = longitude;
+	}
+	public Double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(Double latitude) {
+		this.latitude = latitude;
+	}
+	
 	
 
 	

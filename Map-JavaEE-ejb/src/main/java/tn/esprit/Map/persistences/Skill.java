@@ -13,25 +13,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Entity
 public class Skill implements Serializable {
 
-	@JsonProperty("IdSkill")
+	@JsonProperty("idSkill")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int IdSkill;
 	
-	@JsonProperty("NameSkill")
+	@JsonProperty("nameSkill")
 	private String NameSkill;
 
-	
-	@JsonProperty("skillResources")
-	@OneToMany(mappedBy="skill" , fetch=FetchType.EAGER)
 	@JsonIgnore
+	@OneToMany(mappedBy="skill")
 	private Set<ResourceSkill> skillResources;
 
-	@JsonProperty("listeProjects")
-	@ManyToMany(mappedBy="listeSkills" , fetch=FetchType.EAGER)
 	@JsonIgnore
-	private Set<Project> listeProjects;
-
+	@OneToMany(mappedBy="skill")
+	private Set<ProjectSkill> projectSkills;
+	
 	
 	public int getIdSkill() {
 		return IdSkill;
@@ -57,6 +54,39 @@ public class Skill implements Serializable {
 
 	public void setSkillResources(Set<ResourceSkill> skillResources) {
 		this.skillResources = skillResources;
+	}
+
+	@Override
+	public String toString() {
+		return "Skill [IdSkill=" + IdSkill + ", NameSkill=" + NameSkill + ", skillResources=" + skillResources + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + IdSkill;
+		result = prime * result + ((NameSkill == null) ? 0 : NameSkill.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Skill other = (Skill) obj;
+		if (IdSkill != other.IdSkill)
+			return false;
+		if (NameSkill == null) {
+			if (other.NameSkill != null)
+				return false;
+		} else if (!NameSkill.equals(other.NameSkill))
+			return false;
+		return true;
 	}
 
 	
