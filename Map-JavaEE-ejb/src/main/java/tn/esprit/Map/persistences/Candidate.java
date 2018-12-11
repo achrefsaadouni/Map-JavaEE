@@ -1,6 +1,7 @@
 package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
@@ -35,6 +36,9 @@ public class Candidate extends Person implements Serializable {
 	@OneToOne
 	private Project project;
 	
+	@OneToMany(mappedBy="candidate")
+	private List<TestScore> TestScore;
+	
 	public Set<Test> getTest() {
 		return Test;
 	}
@@ -64,6 +68,12 @@ public class Candidate extends Person implements Serializable {
 	}
 	public void setProject(Project project) {
 		this.project = project;
+	}
+	public List<TestScore> getTestScore() {
+		return TestScore;
+	}
+	public void setTestScore(List<TestScore> testScore) {
+		TestScore = testScore;
 	}
 	
 

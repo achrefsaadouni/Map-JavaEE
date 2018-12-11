@@ -3,13 +3,16 @@ package tn.esprit.Map.persistences;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -39,13 +42,18 @@ public class Test implements Serializable {
 	private String TestFile ;
 	
 	private String TestResponseFile ;
-	
+	@ManyToMany (mappedBy="test")
+	private List<Modules> modules;
 	private String Employment_Letter;
 	
 	@JsonIgnore
 	@ManyToOne
 	private Candidate candidate;
-
+	@OneToMany(mappedBy="test")
+	private List<TestScore> TestScore;
+	
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -118,6 +126,22 @@ public class Test implements Serializable {
 
 	public void setTestUploadTime(Timestamp testUploadTime) {
 		this.testUploadTime = testUploadTime;
+	}
+
+	public List<Modules> getModules() {
+		return modules;
+	}
+
+	public void setModules(List<Modules> modules) {
+		this.modules = modules;
+	}
+
+	public List<TestScore> getTestScore() {
+		return TestScore;
+	}
+
+	public void setTestScore(List<TestScore> testScore) {
+		TestScore = testScore;
 	}
 
 	
