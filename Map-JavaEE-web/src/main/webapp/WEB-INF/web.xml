@@ -13,9 +13,5 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.jsf</url-pattern>
 	</servlet-mapping>
-	<servlet>
-		<servlet-name>StartUpService</servlet-name>
-		<servlet-class>tn.esprit.Map.services.StartUpService</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
+	
 </web-app>
