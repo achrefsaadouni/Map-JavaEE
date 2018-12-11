@@ -34,8 +34,6 @@ public class Client extends Person implements Serializable {
 	@JsonIgnore
 	@JsonProperty("projects")
 	private List<Project> projects;
-	
-	
 	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	@JsonProperty("contracts")

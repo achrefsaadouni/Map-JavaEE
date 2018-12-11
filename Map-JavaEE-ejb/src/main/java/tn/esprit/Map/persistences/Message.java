@@ -8,48 +8,57 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 @Entity
-@XmlRootElement(name="employe")
+@JsonRootName("Message")
 public class Message implements Serializable {
 	
 
 	@Id
 	@GeneratedValue
 	private int id;
+	
 	private String receiver;
+
 	private String sender;
-	private String object;
+	private String obj;
 	private String content;
-	@Temporal(TemporalType.TIMESTAMP) 
+	@Temporal(TemporalType.DATE) 
 	private Date dateMessage;
 	private TypeMessage typeMessage; 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	private InBox inBox;
 	@OneToOne
 	private Person person;
+	
 	
 
 	public int getId() {
 		return id;
 	}
 
-	@XmlAttribute(name="id",required=true)
+	
 	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getObject() {
-		return object;
+	
+    
+	public String getObj() {
+		return obj;
 	}
-	@XmlElement(name="Object")
-	public void setObject(String object) {
-		this.object = object;
+	
+	public void setObj(String obj) {
+		this.obj = obj;
 	}
 
 	public String getContent() {
 		return content;
 	}
-	@XmlElement(name="Content")
+	
 	public void setContent(String content) {
 		this.content = content;
 	}
@@ -57,7 +66,7 @@ public class Message implements Serializable {
 	public Date getDateMessage() {
 		return dateMessage;
 	}
-	@XmlElement(name="DateMessage")
+	
 	public void setDateMessage(Date dateMessage) {
 		this.dateMessage = dateMessage;
 	}
@@ -65,7 +74,7 @@ public class Message implements Serializable {
 	public TypeMessage getTypeMessage() {
 		return typeMessage;
 	}
-	@XmlElement(name="TypeMessage")
+	
 	public void setTypeMessage(TypeMessage typeMessage) {
 		this.typeMessage = typeMessage;
 	}
@@ -73,7 +82,7 @@ public class Message implements Serializable {
 	public InBox getInBox() {
 		return inBox;
 	}
-	@XmlElement(name="InBox")
+	
 	public void setInBox(InBox inBox) {
 		this.inBox = inBox;
 	}
@@ -81,15 +90,15 @@ public class Message implements Serializable {
 	public String getReceiver() {
 		return receiver;
 	}
-	@XmlElement(name="Receiver")
+	
 	public void setReceiver(String receiver) {
-		receiver = receiver;
+		this.receiver = receiver;
 	}
 
 	public String getSender() {
 		return sender;
 	}
-	@XmlElement(name="Sender")
+	
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
@@ -97,7 +106,7 @@ public class Message implements Serializable {
 	public Person getPerson() {
 		return person;
 	}
-	@XmlElement(name="Person")
+	
 	public void setPerson(Person person) {
 		this.person = person;
 	}
@@ -115,7 +124,7 @@ public class Message implements Serializable {
 		result = prime * result + ((dateMessage == null) ? 0 : dateMessage.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((inBox == null) ? 0 : inBox.hashCode());
-		result = prime * result + ((object == null) ? 0 : object.hashCode());
+		result = prime * result + ((obj == null) ? 0 : obj.hashCode());
 		result = prime * result + ((person == null) ? 0 : person.hashCode());
 		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
 		result = prime * result + ((typeMessage == null) ? 0 : typeMessage.hashCode());
@@ -153,10 +162,10 @@ public class Message implements Serializable {
 				return false;
 		} else if (!inBox.equals(other.inBox))
 			return false;
-		if (object == null) {
-			if (other.object != null)
+		if (obj == null) {
+			if (other.obj != null)
 				return false;
-		} else if (!object.equals(other.object))
+		} else if (!obj.equals(other.obj))
 			return false;
 		if (person == null) {
 			if (other.person != null)
@@ -173,6 +182,12 @@ public class Message implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Message [id=" + id + ", receiver=" + receiver + ", sender=" + sender + ", obj=" + obj
+				+ ", content=" + content + ", dateMessage=" + dateMessage + ", typeMessage=" + typeMessage + "]";
+	}
 
 
+    
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 @JsonRootName("person")
@@ -31,11 +32,18 @@ public class Person implements Serializable {
 	private int archived;
 	@JsonProperty("notePerson")
 	private double notePerson;
+	@JsonIgnore
 	@OneToOne
-	@JsonProperty("inBox")
+	//@JsonProperty("inBox")
 	private InBox inBox;
-	@OneToOne(mappedBy="person")
+	@JsonIgnore
+	@OneToOne(mappedBy="person",cascade={CascadeType.REMOVE})
 	private Message message;
+
+	@OneToMany(mappedBy="person2ID")
+	private List<DiscussionChat> discussions;
+
+
 	@Enumerated(EnumType.STRING)
 	@JsonProperty("role")
 	private Role roleT;
@@ -55,6 +63,7 @@ public class Person implements Serializable {
 	public void setRoleT(Role role) {
 		this.roleT = role;
 	}
+
 	public int getId() {
 		return id;
 	}
@@ -89,10 +98,11 @@ public class Person implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	@JsonIgnore
 	public InBox getInBox() {
 		return inBox;
 	}
+	@JsonProperty
 	public void setInBoxs(InBox inBox) {
 		this.inBox = inBox;
 	}
@@ -117,14 +127,22 @@ public class Person implements Serializable {
 	public void setNotePerson(double notePerson) {
 		this.notePerson = notePerson;
 	}
+	@JsonIgnore
 	public Message getMessage() {
 		return message;
 	}
+	@JsonProperty
 	public void setMessage(Message message) {
 		this.message = message;
 	}
 	public int getArchived() {
 		return archived;
+	}
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", login=" + login
+				+ ", password=" + password + ", email=" + email + ", archived=" + archived + ", notePerson="
+				+ notePerson + "]";
 	}
 
    

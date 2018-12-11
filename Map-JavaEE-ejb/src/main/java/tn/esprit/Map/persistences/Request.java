@@ -5,9 +5,15 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+
+import com.fasterxml.jackson.annotation.JsonRootName;
+
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
 @Entity
+@JsonRootName("request")
 public class Request implements Serializable {
 	@Id
 	@GeneratedValue( strategy = GenerationType.IDENTITY )
@@ -27,6 +33,8 @@ public class Request implements Serializable {
 	private Date startDateMondate;
 	@Temporal(TemporalType.DATE)
 	private Date endDateMondate;
+	private int accept;
+	private float daysMondate;
 	@ManyToOne
 	@JsonIgnore
 	private Administrator administrator;
@@ -132,6 +140,24 @@ public class Request implements Serializable {
 
 	public void setClient(Client client) {
 		this.client = client;
+	}
+	
+	
+
+	public int getAccept() {
+		return accept;
+	}
+
+	public void setAccept(int accept) {
+		this.accept = accept;
+	}
+
+	public float getDaysMondate() {
+		return daysMondate;
+	}
+
+	public void setDaysMondate(float daysMondate) {
+		this.daysMondate = daysMondate;
 	}
 
 	public Request() {

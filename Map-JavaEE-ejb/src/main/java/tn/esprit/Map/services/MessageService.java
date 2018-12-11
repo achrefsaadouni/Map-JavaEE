@@ -1,8 +1,9 @@
 package tn.esprit.Map.services;
 
+import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateful;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +16,7 @@ import tn.esprit.Map.persistences.Person;
 import tn.esprit.Map.persistences.Request;
 import tn.esprit.Map.persistences.TypeMessage;
 
-@Stateful
+@Stateless
 public class MessageService implements MessageServiceRemote {
 
 
@@ -23,11 +24,14 @@ public class MessageService implements MessageServiceRemote {
 	EntityManager em; 
 
 	@Override
-	public int addMessage(Message message) {
-		
+	public int addMessage(Message message,int personID) {
+		Person personne = em.find(Person.class, personID);
 		try {
-			
+			message.setDateMessage(new Date());
 			em.persist(message);
+			message.setPerson(personne);
+			updateMessage(personne);
+			
 			
 		}
 		catch(NullPointerException e){
@@ -39,7 +43,13 @@ public class MessageService implements MessageServiceRemote {
 	@Override
 	public int deleteMessage(int messageID) {
 		Message message = em.find(Message.class,messageID);
-		em.remove(message);
+		
+		if(message.getPerson()!=null)
+		{
+			this.updatePersonMessage(message);
+			
+		}
+		this.deleteMessageJPQL(message);
 		return message.getId();
 	}
 
@@ -114,6 +124,52 @@ public class MessageService implements MessageServiceRemote {
 		//query.setParameter("personne",personne);
 		List<Message> results = query.getResultList();
 		return results;
+	}
+
+	@Override
+	public int addMessage2(Message message) {
+		try {
+			
+			em.persist(message);
+				
+			
+		}
+		catch(NullPointerException e){
+			System.out.println("error");
+		}
+		return message.getId();
+	}
+
+	@Override
+	public Message getMessageByID(int messageID) {
+		Message message = em.find(Message.class, messageID);
+		return message;
+	}
+
+	@Override
+	public String updatePersonMessage(Message message) {
+		Query query = em.createQuery("update Message m set m.person= :person where m.id= :messageId");
+		query.setParameter("person",null);
+		query.setParameter("messageId", message.getId());
+		int update = query.executeUpdate();
+		if (update == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
+	@Override
+	public String deleteMessageJPQL(Message message) {
+		Query query = em.createQuery("DELETE FROM Message m WHERE m.id = :messageId");
+		query.setParameter("messageId", message.getId());
+		int update = query.executeUpdate();
+		if (update == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
+		
 	}
 
 	
