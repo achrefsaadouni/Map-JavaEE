@@ -12,13 +12,12 @@ public class TestScore implements Serializable{
 	
 	@EmbeddedId
 	private CanTestPk idTestScore;
-	private int score ;
+	private int score = 0;
 	@ManyToOne
 	@JoinColumn(name="Id_test" , referencedColumnName="id",insertable=false,updatable=false)
 	private Test test ;
 	@ManyToOne
 	@JoinColumn(name="id_Candidate" , referencedColumnName="id",insertable=false,updatable=false)
-
 	private Candidate candidate ;
 	
 	

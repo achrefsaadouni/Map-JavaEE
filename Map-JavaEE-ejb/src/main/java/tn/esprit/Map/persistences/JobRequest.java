@@ -14,21 +14,21 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class JobRequest implements Serializable {
 	@Id
 	@GeneratedValue
-	@JsonProperty("id")
+
 	private int id;
 	@Enumerated(EnumType.STRING)
-	@JsonProperty("stateType")
+
 	private StateType stateType;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("rdvdate")
+
 	private Date rdvdate;
 	@Temporal(TemporalType.DATE)
-	@JsonProperty("sentdate")
+
 	private Date sentdate;
-	@JsonProperty("speciality")
+	
 	private String speciality;
-	@JsonProperty("Cv")
-	private String Cv;
+
+
 	@OneToOne
 	private Candidate candidate;
 	
@@ -62,14 +62,6 @@ public class JobRequest implements Serializable {
 		this.candidate = candidate;
 	}
 	
-	public String getCv() {
-		return Cv;
-	}
-
-	public void setCv(String cv) {
-		Cv = cv;
-	}
-
 	public Date getRdvdate() {
 		return rdvdate;
 	}

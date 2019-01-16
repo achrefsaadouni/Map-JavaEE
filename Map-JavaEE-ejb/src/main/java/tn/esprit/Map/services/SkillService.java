@@ -39,7 +39,6 @@ public class SkillService implements SkillRemote {
 			return false;
 		}
 		Skill s = skills.get(0);
-		s.setIdSkill(skill.getIdSkill());
 		s.setNameSkill(skill.getNameSkill());
 		em.merge(s);
 		return true;
@@ -93,11 +92,19 @@ public class SkillService implements SkillRemote {
 				"SELECT DISTINCT rs.skill FROM ResourceSkill rs where rs.resource=:r ORDER BY rs.rateSkill desc");
 		List<Skill> listeSkill = (List<Skill>) q.setParameter("r", r).getResultList();
 
-		for (Skill s : listeSkill) {
-			s.setSkillResources(null);
-
-		}
+	
 		return listeSkill;
+	}
+	@Override
+	public List<ResourceSkill> ResourceSkillOrdered(int ResourceId){
+		Resource r = em.find(Resource.class, ResourceId);
+		Query q = em.createQuery(
+				"SELECT DISTINCT rs FROM ResourceSkill rs where rs.resource=:r ORDER BY rs.rateSkill desc");
+		List<ResourceSkill> listeSkill = (List<ResourceSkill>) q.setParameter("r", r).getResultList();
+
+		
+		return listeSkill;
+		
 	}
 
 	@Override

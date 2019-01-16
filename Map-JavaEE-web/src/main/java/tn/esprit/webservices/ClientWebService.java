@@ -1,5 +1,7 @@
 package tn.esprit.webservices;
 
+import java.util.List;
+
 import javax.annotation.ManagedBean;
 import javax.ejb.EJB;
 import javax.inject.Inject;
@@ -51,6 +53,16 @@ public class ClientWebService {
 	public Client getClientById(@QueryParam("idClient") String idClient) {
 		return clientRemote.getClientById(Integer.parseInt(idClient));
 
+	}
+	
+	
+	
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getClients")
+	public List<Client> getAllClientAngular() {
+		return clientRemote.getAllClientsAngular();
 
 	}
 	
@@ -79,6 +91,14 @@ public class ClientWebService {
 	@Produces(MediaType.TEXT_PLAIN)
 	public String updateClient(Client client) {
 		return clientRemote.updateClientByAdmin(client);
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("/updatePassword")
+	public String updateClientPassword(Client client) {
+		return clientRemote.updateClientPassword(client);
 	}
 
 	@DELETE

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @Entity
@@ -40,6 +41,7 @@ public class Request implements Serializable {
 	private Administrator administrator;
 	@ManyToOne
 	@JoinColumn(insertable = false, updatable = false)
+	@JsonProperty("Client")
 	private Client client;
 	@OneToOne
 	private Resource suggessedResource; 

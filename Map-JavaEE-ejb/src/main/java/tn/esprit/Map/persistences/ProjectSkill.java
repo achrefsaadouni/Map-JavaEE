@@ -47,6 +47,18 @@ public class ProjectSkill implements Serializable{
 	public void setPercentage(int percentage) {
 		this.percentage = percentage;
 	}
+	public Project getProject() {
+		return project;
+	}
+	public void setProject(Project project) {
+		this.project = project;
+	}
+	public Skill getSkill() {
+		return skill;
+	}
+	public void setSkill(Skill skill) {
+		this.skill = skill;
+	}
 
 	
 	

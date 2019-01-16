@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 public class Project implements Serializable {
 	@Id
 	@GeneratedValue
-	@JsonProperty("id")
+	@JsonProperty("idProject")
 	private int id;
 	private String projectName;
 	@Temporal(TemporalType.DATE)
@@ -30,11 +30,11 @@ public class Project implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@JsonProperty("endDate")
 	private Date endDate;
-	@JsonProperty("address")
+	@JsonProperty("Address")
 	private String address;
 	@JsonProperty("totalNumberResource")
 	private int totalNumberResource;
-	@JsonProperty("levioNumberResource")
+	@JsonProperty("LevioNbResource")
 	private int levioNumberResource;
 	@JsonProperty("picture")
 	private String picture;
@@ -46,7 +46,7 @@ public class Project implements Serializable {
 	private OrganizationalChart organizationalChart;
 	@ManyToOne	
 	@JoinColumn(name = "clientId", referencedColumnName = "id",insertable = false, updatable = false)
-	@JsonProperty("clientId")
+	@JsonProperty("Client")
 	private Client client;
 	@OneToMany(mappedBy = "projet", fetch = FetchType.EAGER)
 	@JsonIgnore

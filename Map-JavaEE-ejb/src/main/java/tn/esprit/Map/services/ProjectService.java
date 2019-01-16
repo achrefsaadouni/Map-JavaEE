@@ -34,8 +34,25 @@ public class ProjectService implements ProjectRemote {
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
 
-
-	ContractService contractService = new ContractService();
+	
+	@Override
+	public List<Project> getProjectsByAdress(String address) {
+		Query query = em.createQuery(
+				"SELECT p.id ,p.projectName , p.startDate" + " , p.endDate , p.address , p.totalNumberResource ,"
+						+ " p.levioNumberResource,p.picture, p.projectType ,p.client  FROM Project p where p.address= :address");
+		query.setParameter("address",address);
+		List<Object[]> res = query.getResultList();
+		List<Project> projects = new ArrayList<Project>();
+		res.forEach(array -> {
+			Project project = arrayToProject(array);
+			Client c = project.getClient();
+			c.setProjects(null);
+			c.setInBoxs(null);
+			c.setRequests(null);
+			projects.add(project);
+		});
+		return projects;
+	}
 
 	@Override
 	public List<Project> getAllProjects() {
@@ -54,8 +71,25 @@ public class ProjectService implements ProjectRemote {
 			projects.add(project);
 		});
 		return projects;
-		
-		
+	}
+	@Override
+	public Project getProjectById(int projectId) {
+		return em.find(Project.class, projectId);
+//		Query query = em.createQuery(
+//				"SELECT p.id ,p.projectName , p.startDate" + " , p.endDate , p.address , p.totalNumberResource ,"
+//						+ " p.levioNumberResource,p.picture, p.projectType ,p.client  FROM Project p p.id= :projectId");
+//		query.setParameter("projectId", projectId);
+//		List<Object[]> res = query.getResultList();
+//		List<Project> projects = new ArrayList<Project>();
+//		res.forEach(array -> {
+//			Project project = arrayToProject(array);
+//			Client c = project.getClient();
+//			c.setProjects(null);
+//			c.setInBoxs(null);
+//			c.setRequests(null);
+//			projects.add(project);
+//		});
+//		return projects;
 	}
 
 	public Project arrayToProject(Object[] array) {
@@ -84,7 +118,7 @@ public class ProjectService implements ProjectRemote {
 	
 	
 	@Override
-	public String addProject(Project project,int clientId) {
+	public int addProject(Project project,int clientId) {
 		
 			
 //		if (project.getEndDate().compareTo(project.getStartDate()) < 0) {
@@ -109,7 +143,21 @@ public class ProjectService implements ProjectRemote {
 		query.executeUpdate();
 		
 		//}
-		return "Project has been saved into data base with this id : "+project.getId();
+		return project.getId();
+	}
+	@Override
+	public int addProjectAngular(Project project , int clientId) {
+
+		em.persist(project);
+		em.flush();
+		Client client = em.find(Client.class, clientId);
+		Query query = em.createQuery("update Project p set p.client= :client where p.id= :projectId");
+		query.setParameter("client",client);
+		query.setParameter("projectId",project.getId());
+		query.executeUpdate();
+		
+		//}
+		return project.getId();
 	}
 
 	
@@ -173,14 +221,23 @@ public class ProjectService implements ProjectRemote {
 		
 
 	}
-	
+	@Override
+	public String assignProjectToClientAngular(int clientId, int projectId) {
+		Client client = em.find(Client.class, clientId);
+		Query query = em.createQuery("update Project p set p.client= :client where p.id= :projectId");
+		query.setParameter("client", client);
+		query.setParameter("projectId", projectId);
+		int modified = query.executeUpdate();
+		if (modified == 1) {
+			return "success";
+		} else {
+			return "faiiil";
+		}
+	}
+
 	
 
-	@Override
-	public Project getProjectById(int projectId) {
-		Project project = em.find(Project.class, projectId);
-		return project;
-	}
+	
 
 	
 
@@ -254,7 +311,7 @@ public class ProjectService implements ProjectRemote {
 		Query query = em.createQuery("update Project p set p.projectName= :projectName , p.startDate= :startDate"
 				+ " , p.endDate= :endDate , p.address= :address , p.totalNumberResource= :totalNumberResource ,"
 				+ " p.levioNumberResource= :levioNumberResource , p.picture= :picture ,"
-				+ " p.projectType= :projectType where p.id= :projectId");
+				+ " p.projectType= :projectType , p.client = :client where p.id= :projectId");
 		query.setParameter("projectId", project.getId());
 		query.setParameter("projectName", project.getProjectName());
 		query.setParameter("startDate", project.getStartDate());
@@ -264,6 +321,7 @@ public class ProjectService implements ProjectRemote {
 		query.setParameter("levioNumberResource", project.getLevioNumberResource());
 		query.setParameter("picture", project.getPicture());
 		query.setParameter("projectType", project.getProjectType());
+		query.setParameter("client", project.getClient());
 		int modified = query.executeUpdate();
 		if (modified == 1) {
 			return "success";
@@ -347,6 +405,35 @@ public class ProjectService implements ProjectRemote {
 		
 		return "you have spent between "+startDate+" and " +endDate+ " : "+sum;
 	}
+	@Override
+	public List<Client> getClientByProject(int projectId) {
+		Query query = em.createQuery("select p.client from Project p where p.id= :projectId");
+		query.setParameter("projectId", projectId);
+		return query.getResultList();
+	}
+	@Override
+	public String archiveOneProject(Project project) {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		ArchivedProjects archivedProjects = new ArchivedProjects();
+			archivedProjects.setId(project.getId());
+			archivedProjects.setProjectName(project.getProjectName());
+			archivedProjects.setProjectType(project.getProjectType());
+			archivedProjects.setAddress(project.getAddress());
+			archivedProjects.setClient(project.getClient().getId());
+			archivedProjects.setStartDate(project.getStartDate());
+			archivedProjects.setEndDate(project.getEndDate());
+			archivedProjects.setLevioNumberResource(project.getLevioNumberResource());
+			archivedProjects.setTotalNumberResource(project.getTotalNumberResource());
+			archivedProjects.setPicture(project.getPicture());
+			em.remove(em.contains(project) ? project : em.merge(project));
+			em.persist(em.contains(archivedProjects) ? archivedProjects : em.merge(archivedProjects));		
+		return "Archived";
+	}
+
+	
+
+
 
 
 

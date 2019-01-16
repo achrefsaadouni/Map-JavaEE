@@ -36,8 +36,8 @@ public class Candidate extends Person implements Serializable {
 	@OneToOne
 	private Project project;
 	
-	@OneToMany(mappedBy="candidate")
-	private List<TestScore> TestScore;
+	@OneToMany(mappedBy="candidate" ,fetch=FetchType.EAGER)
+	private Set<TestScore> TestScore;
 	
 	public Set<Test> getTest() {
 		return Test;
@@ -69,10 +69,10 @@ public class Candidate extends Person implements Serializable {
 	public void setProject(Project project) {
 		this.project = project;
 	}
-	public List<TestScore> getTestScore() {
+	public Set<TestScore> getTestScore() {
 		return TestScore;
 	}
-	public void setTestScore(List<TestScore> testScore) {
+	public void setTestScore(Set<TestScore> testScore) {
 		TestScore = testScore;
 	}
 	

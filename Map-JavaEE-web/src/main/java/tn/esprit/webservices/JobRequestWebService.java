@@ -40,9 +40,10 @@ public class JobRequestWebService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public void AddJobRequest(JobRequest st)
+	@Path("new/{id}")
+	public void AddJobRequest(JobRequest st,@PathParam("id") int id)
 	{
-		JobRequestService.AddJobRequest(st);
+		JobRequestService.AddJobRequest(st , id);
 	}
 	
 	@DELETE
@@ -67,7 +68,7 @@ public class JobRequestWebService {
 	{
 		if(JobRequestService.ShowMyRequest(id) == null )
 		{
-			return Response.status(Response.Status.BAD_REQUEST).entity("verify you  id ").build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("verify you id ").build();
 			
 		}
 		return Response.ok(JobRequestService.ShowMyRequest(id), MediaType.APPLICATION_JSON).build();

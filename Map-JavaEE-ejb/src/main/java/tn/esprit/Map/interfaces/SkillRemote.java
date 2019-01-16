@@ -11,7 +11,6 @@ import tn.esprit.Map.persistences.Skill;
 
 @Remote
 public interface SkillRemote {
-
 	public void AddSkill(Skill skill);
 
 	public Boolean UpdateSkill(Skill skill);
@@ -29,6 +28,7 @@ public interface SkillRemote {
 	public Boolean DeleteSkillResource(int skillId, int resourceId);
 
 	public List<Skill> orderSkillsOfResource(int ResourceId);
+	public List<ResourceSkill> ResourceSkillOrdered(int ResourceId);
 	
 	public List<Skill> orderSkillsOfProjecte(int ProjectId);
 	
@@ -40,3 +40,4 @@ public interface SkillRemote {
 	
 
 }
+

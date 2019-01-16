@@ -14,6 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.http.impl.io.SocketOutputBuffer;
+
 import tn.esprit.Map.interfaces.TestLocalService;
 import tn.esprit.Map.persistences.Test;
 
@@ -44,12 +46,17 @@ public class TestWebService {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	@Path("technical")
-	public String AddTechTest(Test test) {
-		TestLocalService.TechAddTest(test);
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("new/{idc}")
+	public Response AddTest(Test test , @PathParam("idc") int idc) {
+		
+			return Response.ok(TestLocalService.AddTest(test,idc),MediaType.APPLICATION_JSON).build();
+			
+			
+		
+		
 
-		return "successful test Add";
+		
 	}
 
 	@POST
@@ -144,6 +151,78 @@ public class TestWebService {
 	
 
 	
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("new/{idT}/{idM}")
+	public String AddTestToModule(@PathParam("idT") int idT,@PathParam("idM") int idM) {
+		try {
+			TestLocalService.affectModuleToTest(idT, idM);
+			return "successful test Add";
+			
+		} catch (Exception e) {
+			return ""+e;
+		}
+		
+
+		
+	}
 	
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("affect/{idT}/{idC}")
+	public String AffectTestToCandidate(@PathParam("idT") int idT,@PathParam("idC") int idC) {
+		try {
+			TestLocalService.AddTestScore(idT, idC);
+			return "successfull affecting";
+		} catch (Exception e) {
+			return ""+e;
+		}
+		
+
+		
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("testscore/{idc}")
+	public Response GetTestscore(@PathParam("idc") int idc) {
+		
+		if (TestLocalService.getTestScore(idc) == null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+
+		if (TestLocalService.getTestScore(idc).size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Aint got no data").build();
+
+		else
+			return Response.ok(TestLocalService.getTestScore(idc), MediaType.APPLICATION_JSON).build();
+		
+
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("set/{idc}")
+	public Response SetTest(@PathParam("idc") int idmodule) {
+		
+		if (TestLocalService.Create_Test(idmodule)== null)
+			return Response.status(Response.Status.NOT_FOUND).build();
+
+		if (TestLocalService.Create_Test(idmodule).size() == 0)
+			return Response.status(Response.Status.BAD_REQUEST).entity("Aint got no data").build();
+
+		else
+			return Response.ok(TestLocalService.Create_Test(idmodule), MediaType.APPLICATION_JSON).build();
+		
+
+	}
+	@GET
+	@Path("score/{idc}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public int SetScore(@PathParam("idc") int idc) {
+		int number = TestLocalService.setScoreToTest(idc);
+		return number;
+	}
 	
 }

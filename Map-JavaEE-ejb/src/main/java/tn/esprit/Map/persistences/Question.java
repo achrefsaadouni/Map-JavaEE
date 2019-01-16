@@ -1,9 +1,11 @@
 package tn.esprit.Map.persistences;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
@@ -13,7 +15,7 @@ import javax.persistence.ManyToMany;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "Type")
-public class Question {
+public class Question implements Serializable{
 	
 	@Id
 	@GeneratedValue
@@ -22,10 +24,6 @@ public class Question {
 	protected String title;
 	
 	protected String Description;
-	
-	@ManyToMany(mappedBy="question")
-	protected List<Modules> modules;
-
 	public int getId() {
 		return id;
 	}
@@ -50,14 +48,6 @@ public class Question {
 		Description = description;
 	}
 
-	public List<Modules> getModules() {
-		return modules;
-	}
-
-	public void setModules(List<Modules> modules) {
-		this.modules = modules;
-	}
-	
 	
 	
 

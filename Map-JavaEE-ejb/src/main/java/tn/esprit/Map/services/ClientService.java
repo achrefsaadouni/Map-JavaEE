@@ -1,6 +1,7 @@
 package tn.esprit.Map.services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -20,6 +21,8 @@ import tn.esprit.Map.persistences.Client;
 import tn.esprit.Map.persistences.ClientType;
 import tn.esprit.Map.persistences.Contract;
 import tn.esprit.Map.persistences.Project;
+import tn.esprit.Map.persistences.ProjectType;
+import tn.esprit.Map.persistences.Role;
 import tn.esprit.Map.utilities.CryptPasswordMD5;
 import tn.esprit.Map.utilities.Mail_API;
 import tn.esprit.Map.utilities.RandomPassword;
@@ -35,14 +38,26 @@ public class ClientService implements ClientRemote {
 	
 	@Override
 	public List<Client> getAllClients() {
-		TypedQuery<Client> query = em.createQuery("SELECT c FROM Client c where c.archived= :archvied", Client.class);
+		Query query = em.createQuery("SELECT c.id ,c.nameSociety FROM Client c where c.archived= :archvied and c.roleT = :roleT");
 		query.setParameter("archvied",0);
-		List<Client> results = query.getResultList();
-		for (Client c : results) {
-			c.setProjects(null);
-			c.setRequests(null);
-		}
-		return results;
+		query.setParameter("roleT",Role.valueOf("Client"));
+		List<Object[]> res  = query.getResultList();
+		
+		List<Client> clients = new ArrayList<Client>();
+		res.forEach(array -> {
+			Client client = arrayToClient(array);
+			client.setProjects(null);
+			client.setRequests(null);
+			clients.add(client);
+		});
+		return clients;
+
+	}
+	public Client arrayToClient(Object[] array) {
+		Client client = new Client();
+		client.setId((int) array[0]);
+		client.setNameSociety((String) array[1]);
+		return client;
 	}
 
 	public static boolean isValidEmailAddress(String email) {
@@ -67,12 +82,13 @@ public class ClientService implements ClientRemote {
 		else
 		{
 			password =randomPassword.generateRandomPassword();
-			cryptedPassword=cryptPasswordMD5.cryptWithMD5(password);
-		client.setPassword(cryptedPassword);
+			//cryptedPassword=cryptPasswordMD5.cryptWithMD5(password);
+		client.setPassword(password);
 		client.setLogin(client.getFirstName()+" "+client.getLastName());
-		client.setClientType(ClientType.newClient);
+		//client.setClientType(ClientType.newClient);
+		client.setRoleT(Role.Client);
 		em.persist(client);
-		mailAPI.sendEmail(client.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login : "+client.getLogin()+" Password : "+password);
+		//mailAPI.sendEmail(client.getEmail(), "rahmabasly20@gmail.com", "Username and Password", "Login : "+client.getLogin()+" Password : "+password);
 		}
 		return "Client has been saved into data base with this id :"+ client.getId();
 	}
@@ -155,6 +171,48 @@ public class ClientService implements ClientRemote {
 	public Client getClientById(int idClient) {
 		return em.find(Client.class,idClient);
 	}
+	
+	@Override
+	public String updateClientPassword(Client client) {
+		Query query = em.createQuery("update Client c set c.password= :password  where c.id= :clientId");	
+		query.setParameter("password", client.getPassword());
+		query.setParameter("clientId", client.getId());
+		int modified = query.executeUpdate();
+		if (modified == 1) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+	@Override
+	public List<Client> getAllClientsAngular() {
+		Query query = em.createQuery("SELECT c.id,c.firstName,c.lastName,c.email,c.nameSociety,c.logo,c.address,c.clientType FROM Client c where c.archived= :archvied and c.roleT = :roleT");
+		query.setParameter("archvied",0);
+		query.setParameter("roleT",Role.valueOf("Client"));
+		List<Object[]> res  = query.getResultList();
+		
+		List<Client> clients = new ArrayList<Client>();
+		res.forEach(array -> {
+			Client client = arrayToClientAngular(array);
+			client.setProjects(null);
+			client.setRequests(null);
+			clients.add(client);
+		});
+		return clients;
+	}
+	public Client arrayToClientAngular(Object[] array) {
+		Client client = new Client();
+		client.setId((int) array[0]);
+		client.setFirstName((String) array[1]);
+		client.setLastName((String) array[2]);
+		client.setEmail((String) array[3]);
+		client.setNameSociety((String) array[4]);
+		client.setLogo((String) array[5]);
+		client.setAddress((String) array[6]);
+		client.setClientType((ClientType) array[7]);
+		return client;
+	}
+
 
 
 	

@@ -2,12 +2,17 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Modules implements Serializable{
@@ -16,11 +21,13 @@ public class Modules implements Serializable{
 	@GeneratedValue
 	private int id ;
 	private String title ;
-	
+	@JsonIgnore
 	@ManyToOne
 	private Category category;
-	@ManyToMany
-	private List<Question> question;
+	
+	@OneToMany(mappedBy="modules" , fetch = FetchType.EAGER)
+	private Set<Qcm> Question;
+	@JsonIgnore
 	@ManyToMany
 	private List<Test> test;
 	
@@ -48,13 +55,7 @@ public class Modules implements Serializable{
 		this.category = category;
 	}
 
-	public List<Question> getQuestion() {
-		return question;
-	}
 
-	public void setQuestion(List<Question> question) {
-		this.question = question;
-	}
 
 	public List<Test> getTest() {
 		return test;
@@ -62,6 +63,14 @@ public class Modules implements Serializable{
 
 	public void setTest(List<Test> test) {
 		this.test = test;
+	}
+
+	public Set<Qcm> getQuestion() {
+		return Question;
+	}
+
+	public void setQuestion(Set<Qcm> question) {
+		Question = question;
 	}
 	
 	

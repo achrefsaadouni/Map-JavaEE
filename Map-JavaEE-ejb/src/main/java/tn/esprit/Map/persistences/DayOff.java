@@ -40,6 +40,10 @@ public class DayOff implements Serializable {
 
 	private String reason;
 	
+	@JsonProperty("color")
+
+	private String color;
+	
 	@JsonProperty("typeDayOff")
 
 	@Enumerated(EnumType.STRING)
@@ -111,6 +115,14 @@ public class DayOff implements Serializable {
 	}
 	public void setResources(List<Resource> resources) {
 		Resources = resources;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
 	}
 	
 }

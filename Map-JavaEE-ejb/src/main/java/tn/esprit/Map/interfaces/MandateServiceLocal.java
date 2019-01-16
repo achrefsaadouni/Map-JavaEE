@@ -8,6 +8,8 @@ import javax.ejb.Local;
 
 import tn.esprit.Map.persistences.AvailabilityType;
 import tn.esprit.Map.persistences.Mandate;
+import tn.esprit.Map.persistences.MapContent;
+import tn.esprit.Map.persistences.Project;
 import tn.esprit.Map.persistences.Resource;
 import tn.esprit.Map.persistences.Skill;
 import tn.esprit.Map.persistences.Suggestion;
@@ -27,7 +29,7 @@ public interface MandateServiceLocal {
 	public List<Mandate> getByStartDate(Date startDate);
 	public List<Mandate> getByEndDate(Date endDate);
 	public List<Mandate> getByPeriod(Date startDate,Date endDate);
-	//public List<Mandate> getByClient(int clientId);
+	public List<Mandate> getByClient(int clientId);
 	public Mandate getMandate(int ressourceId,int projetId,Date dateDebut,Date dateFin);
 	public void archive(Timer timer);
 	public boolean restore(int ressourceId, int projetId, Date startDate, Date endDate);
@@ -37,4 +39,11 @@ public interface MandateServiceLocal {
 	public void AlertEndMandate(Timer timer);
 	public double ScoreSkill(Resource resource,List<Skill>skills);
 	public double CostProject(int projectId);
+	public List<Resource> getGps();
+	public void cancelRequest(int id);
+	public void traiter(int requestId);
+	public List<Project> getprojects();
+	public List<MapContent> getContent();
+	public String addSuggestion(int resourceId,int requestId);
+	
 }

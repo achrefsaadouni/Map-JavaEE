@@ -22,18 +22,21 @@ import tn.esprit.Map.persistences.Skill;
 
 @Stateless
 public class ResourceService implements ResourceRemote {
-
 	@PersistenceContext(unitName = "MAP")
 	private EntityManager em;
 
 	
 	@Override
 	
-	public void AddResource(Resource resource) {
+	public Resource AddResource(Resource resource) {
 		resource.setAvailability(AvailabilityType.available);
 		resource.setArchived(0);
 		resource.setMoyenneSkill(0);
+		resource.setNombreAlerte(0);
+		resource.setNombreConge(0);
+		resource.setRoleT(Role.Resource);
 		em.persist(resource);
+		return resource;
 	}
 
 	@Override
@@ -109,14 +112,14 @@ public class ResourceService implements ResourceRemote {
 
 	@Override
 	public List<tn.esprit.Map.persistences.Resource> listResource() {
-		String request = "select res from Resource res";
+		String request = "select res from Resource res WHERE res.archived =:val";
 		Query query = em.createQuery(request);
-		List<Resource> resources = query.getResultList();
+		List<Resource> resources = query.setParameter("val", 0).getResultList();
 		if (resources.isEmpty()) {
 			return null;
 		} else
-		/*for(Resource r : resources){
-			r.setResourceSkills(null);}*/
+		for(Resource r : resources){
+			r.setNoteClient(null);}
 			return resources;
 	}
 
@@ -124,16 +127,17 @@ public class ResourceService implements ResourceRemote {
 	public Resource getResourceById(int idResource) {
 		Query q = em.createQuery("select res from Resource res WHERE res.id= :id");
 		Resource r =(Resource) q.setParameter("id", idResource).getSingleResult();
-		r.setProject(null);
-		r.setDayOffs(null);
-		r.setResourceSkills(null);
+		//r.setProject(null);
+		//r.setDayOffs(null);
+		//r.setResourceSkills(null);
 		return r;
 	}
 
 	@Override
 	public List<Resource> getResourceArchive() {
 		int valeur = 1;
-		String requestJPQL = "select res  from Resource res where res.archived=" + valeur;
+		String role=Role.Resource.toString();
+		String requestJPQL = "select res  from Resource res where res.archived=" + valeur+" AND res.roleT="+role+" ORDER BY res.moyenneSkill DESC";
 		Query query = em.createQuery(requestJPQL);
 		List<Resource> rs = (List<Resource>) query.getResultList();
 		for(Resource r : rs){
@@ -206,4 +210,24 @@ public class ResourceService implements ResourceRemote {
 			
 	}
 
+	@Override
+	public List<Resource> getResourceNoArchive() {
+		String role = Role.Resource.toString();
+		int valeur = 0;
+		String requestJPQL = "select res  from Resource res where res.archived=" + valeur+" AND res.roleT="+role+" ORDER BY res.moyenneSkill DESC";
+		Query query = em.createQuery(requestJPQL);
+		List<Resource> rs = (List<Resource>) query.getResultList();
+		for(Resource r : rs){
+			r.setResourceSkills(null);
+			}
+			
+		return rs;
+	}
+
+	@Override
+	public void Vu(int resourceId) {
+	Resource r = em.find(Resource.class, resourceId);
+	r.setFirstVisit(1);
+	em.merge(r);
+	}
 }

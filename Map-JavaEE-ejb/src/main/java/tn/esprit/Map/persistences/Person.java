@@ -45,7 +45,6 @@ public class Person implements Serializable {
 
 
 	@Enumerated(EnumType.STRING)
-	@JsonProperty("role")
 	private Role roleT;
 	
 	private String token;

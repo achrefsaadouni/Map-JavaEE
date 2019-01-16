@@ -2,8 +2,10 @@ package tn.esprit.Map.persistences;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -17,8 +19,8 @@ public class Category  implements Serializable{
 	private int id ;
 	private String Name ;
 	
-	@OneToMany (mappedBy="category")
-	private List<Modules> modules;
+	@OneToMany (mappedBy="category" , fetch = FetchType.EAGER)
+	private Set<Modules> modules;
 	public int getId() {
 		return id;
 	}
@@ -35,11 +37,11 @@ public class Category  implements Serializable{
 		Name = name;
 	}
 
-	public List<Modules> getModules() {
+	public Set<Modules> getModules() {
 		return modules;
 	}
 
-	public void setModules(List<Modules> modules) {
+	public void setModules(Set<Modules> modules) {
 		this.modules = modules;
 	}
 

@@ -59,7 +59,7 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("moyenneSkill")
 	private float moyenneSkill;
 
-	@JoinTable(joinColumns = @JoinColumn(referencedColumnName = "id", updatable = false), inverseJoinColumns = @JoinColumn(name = "dayoff", referencedColumnName = "id", updatable = false))
+	@JoinTable(joinColumns = @JoinColumn(referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "dayoff", referencedColumnName = "id"))	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JsonProperty("dayOffs")
 	private Set<DayOff> dayOffs;
@@ -78,6 +78,15 @@ public class Resource extends Person implements Serializable {
 	@JsonProperty("organizationalCharts")
 	@ManyToMany(mappedBy = "resources", fetch = FetchType.EAGER)
 	private Set<OrganizationalChart> organizationalCharts;
+	
+	@JsonProperty("nombreConge")
+	private Integer nombreConge;
+	
+	@JsonProperty("nombreAlerte")
+	private Integer nombreAlerte;
+	
+	@JsonProperty("firstVisit")
+	private Integer firstVisit;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "ressource", fetch = FetchType.EAGER)
@@ -223,5 +232,31 @@ public class Resource extends Person implements Serializable {
 	public void setNoteClient(Set<Note> noteClient) {
 		this.noteClient = noteClient;
 	}
+
+	public Integer getNombreConge() {
+		return nombreConge;
+	}
+
+	public void setNombreConge(Integer nombreConge) {
+		this.nombreConge = nombreConge;
+	}
+
+	public Integer getNombreAlerte() {
+		return nombreAlerte;
+	}
+
+	public void setNombreAlerte(Integer nombreAlerte) {
+		this.nombreAlerte = nombreAlerte;
+	}
+
+	public Integer getFirstVisit() {
+		return firstVisit;
+	}
+
+	public void setFirstVisit(Integer firstVisit) {
+		this.firstVisit = firstVisit;
+	}
+	
+	
 	
 }

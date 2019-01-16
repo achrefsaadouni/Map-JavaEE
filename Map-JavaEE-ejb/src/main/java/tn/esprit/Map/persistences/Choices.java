@@ -1,17 +1,22 @@
 package tn.esprit.Map.persistences;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class Choices {
+public class Choices implements Serializable{
 	@Id
 	@GeneratedValue
 	private int id ; 
 	private String Title;
 	private boolean correct ; 
+	@JsonIgnore
 	@ManyToOne
 	private Qcm qcm ;
 

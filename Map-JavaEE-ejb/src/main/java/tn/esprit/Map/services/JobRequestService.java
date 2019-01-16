@@ -1,5 +1,6 @@
 package tn.esprit.Map.services;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -8,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import tn.esprit.Map.interfaces.JobRequestLocal;
+import tn.esprit.Map.persistences.Candidate;
 import tn.esprit.Map.persistences.JobRequest;
 import tn.esprit.Map.persistences.StateType;
 
@@ -20,11 +22,12 @@ public class JobRequestService implements JobRequestLocal {
 	@Override
 	public JobRequest UpdateJobRequest(JobRequest  jbr) {
 		
-		int query = em.createQuery("update JobRequest j set j.Cv= :Cv where j.id = :id").
+	/*	int query = em.createQuery("update JobRequest j set j.Cv= :Cv where j.id = :id").
 				setParameter("Cv", jbr.getCv()).setParameter("id", jbr.getId())
 				.executeUpdate();
 		
-		return jbr;
+		return jbr;*/
+		return null;
 	}
 
 	@Override
@@ -46,16 +49,24 @@ public class JobRequestService implements JobRequestLocal {
 	}
 
 	@Override
-	public void AddJobRequest(JobRequest st) {
+	public void AddJobRequest(JobRequest st , int id) {
+		Candidate candidate = em.find(Candidate.class, id);
+		st.setStateType(StateType.onHold);
+		st.setSentdate(new Date());
+		st.setCandidate(candidate);
 		em.persist(st);
 		System.out.println("Job Request successful");
 
 	}
 
 	@Override
-	public JobRequest ShowMyRequest(int id) {
-		JobRequest jbr = em.find(JobRequest.class, id);
-		return jbr;
+	public	List< JobRequest> ShowMyRequest(int id) {
+		Candidate candidate = em.find(Candidate.class,id);
+		TypedQuery<JobRequest> query = em.createQuery("SELECT j FROM JobRequest j where j.candidate= :candidate", JobRequest.class)
+				.setParameter("candidate", candidate);
+		List<JobRequest> results = query.getResultList();
+		return results;
+		
 	}
 
 	@Override

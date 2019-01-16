@@ -6,8 +6,10 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class CanTestPk implements Serializable{
+	
 	private int Id_test ;
 	private int id_Candidate;
+		
 	public int getId_test() {
 		return Id_test;
 	}

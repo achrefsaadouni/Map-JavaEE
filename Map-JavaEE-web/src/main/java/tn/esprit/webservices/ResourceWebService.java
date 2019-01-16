@@ -50,13 +50,11 @@ public class ResourceWebService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("add")
-	@Secured
+	
 	public String AddResource(Resource r) {
-		if (authenticatedUser.getRoleT() == Role.Admin)
-		{
+		
 		resourceRemote.AddResource(r);
-		return "Add avec Succ";}
-		return "access denied";
+		return "Add avec Succ";
 		
 	}
 	
@@ -66,10 +64,9 @@ public class ResourceWebService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("update")
-	@Secured
+	
 	public String UpdateResource(Resource newResource) {
-			if (authenticatedUser.getRoleT() == Role.Admin)
-			{
+		
 		
 	Resource resource = resourceRemote.getResourceById(newResource.getId());
 	resource.setLastName(newResource.getLastName());
@@ -89,49 +86,59 @@ public class ResourceWebService {
 	resource.setInBox(newResource.getInBox());
 	resource.setArchived(newResource.isArchived());
 	resourceRemote.UpdateResource(newResource);
-	return "updated";}
-	return "Access Denied";
+	return "updated";
 
 	}
 	
 	
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("archive")
-	@Secured
+	
 	public String ArchiveResource(@QueryParam("resourceId") String resourceId) {
-		if (authenticatedUser.getRoleT() == Role.Admin)
-		{
+		
 		if(resourceRemote.ArchiveResource(Integer.parseInt(resourceId)) == false){
 			return "il n'existe pas";
 		}
 		return "Archie done";
-	}
-		return "Access Denied";}
+}
+	
 	
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("Unarchive")
+	
 	public String UnArchiveResource(@QueryParam("resourceId") String resourceId) {
+	
 		if(resourceRemote.UnArchiveResource(Integer.parseInt(resourceId)) == false){
 			return "il n'existe pas";
 		}
 		return "UnArchie done";
+	
 	}
 	
+	@PUT
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("vu")
+	
+	public String Vu(@QueryParam("resourceId") String resourceId) {
+	
+		resourceRemote.Vu(Integer.parseInt(resourceId));
+		return "done";
+	
+	}
 
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("AffectResourceToProject")
-	@Secured
+	
 	public String AffectResourceToProject(@QueryParam("resourceId") String resourceId , @QueryParam("projectId") String projectId) {
-		if (authenticatedUser.getRoleT() == Role.Admin)
-		{
+		
 		if(resourceRemote.AffectResourceToProject(Integer.parseInt(resourceId), Integer.parseInt(projectId)) == true)
 		return "Affected"; 
 		else
-		return "impossible";}
-		return "Access denied";
+		return "impossible";
 	}
 	
 	
@@ -150,6 +157,13 @@ public class ResourceWebService {
 		return Response.ok(resourceRemote.listResource(), MediaType.APPLICATION_JSON).build();
 	}
 
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("listeResourceNoArchivedParMoyenne")
+	public Response ListResourceNoArchivedParMoyenne() {
+		return Response.ok(resourceRemote.getResourceNoArchive(), MediaType.APPLICATION_JSON).build();
+	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -184,47 +198,41 @@ public class ResourceWebService {
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("noteResource")
-	@Secured
+	
 	public String noteResource(@QueryParam("resourceId") String resourceId , @QueryParam("clientId") String clientId ,@QueryParam("note") String note) {
-		if (authenticatedUser.getRoleT() == Role.Client)
-		{
+		
 		if(resourceRemote.noteResource(Integer.parseInt(resourceId),Integer.parseInt(clientId) , Float.parseFloat(note)) == false){
 			return "pas de note";
 		}
 		resourceRemote.noteResource(Integer.parseInt(resourceId) ,Integer.parseInt(clientId), Float.parseFloat(note));
-		return "note ajoutée";}
-		return "Access denied";
+		return "note ajoutée";
 	}
 
 	
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("UpdateAffectation")
-	@Secured
+
 	public String UpdateAffectation(@QueryParam("resourceId") String resourceId ,@QueryParam("projetId") String projetId ) {
-		if (authenticatedUser.getRoleT() == Role.Admin)
-		{
+	
 		if(resourceRemote.UpdateAffectation(Integer.parseInt(resourceId) ,Integer.parseInt(projetId)) == false){
 			return "pas de note";
 		}
 		resourceRemote.UpdateAffectation(Integer.parseInt(resourceId) ,Integer.parseInt(projetId));
-		return "Affectation updated";}
-		return "Access denied";
+		return "Affectation updated";
 	}
 	
 	@PUT
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("DeleteAffectation")
-	@Secured
+	
 	public String DeleteAffectation(@QueryParam("resourceId") String resourceId ) {
-		if (authenticatedUser.getRoleT() == Role.Admin)
-		{
+		
 		if(resourceRemote.DeleteAffectation(Integer.parseInt(resourceId)) == false){
 			return "pas de projet";
 		}
 		resourceRemote.DeleteAffectation(Integer.parseInt(resourceId));
-		return "Affectation deleted";}
-		return "Access denied";
+		return "Affectation deleted";
 	}
 
 }

@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -42,15 +44,15 @@ public class Test implements Serializable {
 	private String TestFile ;
 	
 	private String TestResponseFile ;
-	@ManyToMany (mappedBy="test")
-	private List<Modules> modules;
+	@ManyToMany (mappedBy="test" , fetch=FetchType.EAGER)
+	private Set<Modules> modules;
 	private String Employment_Letter;
 	
 	@JsonIgnore
 	@ManyToOne
 	private Candidate candidate;
-	@OneToMany(mappedBy="test")
-	private List<TestScore> TestScore;
+	@OneToMany(mappedBy="test" ,fetch=FetchType.EAGER)
+	private Set<TestScore> TestScore;
 	
 	
 	
@@ -128,19 +130,19 @@ public class Test implements Serializable {
 		this.testUploadTime = testUploadTime;
 	}
 
-	public List<Modules> getModules() {
+	public Set<Modules> getModules() {
 		return modules;
 	}
 
-	public void setModules(List<Modules> modules) {
+	public void setModules(Set<Modules> modules) {
 		this.modules = modules;
 	}
 
-	public List<TestScore> getTestScore() {
+	public Set<TestScore> getTestScore() {
 		return TestScore;
 	}
 
-	public void setTestScore(List<TestScore> testScore) {
+	public void setTestScore(Set<TestScore> testScore) {
 		TestScore = testScore;
 	}
 
